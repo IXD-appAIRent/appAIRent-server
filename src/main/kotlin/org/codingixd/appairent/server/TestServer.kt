@@ -1,5 +1,8 @@
 package org.codingixd.appairent.server
 
+import net.aksingh.owmjapis.model.CurrentWeather
+import net.aksingh.owmjapis.model.DailyWeatherForecast
+import net.aksingh.owmjapis.model.HourlyWeatherForecast
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.web.bind.annotation.GetMapping
@@ -7,16 +10,19 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.atomic.AtomicLong
 
-data class Greeting(val id: Long, val content: String)
 
 @RestController
 class GreetingController {
 
     val counter = AtomicLong()
 
-    @GetMapping("/greeting")
-    fun greeting(@RequestParam(value = "name", defaultValue = "World") name: String) =
-        Greeting(counter.incrementAndGet(), "Hello, $name")
+    @GetMapping("/weather/current")
+    fun currentWeather() = CurrentWeather.toJson(DataSourceBridge.getCurrentWeather())
+
+    @GetMapping("/weather/forecast")
+    fun forecastWeather(): String {
+        return HourlyWeatherForecast.toJson(DataSourceBridge.getHourlyWeatherForecast())
+    }
 
 }
 
