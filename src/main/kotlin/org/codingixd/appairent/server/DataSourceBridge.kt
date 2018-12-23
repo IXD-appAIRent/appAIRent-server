@@ -1,13 +1,16 @@
 package org.codingixd.appairent.server
 
+import de.jupf.staticonf.StatiConf
 import net.aksingh.owmjapis.core.OWM
 import net.aksingh.owmjapis.model.CurrentWeather
-import net.aksingh.owmjapis.model.DailyWeatherForecast
 import net.aksingh.owmjapis.model.HourlyWeatherForecast
+import org.codingixd.appairent.data.SenateData
 
 object DataSourceBridge {
 
-    private val owm = OWM("d62d3d0590770fe7af7314ea122f1a03")
+    val owmApiKey: String by StatiConf("src/main/resources/api.config")
+
+    private val owm = OWM(owmApiKey)
 
     private const val berlin = 2950159
 
@@ -19,9 +22,9 @@ object DataSourceBridge {
         return owm.hourlyWeatherForecastByCityId(berlin)
     }
 
-    fun getDailyWeatherForecast(): DailyWeatherForecast {
-        return owm.dailyWeatherForecastByCityId(berlin)
-    }
-
-
+    fun getCurrentPollution() = SenateData.fetchNewestData()
 }
+
+data class Errors(val errors: List<Error>)
+
+data class Error(val status: String, val title: String, val detail: String)

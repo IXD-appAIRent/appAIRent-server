@@ -1,4 +1,4 @@
-package org.codingixd.appairent.server.ml;
+package org.codingixd.appairent.ml;
 
 public class MLException extends Exception {
 

@@ -1,4 +1,4 @@
-package org.codingixd.appairent.server.ml;
+package org.codingixd.appairent.ml;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
