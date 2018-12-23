@@ -14,11 +14,11 @@ Result: OpenWeatherMap current weather Json
  
 ### Weather Forecast
 
-Note: momentarily only hourly forecasts because of OpenWeatherMap restrictions
+Note: momentarily only 3-hourly forecasts because of OpenWeatherMap restrictions
 
 `localhost:8080/weather/forecast/hourly`
 
-Result: OpenWeatherMap hourly weather forecast Json
+Result: OpenWeatherMap 3-hourly weather forecast Json
 
 ### Current Pollution
 
