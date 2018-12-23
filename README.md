@@ -50,8 +50,8 @@ Provides a pollution forecast
 Results in a json, for example:
 ```json
 [
-  { time: 1545598800000, "level":2},
-  {"time":1545609600000,"level":1},
+  { "time": 1545598800000, "level":2 },
+  { "time":1545609600000,"level":1 },
   ...
 ]
 ```
