@@ -1,0 +1,240 @@
+html, body {
+  width: 1080px;
+  height: 2240px;
+  margin: 0;
+  padding: 0;
+  font-family: 'Karla', sans-serif;
+}
+
+#map {
+  position: absolute;
+  top: 200px;
+  bottom: 0;
+  width: 1080px;
+  height: 1200px;
+}
+
+.gContainer {
+  position: relative;
+  width: 300px;
+  height: 250px;
+}
+
+
+.gaugePos {
+  width: 300px;
+  height: 250px;
+  position: absolute;
+}
+
+#article1 {
+  background-image: url("middlepollution.png");
+  background-size: 100%;
+  width: 100%;
+}
+
+.temperature {
+  font-size: 150%;
+}
+
+.nolinkstyle {
+  text-decoration: none;
+  color: #000000;
+
+}
+
+#recommendation {}
+
+#moreCharts {
+  text-align: center;
+}
+
+.marker {
+  background-image: url('icons/location_icon.svg');
+  background-size: cover;
+  width: 25px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.locdiv {
+  background-image: url('open-iconic/svg/media-record.svg');
+  background-size: cover;
+  width: 25px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.button1 {
+	padding: 0px;
+	margin-left: 10px;
+	font-size: 14px;
+}
+
+#choice-1:focus, #choice-2:focus, #choice-3:focus, #choice-4:focus, #choice-5:focus, #choice-6:focus, #choice-7:focus, #choice-8:focus, #choice-9:focus{
+	background-color: #888;
+	box-shadow: none;
+}
+
+#choice-1:hover, #choice-2:hover, #choice-3:hover, #choice-4:hover, #choice-5:hover, #choice-6:hover, #choice-7:hover, #choice-8:hover, #choice-9:hover{
+	background-color: #888;
+}
+
+#address {
+  display: none;
+}
+#location {
+	margin-bottom: 50px;
+}
+
+#locationTitle {
+  text-align: left;
+  width: 99%;
+}
+
+#locationIcon {
+  width: 100%;
+}
+
+#iconWrap {
+  white-space: nowrap;
+  width: 10%;
+}
+
+#windWrap {
+  white-space: nowrap;
+	width: 20%;
+}
+
+
+.st0 {
+  fill: #FFFFFF;
+  stroke: #000000;
+  stroke-width: 8;
+  stroke-miterlimit: 10;
+}
+
+.st1 {
+  stroke: #000000;
+  stroke-width: 8;
+  stroke-miterlimit: 10;
+}
+
+#Layer_1:hover {
+  fill: #777777;
+}
+
+.weather {
+	margin-left: 20px;
+  width: 100%;
+}
+
+.weatherT {
+  font-family: inherit;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.weather1 {
+	/*border: solid 1px;*/
+
+}
+
+#weatherIconNow {
+
+
+}
+
+
+.weatherIcon {
+
+}
+
+.forecastall {
+  height: 100%;
+}
+
+.forecastday {
+  height: 100%;
+  border-bottom-style: solid;
+  border-width: thin;
+}
+
+.windicons {
+	white-space: nowrap;
+	margin-top: 20px;
+}
+
+.ui-block-a {
+  margin-right: 10px;
+}
+
+.temperaturefor {
+  font-size: 16px;
+  text-align: left;
+  margin-top: -5px;
+}
+
+.gauge {
+  top: 20px;
+	margin-left: 10px;
+  position: relative;
+  width: 100px;
+  height: 50px;
+}
+
+.forecastGauge {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}
+
+
+.carousel-indicators li {
+	height: 7px !important;
+	width: 7px !important;
+ border: solid 1px;
+ border-radius: 50%;
+ background-color: #fff;
+
+}
+.carousel-indicators {
+	 bottom: -10px;
+}
+
+.carousel-indicators .active {
+    background-color: #000;
+}
+
+.carousel-control {
+    background-image:none !important;
+    filter:none !important;
+}
+
+.carousel-control span.glyphicon {
+    color: #000;
+}
+
+.carousel {
+  width: 30%;
+	height: 170px;
+	padding: 3px 3px 3px 3px;
+	margin: 5px 5px 5px 5px;
+	border: solid 3px;
+}
+
+.mlGauge {
+	top: 20px;
+	margin-left: 10px;
+	position: relative;
+	width: 100px;
+	height: 50px;
+}
+
+.mlGaugePos {
+  width: 300px;
+  height: 250px;
+  position: absolute;
+}
