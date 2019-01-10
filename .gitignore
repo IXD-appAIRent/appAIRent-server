@@ -149,3 +149,5 @@ gradle-app.setting
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
 
+data/ml_background.bin
+data/ml_traffic.bin
