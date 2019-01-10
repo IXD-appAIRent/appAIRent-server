@@ -34,8 +34,9 @@ $(document).on('swiperight', '.ui-page', function(event) {
 });
 
 
-
-
+$(document).ready(function(){
+    $("#article1").fadeIn(5000);
+});
 
 
 
@@ -87,7 +88,7 @@ function distance(lat1, lon1, lat2, lon2) {
 
 function getDistNearestStation(lat, lon) {
   var dist;
-  StationUrl = encodeURI("http://172.16.253.16:8080/pollution/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
+  StationUrl = encodeURI("http://192.168.2.110:8080/pollution/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
   //alert(StationUrl);
   $.getJSON(StationUrl, function getDistance(data) {
     if (data[0].station.location.lng !== null) {
@@ -101,8 +102,8 @@ function getDistNearestStation(lat, lon) {
 
 function getValueNow(lat, lon) {
   var values = [];
-  StationUrl = encodeURI("http://172.16.253.16:8080/pollution/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
-  //alert(StationUrl);
+  StationUrl = encodeURI("http://192.168.2.110:8080/pollution/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
+  alert(StationUrl);
   $.getJSON(StationUrl, function(data) {
     if (data[0].station.location.lng !== null) {
       var pollutant = data[0].measurementType;
@@ -165,7 +166,7 @@ makeButtons();
 
 function getWeatherForecast(time){
   if (time == 0){
-  $.getJSON("http://172.16.253.16:8080/weather/current", function(now) {
+  $.getJSON("http://192.168.2.110:8080/weather/current", function(now) {
       console.log(now); // this will show the info it in firebug console
       var nowdata = [];
       nowdata[0] = 2;
@@ -177,7 +178,7 @@ function getWeatherForecast(time){
       change3hour(nowdata);
   });
   } else {
-    $.getJSON("http://172.16.253.16:8080/weather/forecast/hourly", function(json) {
+    $.getJSON("http://192.168.2.110:8080/weather/forecast/hourly", function(json) {
       console.log(json);
       if(time > 0 && time < 9){
         //alert(json.list[time].dt_txt);
@@ -663,8 +664,6 @@ function makeGauge(id, value, color, width) {
 }
 
 
-makeGauge("background", (2 * 30) - 17, "#888", 300);
-makeGauge("traffic", (2 * 30) - 12, "#000", 300);
 
 
 
@@ -735,5 +734,5 @@ function change3hour(data){
 }
 
 function showResult(){
-  fillGauge("mlbg", "mltr", 2,3,300);
+  fillGauge("mlbg", "mltr", fakePollution(),fakePollution(),300);
 }
