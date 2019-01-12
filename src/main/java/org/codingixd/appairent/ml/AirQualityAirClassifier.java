@@ -3,8 +3,6 @@ package org.codingixd.appairent.ml;
 import weka.classifiers.Classifier;
 import weka.core.Debug;
 import weka.core.Instances;
-import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.Normalize;
 
 import java.io.File;
 import java.time.DayOfWeek;
@@ -14,9 +12,8 @@ public class AirQualityAirClassifier implements AirClassifier {
 
     public static void main(String[] args) throws Exception{
         AirClassifier cl = new AirQualityAirClassifier();
-        int i = cl.getClassification(PredictionMode.TRAFFIC, LocalDateTime.of(2017, 1, 24, 14, 0 ),279.15,279.15,279.15,998,87,4,230,90);
+        int i = cl.getClassification(PredictionMode.BACKGROUND, LocalDateTime.of(2017, 4, 26, 15, 0 ),284.17,283.15,285.15,1011,39,3,320,0);
         System.out.println("Classification: " + i);
-
     }
 
     private static final String DATASET_TRAFFIC = "./data/ml_traffic.arff";
@@ -55,7 +52,7 @@ public class AirQualityAirClassifier implements AirClassifier {
 
         int classification = -1;
         try {
-            classification = classify(modelPath, datasetPath, dateTime, temp, temp_min, temp_max, pressure, humidity, wind_speed, wind_deg, clouds_all);
+            classification = classify(modelPath, dateTime, temp, temp_min, temp_max, pressure, humidity, wind_speed, wind_deg, clouds_all);
             System.out.println( this.getClass().getSimpleName() + ": " + classification);
         } catch (Exception e) {
             throw new MLException();
@@ -76,22 +73,18 @@ public class AirQualityAirClassifier implements AirClassifier {
 
 
         Instances dataset = ModelGenerator.loadDataset(datasetPath);
-        Filter filter = new Normalize();
-
 
 
         dataset.randomize(new Debug.Random(1));
 
         //Normalize dataset
-        filter.setInputFormat(dataset);
 
         int trainSize = (int) Math.round(dataset.numInstances() * 0.8);
         int testSize = dataset.numInstances() - trainSize;
 
 
-        Instances datasetnor = Filter.useFilter(dataset, filter);
-        Instances traindataset = new Instances(datasetnor, 0, trainSize);
-        Instances testdataset = new Instances(datasetnor, trainSize, testSize);
+        Instances traindataset = new Instances(dataset, 0, trainSize);
+        Instances testdataset = new Instances(dataset, trainSize, testSize);
 
         // build classifier with train dataset
         Classifier cl =  ModelGenerator.buildClassifier(traindataset);
@@ -101,16 +94,13 @@ public class AirQualityAirClassifier implements AirClassifier {
 
     }
 
-    private int classify(String modelPath,String datasetPath, LocalDateTime dateTime, double temp, double temp_min, double temp_max, double pressure, double humidity, double wind_speed, double wind_deg, double clouds_all) throws Exception{
+    private int classify(String modelPath, LocalDateTime dateTime, double temp, double temp_min, double temp_max, double pressure, double humidity, double wind_speed, double wind_deg, double clouds_all) throws Exception{
         AirQualityModelClassifier cls = new AirQualityModelClassifier();
-        Filter filter = new Normalize();
-        Instances dataset = ModelGenerator.loadDataset(datasetPath);
-        filter.setInputFormat(dataset);
 
         int ret = -1;
 
         try {
-            ret = Integer.parseInt(cls.classifiy(Filter.useFilter(
+            ret = Integer.parseInt(cls.classifiy(
                     cls.createInstance(
                             dateTime.getHour(),
                             ((dateTime.getDayOfWeek() == DayOfWeek.SATURDAY) ||
@@ -124,7 +114,7 @@ public class AirQualityAirClassifier implements AirClassifier {
                             wind_speed,
                             wind_deg,
                             clouds_all
-                    ), filter), modelPath)
+                    ), modelPath)
             );
         } catch (Exception e) {
             e.printStackTrace();

@@ -6,8 +6,8 @@ import de.jupf.staticlog.Log
 import net.aksingh.owmjapis.model.CurrentWeather
 import net.aksingh.owmjapis.model.HourlyWeatherForecast
 import org.codingixd.appairent.data.*
-import org.codingixd.appairent.ml.Classifier
-import org.codingixd.appairent.ml.FakeClassifier
+import org.codingixd.appairent.ml.AirClassifier
+import org.codingixd.appairent.ml.AirQualityAirClassifier
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.scheduling.annotation.EnableScheduling
@@ -75,7 +75,7 @@ fun main(args: Array<String>) {
 @Component
 class ScheduledTasks {
 
-    val classifier: Classifier = FakeClassifier()
+    val airClassifier: AirClassifier = AirQualityAirClassifier()
 
     @Scheduled(fixedRate = 60000)
     fun fetchCurrentData() {
@@ -105,7 +105,7 @@ class ScheduledTasks {
                 val ldt = LocalDateTime.ofInstant(data.dateTime!!.toInstant(), ZoneId.systemDefault())
                 forecasts.add(
                     HourlyPollutionLevel(ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
-                        classifier.getClassification(ldt, data.mainData!!.temp!!, data.mainData!!.tempMin!!,
+                        airClassifier.getClassification(AirClassifier.PredictionMode.TRAFFIC, ldt, data.mainData!!.temp!!, data.mainData!!.tempMin!!,
                             data.mainData!!.tempMax!!, data.mainData!!.pressure!!, data.mainData!!.humidity!!, data.windData!!.speed!!,
                             data.windData!!.degree!!, data.cloudData!!.cloud!!)))
             }
