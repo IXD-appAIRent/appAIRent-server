@@ -2,7 +2,6 @@ package org.codingixd.appairent.ml;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.evaluation.Evaluation;
-import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -12,7 +11,7 @@ import weka.core.converters.ConverterUtils.DataSource;
  *
  */
 
-public class ModelGenerator {
+class ModelGenerator {
     public static Instances loadDataset(String path) {
         Instances dataset = null;
         try {
@@ -26,16 +25,15 @@ public class ModelGenerator {
         return dataset;
     }
 
-    public static Classifier buildClassifier(Instances traindataset) {
-        RandomForest rf = new RandomForest();
+    public static Classifier buildClassifier(Classifier cl, Instances traindataset) {
 
         try {
-            rf.buildClassifier(traindataset);
+            cl.buildClassifier(traindataset);
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return rf;
+        return cl;
     }
 
     public static void evaluateModel(Classifier model, Instances traindataset, Instances testdataset) {

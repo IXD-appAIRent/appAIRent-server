@@ -8,13 +8,13 @@ import weka.core.DenseInstance;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 
-class AirQualityModelClassifier {
+class RandomForestInstanceClassifier {
 
     private ArrayList<String> classVal;
     private Instances dataRaw;
 
 
-    AirQualityModelClassifier() {
+    RandomForestInstanceClassifier() {
         ArrayList<Attribute> attributes = new ArrayList<>();
         attributes.add(new Attribute("hour"));
         attributes.add(new Attribute("weekend"));

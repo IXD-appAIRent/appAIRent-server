@@ -1,6 +1,7 @@
 package org.codingixd.appairent.ml;
 
 import weka.classifiers.Classifier;
+import weka.classifiers.trees.RandomForest;
 import weka.core.Debug;
 import weka.core.Instances;
 
@@ -8,11 +9,11 @@ import java.io.File;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
-public class AirQualityAirClassifier implements AirClassifier {
+public class RandomForestAirClassifier implements AirClassifier {
 
     public static void main(String[] args) throws Exception{
-        AirClassifier cl = new AirQualityAirClassifier();
-        int i = cl.getClassification(PredictionMode.BACKGROUND, LocalDateTime.of(2017, 4, 26, 15, 0 ),284.17,283.15,285.15,1011,39,3,320,0);
+        AirClassifier cl = new RandomForestAirClassifier();
+        int i = cl.getClassification(PredictionMode.TRAFFIC, LocalDateTime.of(2017, 4, 26, 15, 0 ),284.17,283.15,285.15,1011,39,3,320,0);
         System.out.println("Classification: " + i);
     }
 
@@ -38,7 +39,6 @@ public class AirQualityAirClassifier implements AirClassifier {
                 break;
         }
 
-
         // create model if it does not exist
         if(!modelExists(modelPath)){
             // GENERATE MODEL
@@ -53,7 +53,6 @@ public class AirQualityAirClassifier implements AirClassifier {
         int classification = -1;
         try {
             classification = classify(modelPath, dateTime, temp, temp_min, temp_max, pressure, humidity, wind_speed, wind_deg, clouds_all);
-            System.out.println( this.getClass().getSimpleName() + ": " + classification);
         } catch (Exception e) {
             throw new MLException();
         }
@@ -71,23 +70,19 @@ public class AirQualityAirClassifier implements AirClassifier {
 
     private void generateModel(String modelPath, String datasetPath) throws Exception{
 
-
         Instances dataset = ModelGenerator.loadDataset(datasetPath);
-
 
         dataset.randomize(new Debug.Random(1));
 
-        //Normalize dataset
-
         int trainSize = (int) Math.round(dataset.numInstances() * 0.8);
         int testSize = dataset.numInstances() - trainSize;
-
 
         Instances traindataset = new Instances(dataset, 0, trainSize);
         Instances testdataset = new Instances(dataset, trainSize, testSize);
 
         // build classifier with train dataset
-        Classifier cl =  ModelGenerator.buildClassifier(traindataset);
+        RandomForest rf = new RandomForest();
+        Classifier cl =  ModelGenerator.buildClassifier(rf, traindataset);
         ModelGenerator.saveModel(cl, modelPath);
 
         ModelGenerator.evaluateModel(cl, traindataset, testdataset);
@@ -95,7 +90,7 @@ public class AirQualityAirClassifier implements AirClassifier {
     }
 
     private int classify(String modelPath, LocalDateTime dateTime, double temp, double temp_min, double temp_max, double pressure, double humidity, double wind_speed, double wind_deg, double clouds_all) throws Exception{
-        AirQualityModelClassifier cls = new AirQualityModelClassifier();
+        RandomForestInstanceClassifier cls = new RandomForestInstanceClassifier();
 
         int ret = -1;
 
@@ -121,6 +116,5 @@ public class AirQualityAirClassifier implements AirClassifier {
         }
         return ret;
     }
-
 
 }

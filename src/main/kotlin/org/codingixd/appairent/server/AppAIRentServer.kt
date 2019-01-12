@@ -7,7 +7,7 @@ import net.aksingh.owmjapis.model.CurrentWeather
 import net.aksingh.owmjapis.model.HourlyWeatherForecast
 import org.codingixd.appairent.data.*
 import org.codingixd.appairent.ml.AirClassifier
-import org.codingixd.appairent.ml.AirQualityAirClassifier
+import org.codingixd.appairent.ml.RandomForestAirClassifier
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.scheduling.annotation.EnableScheduling
@@ -75,7 +75,7 @@ fun main(args: Array<String>) {
 @Component
 class ScheduledTasks {
 
-    val airClassifier: AirClassifier = AirQualityAirClassifier()
+    val airClassifier: AirClassifier = RandomForestAirClassifier()
 
     @Scheduled(fixedRate = 60000)
     fun fetchCurrentData() {
