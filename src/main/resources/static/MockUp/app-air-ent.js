@@ -1,18 +1,19 @@
-createForecastButtons();
-
-updateWeatherForecast(0);
-updateWeatherForecast(9);
-updateWeatherForecast(15);
-updateWeatherForecast(23);
-updateWeatherForecast(31);
-updateWeatherForecast(39);
-
-updatesNamesOfDaysInForecast();
-
 // enable wait for results
 $.ajaxSetup({
   async: false
 });
+
+createForecastButtons();
+
+updateCurrentWeather();
+updateWeatherForecastUpcommingDays(0);
+updateWeatherForecastUpcommingDays(1);
+updateWeatherForecastUpcommingDays(2);
+updateWeatherForecastUpcommingDays(3);
+
+updatesNamesOfDaysInForecast();
+
+
 
 // Fade in of img. 
 $(document).ready(function(){
@@ -163,12 +164,8 @@ function createForecastButtons() {
   document.getElementById("choice-9").innerHTML += (first+27) %24;
 }
 
-/*
-  Get weather values and pushes them into UI
-
-*/
-function updateWeatherForecast(time){
-  if (time == 0){
+// Updates current weather forecast
+function updateCurrentWeather(){
   $.getJSON("http://192.168.0.117:8080/weather/current", function(now) {
       console.log(now); // this will show the info it in firebug console
       var nowdata = [];
@@ -180,25 +177,42 @@ function updateWeatherForecast(time){
       nowdata.push(now.wind.deg);
       change3hour(nowdata);
   });
-  } else {
-    $.getJSON("http://192.168.0.117:8080/weather/forecast/hourly", function(json) {
-      console.log(json);
-      if(time > 0 && time < 9){
-        //alert(json.list[time].dt_txt);
-        change3hour([fakePollution(),fakePollution(), Math.round(json.list[time].main.temp_max-273.15), Math.round(json.list[time].main.temp_min-273.15), iconConverter(json.list[time].weather[0].icon), json.list[time].wind.deg ]);
-      }
-      else {
-        var i = getRightIndex(time);
-        updateDailyForecast([fakePollution(),fakePollution(), Math.round(json.list[i].main.temp_max-273.15), Math.round(json.list[i].main.temp_min-273.15), iconConverter(json.list[i].weather[0].icon), json.list[i].wind.deg], time);
-        //alert(json.list[i].dt_txt);
-        //alert(json.list[i].wind.deg);
-      }
-    });
-  }
+}
+
+/*
+  Get weather values for next 24 hours and pushes them into UI
+
+*/
+function updateWeatherForecast24Hours(index){
+  $.getJSON("http://192.168.0.117:8080/weather/forecast/hourly", function(json) {
+    console.log(json);
+    if(time < 9){
+      //alert(json.list[time].dt_txt);
+      change3hour([fakePollution(),fakePollution(), Math.round(json.list[time].main.temp_max-273.15), Math.round(json.list[time].main.temp_min-273.15), iconConverter(json.list[time].weather[0].icon), json.list[time].wind.deg ]);
+    }
+  });
+}
+
+/*
+  Get weather values for upcomming days and pushes them into UI
+
+*/
+function updateWeatherForecastUpcommingDays(time){
+  $.getJSON("http://192.168.0.117:8080/weather/forecast/hourly", function(json) {
+    console.log(json);
+
+      var i = getRightIndex(time);
+      updateDailyForecast([fakePollution(),fakePollution(), Math.round(json.list[i].main.temp_max-273.15), Math.round(json.list[i].main.temp_min-273.15), iconConverter(json.list[i].weather[0].icon), json.list[i].wind.deg], time);
+
+  });
 }
 
 function getRightIndex(i){
   var hour = new Date().getHours();
+
+  return 4 + Math.floor((24-hour)/3) + 8*i
+
+
   if (13 <= hour && hour <= 15) {
     return i;
   }
@@ -476,7 +490,7 @@ var chartJSON = new Chart(ctxJSON, configJSON);
 
 function updatesNamesOfDaysInForecast() {
   var i;
-  for (i = 1; i < 6; i++) {
+  for (i = 1; i < 5; i++) {
     var day = "day" + i;
     var paragraph = document.getElementById(day);
     paragraph.textContent += getDayName(i);
@@ -619,35 +633,35 @@ function fillGauge(idbg, idtr, valuebg, valuetr, size) {
 
 // Updates daily weather and polltion forecast
 function updateDailyForecast(data, timeID){
-  if (timeID == 9){
+  if (timeID == 0){
     var bg = "g10";
     var tr = "g11";
     var temp = "temp1";
     var icon = "icon1";
     var wind = "wind1";
   }
-  if (timeID == 15){
+  if (timeID == 1){
     var bg = "g20";
     var tr = "g21";
     var temp = "temp2";
     var icon = "icon2";
     var wind = "wind2";
   }
-  if (timeID == 23){
+  if (timeID == 2){
     var bg = "g30";
     var tr = "g31";
     var temp = "temp3";
     var icon = "icon3";
     var wind = "wind3";
   }
-  if (timeID == 31){
+  if (timeID == 3){
     var bg = "g40";
     var tr = "g41";
     var temp = "temp4";
     var icon = "icon4";
     var wind = "wind4";
   }
-  if (timeID == 39){
+  if (timeID == 4){
     var bg = "g50";
     var tr = "g51";
     var temp = "temp5";
