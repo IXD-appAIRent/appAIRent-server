@@ -20,32 +20,43 @@ Note: momentarily only 3-hourly forecasts because of OpenWeatherMap restrictions
 
 Result: OpenWeatherMap 3-hourly weather forecast Json
 
-### Current Pollution
+### Current Pollution Data from all Station
 
 Returns the current pollution data. 
 It can be filtered and there is the possibility to directly get a mean value for
  each pollutant.
 
-`localhost:8080/pollution/current`
+`localhost:8080/stations/all`
 
 optional parameters:
 
 - `type`: list of values. possible is `traffic, background and suburb`
   - filters by station type
   - default is no filter
-  - example: `localhost:8080/pollution/current?type=traffic,background`  
+  - example: `localhost:8080/stations/all?type=traffic,background`  
   returns values from traffic and background stations 
 - `mean`: boolean
   - when set to `true` returns one mean value for every pollutant. Calculated from all data.
   - can and should be used with the `type` filter
   - default value `false`
-  - example: `localhost:8080/pollution/current?type=traffic,background&mean=true`
+  - example: `localhost:8080/stations/all?type=traffic,background&mean=true`
 
-### Pollution Forecast
+### Pollution Values from nearest Station 
 
-Provides a pollution forecast
+Returns only values from the nearest station.
 
-`localhost:8080/pollution/forecast/hourly`
+`localhost:8080/stations/nearest`
+
+ mandatory paramters:
+ 
+ - `lat`: double which represents latitude of position which nearest is measured against
+ - `lng`: double which represents longitude of position which nearest is measured against
+
+### LQI 3-Hourly Forecast
+
+Provides a 3-hourly lqi forecast for 24 hours
+
+`localhost:8080/index/forecast/hourly`
 
 Results in a json, for example:
 ```json
@@ -57,16 +68,41 @@ Results in a json, for example:
 ```
 
 `time` is the milliseconds till epoch  
-`level` is the pollution level from 0 to 2
+`level` is the pollution level from 1 to 6
 
+### LQI Daily Forecast
 
-### Pollution Values from nearest Station 
+Provides a daily lqi forecast. The fifth day is calculated out of the available values
 
-Returns only values from the nearest station.
+`localhost:8080/index/forecast/daily`
 
-`localhost:8080/pollution/nearest`
-
- mandatory paramters:
- 
- - `lat`: double which represents latitude of position which nearest is measured against
- - `lng`: double which represents longitude of position which nearest is measured against
+Results in a json, for example:
+```json
+[
+  {
+    "dayOfWeek": "TUESDAY",
+    "traffic": 2,
+    "background": 2
+  },
+  {
+    "dayOfWeek": "WEDNESDAY",
+    "traffic": 3,
+    "background": 2
+  },
+  {
+    "dayOfWeek": "THURSDAY",
+    "traffic": 2,
+    "background": 2
+  },
+  {
+    "dayOfWeek": "FRIDAY",
+    "traffic": 3,
+    "background": 3
+  },
+  {
+    "dayOfWeek": "SATURDAY",
+    "traffic": 4,
+    "background": 4
+  }
+]
+```
