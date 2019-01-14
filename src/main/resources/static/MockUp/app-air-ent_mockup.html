@@ -7,11 +7,6 @@
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="" />
 
-
-
-  <!-- optional style
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" />-->
-
   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
 
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
@@ -35,7 +30,9 @@
 
 <body>
 
+  <div id="divBackgroundimage">
 
+  </div>
 
   <div data-role="page" id="article1">
     <div data-role="header" data-theme="a" data-position="fixed" data-id="footer">
@@ -47,16 +44,16 @@
       <div class="row weather">
             <div class="col-xs-2" >
               <div class="weather2">
-                <span class="temperature" id="temp-max">16° </span>
+                <span class="temperature" id="temp-max"> </span>
               </div>
               <div class="weather3">
-                <span class="temperature" id="temp-min">13° </span>
+                <span class="temperature" id="temp-min"> </span>
               </div>
             </div>
             <div class="col-xs-6" >
               <div class="weather1">
                 <a href="#article2">
-                  <img id="weatherIconNow" src="icons/sunny.svg" alt="sunny"/></a>
+                  <img id="weatherIconNow" src="" alt="sunny"/></a>
               </div>
             </div>
 
@@ -69,7 +66,7 @@
           <tr>
             <th id="iconWrap">
 
-              <svg id="locationIcon" onclick="changeAddress()" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="175 150 175 190" style="enable-background:new 0 0 579 500;" xml:space="preserve">
+              <svg id="locationIcon" onclick="toogleAddressInterface()" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="175 150 175 190" style="enable-background:new 0 0 579 500;" xml:space="preserve">
               <g id="Layer_1">
               			<path class="st0" d="M304.6,250.3c7.1-9.8,11-22,10.3-35c-1.8-29.9-27.8-52.6-57.9-50.8c-30.2,1.8-53.1,27.6-51.3,57.5
               				c0.6,10.4,4.2,19.9,9.8,27.9"/>
@@ -90,7 +87,7 @@
             <th></th>
             <th>
               <div id="address">
-                <form onsubmit="submitFunction(); return false;">
+                <form onsubmit="updateLocationDependentValues(); return false;">
                   <input type="text" placeholder="search address" name="search" id="addressInput">
                 </form>
               </div>
@@ -110,15 +107,15 @@
 
         <table>
           <tr>
-            <td><button class="button1" id="choice-1" onclick="getWeatherForecast(0);">now</button></td>
-            <td><button class="button1" id="choice-2" onclick="getWeatherForecast(1);"></button></td>
-            <td><button class="button1" id="choice-3" onclick="getWeatherForecast(2);"></button></td>
-            <td><button class="button1" id="choice-4" onclick="getWeatherForecast(3);"></button></td>
-            <td><button class="button1" id="choice-5" onclick="getWeatherForecast(4);"></button></td>
-            <td><button class="button1" id="choice-6" onclick="getWeatherForecast(5);"></button></td>
-            <td><button class="button1" id="choice-7" onclick="getWeatherForecast(6);"></button></td>
-            <td><button class="button1" id="choice-8" onclick="getWeatherForecast(7);"></button></td>
-            <td><button class="button1" id="choice-9" onclick="getWeatherForecast(8);"></button></td>
+            <td><button class="button1" id="choice-1" onclick="updateCurrentWeather();">now</button></td>
+            <td><button class="button1" id="choice-2" onclick="updateWeatherForecast24Hours(1);"></button></td>
+            <td><button class="button1" id="choice-3" onclick="updateWeatherForecast24Hours(2);"></button></td>
+            <td><button class="button1" id="choice-4" onclick="updateWeatherForecast24Hours(3);"></button></td>
+            <td><button class="button1" id="choice-5" onclick="updateWeatherForecast24Hours(4);"></button></td>
+            <td><button class="button1" id="choice-6" onclick="updateWeatherForecast24Hours(5);"></button></td>
+            <td><button class="button1" id="choice-7" onclick="updateWeatherForecast24Hours(6);"></button></td>
+            <td><button class="button1" id="choice-8" onclick="updateWeatherForecast24Hours(7);"></button></td>
+            <td><button class="button1" id="choice-9" onclick="updateWeatherForecast24Hours(8);"></button></td>
           </tr>
         </table>
         <div id="recommendation">
@@ -158,16 +155,12 @@
       <div class="row forecastday">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day1"></h3>
-          <div class="lead temperaturefor" id="temp1"> 22° <br> 17° </div>
+          <div class="lead temperaturefor" id="temp1"><br></div>
         </div>
         <div class="col-xs-3">
-          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon1" src="icons/sunny.svg" /></div>
+          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon1" src="" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind1">
-          <svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'>
-            <g> <path transform='rotate(90, 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/>
-            </g>
-          </svg>
         </div>
         <div class="col-xs-5 gauge">
           <canvas id="g10" class="forecastGauge"></canvas>
@@ -179,16 +172,12 @@
       <div class="row forecastday">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day2"></h3>
-          <div class="lead temperaturefor" id="temp2"> 17° <br> 14° </div>
+          <div class="lead temperaturefor" id="temp2"><br></div>
         </div>
         <div class="col-xs-3">
-          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon2" src="icons/cloud.svg" /></div>
+          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon2" src="" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind2">
-          <svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'>
-            <g> <path transform='rotate(13, 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/>
-            </g>
-          </svg>
         </div>
         <div class="col-xs-5 gauge">
           <canvas id="g20" class="forecastGauge"></canvas>
@@ -200,16 +189,12 @@
       <div class="row forecastday">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day3"></h3>
-          <div class="lead temperaturefor" id="temp3"> 13° <br> 10° </div>
+          <div class="lead temperaturefor" id="temp3"><br></div>
         </div>
         <div class="col-xs-3">
-          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon3" src="icons/storm.svg" /></div>
+          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon3" src="" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind3">
-          <svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'>
-            <g> <path transform='rotate(250, 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/>
-            </g>
-          </svg>
         </div>
         <div class="col-xs-5 gauge">
           <canvas id="g30" class="forecastGauge"></canvas>
@@ -221,16 +206,12 @@
       <div class="row forecastday">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day4"></h3>
-          <div class="lead temperaturefor" id="temp4"> 18° <br> 13° </div>
+          <div class="lead temperaturefor" id="temp4"><br></div>
         </div>
         <div class="col-xs-3">
-          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon4" src="icons/sun_cloud.svg" /></div>
+          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon4" src="" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind4">
-          <svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'>
-            <g> <path transform='rotate(300, 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/>
-            </g>
-          </svg>
         </div>
 
         <div class="col-xs-5 gauge">
@@ -239,20 +220,16 @@
         </div>
 
       </div>
-
+      <!--
       <div class="row forecastday">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day5"></h3>
-          <div class="lead temperaturefor" id="temp5"> 18° <br> 12°</div>
+          <div class="lead temperaturefor" id="temp5"><br></div>
         </div>
         <div class="col-xs-3">
-          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon5" src="icons/rain.svg" /></div>
+          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon5" src="" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind5">
-          <svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'>
-            <g> <path transform='rotate("+ deg + ", 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/>
-            </g>
-          </svg>
         </div>
         <div class="col-xs-5 gauge">
           <canvas id="g50" class="forecastGauge"></canvas>
@@ -260,10 +237,17 @@
         </div>
 
       </div>
-
+      -->
       <div id="machinelearning">
         <h1> Machine Learning </h1>
         <h3>here you can swap some parameters and see how it affects the outcome of our machine learning algorithm</h3>
+
+        <button id="windDirection" onclick="showResult()">see results</button>
+        <div class="mlGauge">
+          <canvas class="mlGaugePos" id="mlbg"></canvas>
+          <canvas class="mlGaugePos" id="mltr"></canvas>
+        </div>
+
         <div class="row">
         <div id="IconCarousel" class="col-xs-6 carousel slide" data-interval="false" data-ride="carousel">
           <!-- Indicators -->
@@ -278,11 +262,8 @@
 
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
-            <div class="item active">
+            <div class="item active" onclick="showResult()">
               <img src="icons/sunny.svg" alt="sunny">
-            </div>
-            <div class="item">
-              <img src="icons/sun_cloud.svg" alt="stormy">
             </div>
 
             <div class="item">
@@ -291,10 +272,6 @@
 
             <div class="item">
               <img src="icons/rain.svg" alt="cloudy">
-            </div>
-
-            <div class="item">
-              <img src="icons/storm.svg" alt="stormy">
             </div>
 
             <div class="item">
@@ -516,7 +493,6 @@
             <div class="item">
               <img src="icons/sun_cloud.svg" alt="stormy">
             </div>
-
             <div class="item">
               <img src="icons/cloud.svg" alt="cloudy">
             </div>
@@ -550,12 +526,7 @@
         	<p>This is a completely basic popup, no options set.<p>
         </div>-->
 
-        <button id="windDirection" onclick="showResult()">see results</button>
 
-        <div class="mlGauge">
-          <canvas class="mlGaugePos" id="mlbg"></canvas>
-          <canvas class="mlGaugePos" id="mltr"></canvas>
-        </div>
       </div>
     </div>
   </div>

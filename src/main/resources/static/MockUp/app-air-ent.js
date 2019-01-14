@@ -1,6 +1,26 @@
+// enable wait for results
 $.ajaxSetup({
   async: false
 });
+
+createForecastButtons();
+
+updateCurrentWeather();
+updateWeatherForecastUpcommingDays(0);
+updateWeatherForecastUpcommingDays(1);
+updateWeatherForecastUpcommingDays(2);
+updateWeatherForecastUpcommingDays(3);
+
+updatesNamesOfDaysInForecast();
+
+
+
+// Fade in of img. 
+$(document).ready(function(){
+  $("#article1").fadeIn(5000);
+});
+
+// Navigation between main pages. 
 
 $(document).on('swipeleft', '.ui-page', function(event) {
   if (event.handled !== true) // This will prevent event triggering more then
@@ -33,25 +53,7 @@ $(document).on('swiperight', '.ui-page', function(event) {
   return false;
 });
 
-
-
-
-
-
-
-
-
-
-function makeLocUrl() {
-
-  var input = encodeURIComponent((document.getElementById("addressInput").value));
-
-  var url = "https://nominatim.openstreetmap.org/search/de/berlin/" + input + "?format=json&addressdetails=1&limit=1&polygon_svg=1";
-
-  return url;
-
-};
-
+// Loads json
 function getJSON(url, callback) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', url, true);
@@ -67,7 +69,7 @@ function getJSON(url, callback) {
   xhr.send();
 }
 
-
+// Calculates distance between two location points
 function distance(lat1, lon1, lat2, lon2) {
   var R = 6371e3; // metres
   var pi = Math.PI;
@@ -80,14 +82,15 @@ function distance(lat1, lon1, lat2, lon2) {
     Math.cos(phi1) * Math.cos(phi2) *
     Math.sin(deltalambda / 2) * Math.sin(deltalambda / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
+  
   var d = Math.round(R * c);
   return d / 1000;
 }
 
+// Calculates distance to nearest Air Quality Station
 function getDistNearestStation(lat, lon) {
   var dist;
-  StationUrl = encodeURI("http://172.16.253.16:8080/pollution/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
+  StationUrl = encodeURI("http://192.168.0.117:8080/pollution/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
   //alert(StationUrl);
   $.getJSON(StationUrl, function getDistance(data) {
     if (data[0].station.location.lng !== null) {
@@ -99,10 +102,11 @@ function getDistNearestStation(lat, lon) {
   return dist;
 }
 
-function getValueNow(lat, lon) {
+// Returns array of current polution values
+function getCurrentPolutionValue(lat, lon) {
   var values = [];
-  StationUrl = encodeURI("http://172.16.253.16:8080/pollution/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
-  //alert(StationUrl);
+  StationUrl = encodeURI("http://192.168.0.117:8080/pollution/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
+  alert(StationUrl);
   $.getJSON(StationUrl, function(data) {
     if (data[0].station.location.lng !== null) {
       var pollutant = data[0].measurementType;
@@ -114,14 +118,11 @@ function getValueNow(lat, lon) {
   return values;
 }
 
+// Update location and refresh depending values  
+function updateLocationDependentValues() {
 
-
-
-
-//'https://nominatim.openstreetmap.org/?format=json&addressdetails=1&q=Sodener+Str+20&format=json&limit=1'
-
-function submitFunction() {
-  var urlMine = makeLocUrl();
+  var input = encodeURIComponent((document.getElementById("addressInput").value));
+  var urlMine = "https://nominatim.openstreetmap.org/search/de/berlin/" + input + "?format=json&addressdetails=1&limit=1&polygon_svg=1";
 
   $.getJSON(urlMine, function(data) {
     if (Array.isArray(data) && data.length !== 0) {
@@ -138,7 +139,7 @@ function submitFunction() {
       var dist = getDistNearestStation(lat, lon);
       document.getElementById("distance").innerHTML = "<br/> distance to next station: " + dist + " km";
       setLocPoint(latlong);
-      alert(getValueNow(lat, lon));
+      alert(getCurrentPolutionValue(lat, lon));
 
       document.getElementById("address").style.display = "none";
     } else {
@@ -147,11 +148,12 @@ function submitFunction() {
     }
   });
 }
-function makeButtons() {
+
+// Creates buttons for forecast
+function createForecastButtons() {
   var first = new Date().getHours();
   var first = first - (first % 3);
-  //alert(first);
-  //document.getElementById("choice-1").innerHTML = first;
+
   document.getElementById("choice-2").innerHTML += (first+6) % 24;
   document.getElementById("choice-3").innerHTML += (first+9) % 24;
   document.getElementById("choice-4").innerHTML += (first+12) %24;
@@ -161,11 +163,10 @@ function makeButtons() {
   document.getElementById("choice-8").innerHTML += (first+24) %24;
   document.getElementById("choice-9").innerHTML += (first+27) %24;
 }
-makeButtons();
 
-function getWeatherForecast(time){
-  if (time == 0){
-  $.getJSON("http://172.16.253.16:8080/weather/current", function(now) {
+// Updates current weather forecast
+function updateCurrentWeather(){
+  $.getJSON("http://192.168.0.117:8080/weather/current", function(now) {
       console.log(now); // this will show the info it in firebug console
       var nowdata = [];
       nowdata[0] = 2;
@@ -176,25 +177,42 @@ function getWeatherForecast(time){
       nowdata.push(now.wind.deg);
       change3hour(nowdata);
   });
-  } else {
-    $.getJSON("http://172.16.253.16:8080/weather/forecast/hourly", function(json) {
-      console.log(json);
-      if(time > 0 && time < 9){
-        //alert(json.list[time].dt_txt);
-        change3hour([fakePollution(),fakePollution(), Math.round(json.list[time].main.temp_max-273.15), Math.round(json.list[time].main.temp_min-273.15), iconConverter(json.list[time].weather[0].icon), json.list[time].wind.deg ]);
-      }
-      else {
-        var i = getRightIndex(time);
-        changeDays([fakePollution(),fakePollution(), Math.round(json.list[i].main.temp_max-273.15), Math.round(json.list[i].main.temp_min-273.15), iconConverter(json.list[i].weather[0].icon), json.list[i].wind.deg], time);
-        //alert(json.list[i].dt_txt);
-        //alert(json.list[i].wind.deg);
-      }
-    });
-  }
+}
+
+/*
+  Get weather values for next 24 hours and pushes them into UI
+
+*/
+function updateWeatherForecast24Hours(index){
+  $.getJSON("http://192.168.0.117:8080/weather/forecast/hourly", function(json) {
+    console.log(json);
+    if(time < 9){
+      //alert(json.list[time].dt_txt);
+      change3hour([fakePollution(),fakePollution(), Math.round(json.list[time].main.temp_max-273.15), Math.round(json.list[time].main.temp_min-273.15), iconConverter(json.list[time].weather[0].icon), json.list[time].wind.deg ]);
+    }
+  });
+}
+
+/*
+  Get weather values for upcomming days and pushes them into UI
+
+*/
+function updateWeatherForecastUpcommingDays(time){
+  $.getJSON("http://192.168.0.117:8080/weather/forecast/hourly", function(json) {
+    console.log(json);
+
+      var i = getRightIndex(time);
+      updateDailyForecast([fakePollution(),fakePollution(), Math.round(json.list[i].main.temp_max-273.15), Math.round(json.list[i].main.temp_min-273.15), iconConverter(json.list[i].weather[0].icon), json.list[i].wind.deg], time);
+
+  });
 }
 
 function getRightIndex(i){
   var hour = new Date().getHours();
+
+  return 4 + Math.floor((24-hour)/3) + 8*i
+
+
   if (13 <= hour && hour <= 15) {
     return i;
   }
@@ -217,14 +235,7 @@ function fakePollution(){
   return Math.floor(Math.random() * 6)+1;
 }
 
-getWeatherForecast(0);
-getWeatherForecast(9);
-getWeatherForecast(15);
-getWeatherForecast(23);
-getWeatherForecast(31);
-getWeatherForecast(39);
-
-
+// Converts icon code to icon img path
 function iconConverter(iconID){
   var icon;
   if( iconID == "01d" || iconID == "01n") {
@@ -250,8 +261,8 @@ function iconConverter(iconID){
 
 
 
-
-function changeAddress() {
+// Toggles interface to set current location
+function toogleAddressInterface() {
   var x = document.getElementById("address");
   if (x.style.display === "none") {
     x.style.display = "block";
@@ -260,7 +271,7 @@ function changeAddress() {
   }
 }
 
-
+// START INITIALISATION OF MAPBOX
 mapboxgl.accessToken = 'pk.eyJ1IjoibGlsbGlwaWxsaSIsImEiOiJjanBjc3J3ZmozMG55M3dwaHFpcmFlZDNoIn0.Eh9Spcc3_PNF72jAYeGTmQ';
 const map = new mapboxgl.Map({
   container: 'map',
@@ -428,7 +439,9 @@ measurepoints.array.forEach(function(e) {
   var marker = new mapboxgl.Marker(el).setLngLat(coord).setPopup(new mapboxgl.Popup() // add popups
     .setHTML(e.measurementType + " <br/> ID: " + e.station.id + "<br/> <button id='" + e.station.id + "'>see values here</button>")).addTo(map);
 });
+// END INITIALISATION OF MAPBOX
 
+// Adds currently choosen location to map
 function setLocPoint(latlong) {
   var locdiv = document.createElement('div');
   locdiv.className = 'locdiv';
@@ -436,6 +449,7 @@ function setLocPoint(latlong) {
 
 }
 
+// Maps degree of wind direction to Compass direction.
 function degToWord(deg) {
   var val = Math.round(((deg / 22.5) + 0.5))% 16;
   var arr = ["W","WNW","NW","NNW","N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW"]
@@ -443,8 +457,7 @@ function degToWord(deg) {
   return res;
 }
 
-
-
+// Sets arrow which represents direction 
 function getWindIcon(deg, id){
   var word = degToWord(deg);
   var svg = word+"<svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'><g> <path transform='rotate("+ deg + ", 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/> </g></svg>";
@@ -453,46 +466,7 @@ function getWindIcon(deg, id){
 
 
 
-
-
-
-function timeNow(i) {
-  var d = new Date(),
-    h = (d.getHours() < 10 ? '0' : '') + d.getHours(),
-    m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
-  i.value = h + ':' + m;
-}
-
-// var g1;
-// document.addEventListener("DOMContentLoaded", function(event) {
-//   var g1 = new JustGage({
-//     id: "g1",
-//     value: 3,
-//     min: 0,
-//     max: 6,
-//     title: "",
-//     hideMinMax: true,
-//     gaugeWidthScale: 1.2,
-//     titlePosition: "below",
-//     titleFontColor: "#000000",
-//     titleMinFontSize: 20,
-//     relativeGaugeSize: true,
-//     levelColors: ["#FFFFFF", "#555555", "#000000"],
-//     textRenderer: customValue
-//   });
-// });
-
-/*function customValue(val) {
-  if (val < 2) {
-    return 'ok';
-  } else if (val < 5) {
-    return 'over yearly limit';
-  } else if (val >= 5) {
-    return 'over daily limit';
-  }
-};*/
-
-
+// START FAKE BAR CHART CODE 
 var dataset = [1, 4, 2, 7, 5, 3];
 var labels = ["1", "2", "3", "4", "5", "6"];
 
@@ -511,12 +485,12 @@ var configJSON = {
 };
 
 var chartJSON = new Chart(ctxJSON, configJSON);
+// END FAKE BAR CHART CODE 
 
 
-
-function getWeekdays() {
+function updatesNamesOfDaysInForecast() {
   var i;
-  for (i = 1; i < 6; i++) {
+  for (i = 1; i < 5; i++) {
     var day = "day" + i;
     var paragraph = document.getElementById(day);
     paragraph.textContent += getDayName(i);
@@ -549,12 +523,9 @@ function getDayName(i) {
   return day;
 };
 
-getWeekdays();
-
-
-
 
 function makeGauge(id, value, color, width) {
+  // #888 = BACKGROUND
   if (color == "#888"){
     var gauge = new RadialGauge({
       renderTo: id,
@@ -566,16 +537,7 @@ function makeGauge(id, value, color, width) {
       ticksAngle: 180,
       valueBox: false,
       maxValue: 180,
-      majorTicks: [
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""
-
-      ],
+      majorTicks: ["", "", "", "", "", "", ""],
       minorTicks: 1,
       strokeTicks: true,
       highlights: [{
@@ -606,7 +568,9 @@ function makeGauge(id, value, color, width) {
       animationDuration: 1500,
       animationRule: "linear"
     }).draw();
-  } else {
+  }
+  // TRAFFIC 
+  else {
     var gauge = new RadialGauge({
       renderTo: id,
       width: width,
@@ -662,53 +626,42 @@ function makeGauge(id, value, color, width) {
 
 }
 
-
-makeGauge("background", (2 * 30) - 17, "#888", 300);
-makeGauge("traffic", (2 * 30) - 12, "#000", 300);
-
-
-
 function fillGauge(idbg, idtr, valuebg, valuetr, size) {
     makeGauge(idbg, (valuebg * 30) - 17, "#888", size);
     makeGauge(idtr, (valuetr * 30) - 12, "#000", size);
 }
 
-
-// fillGauge(g20,g21, 3,4,100);
-// fillGauge(g30,g31, 4,4,100);
-// fillGauge(g40,g41, 1,2,100);
-// fillGauge(g50,g51, 2,2,100);
-
-function changeDays(data, timeID){
-  if (timeID == 9){
+// Updates daily weather and polltion forecast
+function updateDailyForecast(data, timeID){
+  if (timeID == 0){
     var bg = "g10";
     var tr = "g11";
     var temp = "temp1";
     var icon = "icon1";
     var wind = "wind1";
   }
-  if (timeID == 15){
+  if (timeID == 1){
     var bg = "g20";
     var tr = "g21";
     var temp = "temp2";
     var icon = "icon2";
     var wind = "wind2";
   }
-  if (timeID == 23){
+  if (timeID == 2){
     var bg = "g30";
     var tr = "g31";
     var temp = "temp3";
     var icon = "icon3";
     var wind = "wind3";
   }
-  if (timeID == 31){
+  if (timeID == 3){
     var bg = "g40";
     var tr = "g41";
     var temp = "temp4";
     var icon = "icon4";
     var wind = "wind4";
   }
-  if (timeID == 39){
+  if (timeID == 4){
     var bg = "g50";
     var tr = "g51";
     var temp = "temp5";
@@ -725,7 +678,7 @@ function changeDays(data, timeID){
   getWindIcon(data[5], wind);
 }
 
-
+// Updates 24h Forecast 
 function change3hour(data){
   fillGauge("background", "traffic", data[0], data[1], 300);
   document.getElementById("weatherIconNow").src = data[4];
@@ -734,6 +687,7 @@ function change3hour(data){
   getWindIcon(data[5], "windWrap");
 }
 
+// Updates Interface which makes ML approachable 
 function showResult(){
-  fillGauge("mlbg", "mltr", 2,3,300);
+  fillGauge("mlbg", "mltr", fakePollution(),fakePollution(),300);
 }
