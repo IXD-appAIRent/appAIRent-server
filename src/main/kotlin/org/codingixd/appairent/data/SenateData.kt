@@ -71,7 +71,7 @@ object SenateData {
 
         val pollutantList = mutableListOf<Data.Pollutant>()
 
-        pollutionList.forEach {
+        pollutionList.filter { it.pollutantType in usedPollutants }.forEach {
             val newestKey =
                 it.timePollutantMap.keys.reduce { acc, localDateTime ->
                     if (acc > localDateTime) acc else localDateTime
@@ -81,7 +81,8 @@ object SenateData {
                 pollutantList.add(
                     Data.Pollutant(
                         it.pollutantType, it.unit, it.measurementType,
-                        newestKey.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), value, it.stationList[index]
+                        newestKey.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), value,
+                        calculateIndex(it.pollutantType, value)?.ordinal ?: -1,it.stationList[index]
                     )
                 )
             }
@@ -186,7 +187,7 @@ object SenateData {
                     "&end%5Bdate%5D=${endDate.format(formatter)}&end%5Bhour%5D=$endHour"
 //        println("QUERY: $query")
 
-        val (request, response, result) = query.httpGet().responseString()
+        val (_, response, result) = query.httpGet().responseString()
 
         when (result) {
             is Result.Failure -> error(response)

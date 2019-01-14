@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 
 public class RandomForestAirClassifier implements AirClassifier {
 
-    public static void main(String[] args) throws Exception{
-        AirClassifier cl = new RandomForestAirClassifier();
-        int i = cl.getClassification(PredictionMode.TRAFFIC, LocalDateTime.of(2017, 4, 26, 15, 0 ),284.17,283.15,285.15,1011,39,3,320,0);
-        System.out.println("Classification: " + i);
-    }
+//    public static void main(String[] args) throws Exception{
+//        AirClassifier cl = new RandomForestAirClassifier();
+//        int i = cl.getClassification(PredictionMode.TRAFFIC, LocalDateTime.of(2017, 4, 26, 15, 0 ),284.17,283.15,285.15,1011,39,3,320,0);
+//        System.out.println("Classification: " + i);
+//    }
 
     private static final String DATASET_TRAFFIC = "./data/ml_traffic.arff";
     private static final String DATASET_BACKGROUND = "./data/ml_background.arff";
