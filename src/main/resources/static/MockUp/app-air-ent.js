@@ -1,4 +1,4 @@
-var ipAddress = "192.168.2.53";
+var ipAddress = "192.168.0.117";
 
 // enable wait for results
 $.ajaxSetup({
@@ -15,6 +15,7 @@ updateWeatherForecastUpcomingDays(2);
 updateWeatherForecastUpcomingDays(3);
 
 updatesNamesOfDaysInForecast();
+showResult();
 
 
 
@@ -796,6 +797,80 @@ function updateLocationGauge(data){
 // Updates Interface which makes ML approachable
 function showResult(){
   var gauge;
-	gauge = makeGauge("mlbg", (fakePollution() * 30) - 17 ,"#888",300);
+  // skyML, tempML, windML, timeML, seasonML, PredictionModeML
+
+
+  var pressure, humidity, clouds_all// skyML
+  var temp, temp_min, temp_max//tempML
+  var wind_speed, wind_deg// windML
+  var hour, isWeekEnd// timeML
+  var month // seasonML
+  var predictionMode // PredictionModeML
+
+
+  // TO DEFINE
+  switch ($('#skyML > div.active').index()) {
+    case 0: pressure=0; humidity=0; clouds_all=0;
+      break;
+    case 1: pressure=0; humidity=0; clouds_all=0;
+      break;
+    case 2: pressure=0; humidity=0; clouds_all=0;
+      break;
+    case 3: pressure=0; humidity=0; clouds_all=0;
+      break;
+  }
+
+  switch ($('#tempML > div.active').index()) {
+    case 0: temp=22+273.15;
+      break;
+    case 1: temp=30+273.15;
+      break;
+    case 2: temp=10+273.15;
+      break;
+    case 3: temp=-4+273.15;
+      break;
+  }
+  temp_min=temp; temp_max=temp;
+
+  switch ($('#windML > div.active').index()) {
+    case 0: wind_speed=1.4; wind_deg=0;
+      break;
+    case 1: wind_speed=5.5; wind_deg=90;
+      break;
+    case 2: wind_speed=4.1; wind_deg=180;
+      break;
+    case 3: wind_speed=2.8; wind_deg=270;
+      break;
+  }
+  switch ($('#timeML > div.active').index()) {
+    case 0: hour=8; isWeekEnd=0;
+      break;
+    case 1: hour=13; isWeekEnd=0;
+      break;
+    case 2: hour=23; isWeekEnd=0;
+      break;
+    case 3: hour=13; isWeekEnd=1;
+      break;
+  }
+  switch ($('#seasonML > div.active').index()) {
+    case 0: month=4;
+      break;
+    case 1: month=7;
+      break;
+    case 2: month=10;
+      break;
+    case 3: month=1;
+      break;
+  }
+  switch ($('#PredictionModeML > div.active').index()) {
+    case 0: predictionMode=0;
+      break;
+    case 1: predictionMode=1;
+      break;
+  }
+
+  var prediction = fakePollution()
+
+	gauge = makeGauge("mlbg", (prediction * 30) - 17 ,"#888",300);
 
 }
