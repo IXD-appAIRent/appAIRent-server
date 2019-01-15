@@ -1,3 +1,5 @@
+var ipAddress = "192.168.2.53";
+
 // enable wait for results
 $.ajaxSetup({
   async: false
@@ -6,21 +8,22 @@ $.ajaxSetup({
 createForecastButtons();
 
 updateCurrentWeather();
-updateWeatherForecastUpcommingDays(0);
-updateWeatherForecastUpcommingDays(1);
-updateWeatherForecastUpcommingDays(2);
-updateWeatherForecastUpcommingDays(3);
+
+updateWeatherForecastUpcomingDays(0);
+updateWeatherForecastUpcomingDays(1);
+updateWeatherForecastUpcomingDays(2);
+updateWeatherForecastUpcomingDays(3);
 
 updatesNamesOfDaysInForecast();
 
 
 
-// Fade in of img. 
+// Fade in of img.
 $(document).ready(function(){
   $("#article1").fadeIn(5000);
 });
 
-// Navigation between main pages. 
+// Navigation between main pages.
 
 $(document).on('swipeleft', '.ui-page', function(event) {
   if (event.handled !== true) // This will prevent event triggering more then
@@ -82,7 +85,6 @@ function distance(lat1, lon1, lat2, lon2) {
     Math.cos(phi1) * Math.cos(phi2) *
     Math.sin(deltalambda / 2) * Math.sin(deltalambda / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  
   var d = Math.round(R * c);
   return d / 1000;
 }
@@ -90,35 +92,29 @@ function distance(lat1, lon1, lat2, lon2) {
 // Calculates distance to nearest Air Quality Station
 function getDistNearestStation(lat, lon) {
   var dist;
-  StationUrl = encodeURI("http://192.168.0.117:8080/pollution/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
+  StationUrl = encodeURI("http://"+ ipAddress+":8080/stations/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
   //alert(StationUrl);
   $.getJSON(StationUrl, function getDistance(data) {
-    if (data[0].station.location.lng !== null) {
-      var lonStation = data[0].station.location.lng;
-      var latStation = data[0].station.location.lat;
+    if (data.location.lng !== null) {
+      var lonStation = data.location.lng;
+      var latStation = data.location.lat;
       dist = distance(lat, lon, latStation, lonStation);
     }
   });
   return dist;
 }
 
-// Returns array of current polution values
-function getCurrentPolutionValue(lat, lon) {
+// Returns array of current pollution values
+function getCurrentPollutionValue(lat, lon) {
   var values = [];
-  StationUrl = encodeURI("http://192.168.0.117:8080/pollution/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
-  alert(StationUrl);
+  StationUrl = encodeURI("http://"+ ipAddress+":8080/stations/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
   $.getJSON(StationUrl, function(data) {
-    if (data[0].station.location.lng !== null) {
-      var pollutant = data[0].measurementType;
-      var name = data[0].station.name;
-      var value = data[0].value;
-      values = [pollutant,name,value];
-    }
+      values = [data.measurementType,data.lqi];
   });
   return values;
 }
 
-// Update location and refresh depending values  
+// Update location and refresh depending values
 function updateLocationDependentValues() {
 
   var input = encodeURIComponent((document.getElementById("addressInput").value));
@@ -139,8 +135,9 @@ function updateLocationDependentValues() {
       var dist = getDistNearestStation(lat, lon);
       document.getElementById("distance").innerHTML = "<br/> distance to next station: " + dist + " km";
       setLocPoint(latlong);
-      alert(getCurrentPolutionValue(lat, lon));
-
+      var pollData = getCurrentPollutionValue(lat, lon);
+      updateLocationGauge(pollData);
+      updateOnePopupValue(pollData);
       document.getElementById("address").style.display = "none";
     } else {
       alert("No such address, try again");
@@ -149,34 +146,68 @@ function updateLocationDependentValues() {
   });
 }
 
+function updateOnePopupValue(data){
+  if (data[0] == "background"){
+    document.getElementById("valueBGpopup").innerHTML = data[1];
+    document.getElementById("TRpopup").innerHTML = "";
+  } else{
+    document.getElementById("valueTRpopup").innerHTML = data[1];
+    document.getElementById("BGpopup").innerHTML = "";
+  }
+}
+
+
+
 // Creates buttons for forecast
 function createForecastButtons() {
   var first = new Date().getHours();
   var first = first - (first % 3);
 
-  document.getElementById("choice-2").innerHTML += (first+6) % 24;
-  document.getElementById("choice-3").innerHTML += (first+9) % 24;
-  document.getElementById("choice-4").innerHTML += (first+12) %24;
-  document.getElementById("choice-5").innerHTML += (first+15) %24;
-  document.getElementById("choice-6").innerHTML += (first+18) %24;
-  document.getElementById("choice-7").innerHTML += (first+21) %24;
-  document.getElementById("choice-8").innerHTML += (first+24) %24;
-  document.getElementById("choice-9").innerHTML += (first+27) %24;
+  document.getElementById("choice-2").innerHTML += (first+3) % 24;
+  document.getElementById("choice-3").innerHTML += (first+6) % 24;
+  document.getElementById("choice-4").innerHTML += (first+9) %24;
+  document.getElementById("choice-5").innerHTML += (first+12) %24;
+  document.getElementById("choice-6").innerHTML += (first+15) %24;
+  document.getElementById("choice-7").innerHTML += (first+18) %24;
+  document.getElementById("choice-8").innerHTML += (first+21) %24;
+  document.getElementById("choice-9").innerHTML += (first+24) %24;
 }
 
 // Updates current weather forecast
 function updateCurrentWeather(){
-  $.getJSON("http://192.168.0.117:8080/weather/current", function(now) {
+  $.getJSON("http://"+ ipAddress+":8080/weather/current", function(now) {
       console.log(now); // this will show the info it in firebug console
-      var nowdata = [];
-      nowdata[0] = 2;
-      nowdata[1] = 3;
+      document.getElementById("title1").innerHTML = "Berlin";
+      document.getElementById("distance").innerHTML = "<br> average values for Berlin";
+      var nowdata = update24hPollutionValues(0);
+      document.getElementById("article1").style.backgroundImage = "url('icons/middlepollution.png')";
       nowdata.push(Math.round(now.main.temp_max-273.15));
       nowdata.push(Math.round(now.main.temp_min-273.15));
       nowdata.push(iconConverter(now.weather[0].icon));
       nowdata.push(now.wind.deg);
+      nowdata.push(now.wind.speed);
       change3hour(nowdata);
+      updateDetailView();
   });
+}
+
+function updateDetailView(){
+  $.getJSON("http://"+ ipAddress+":8080/stations/all?type=traffic,background&mean=true", function(polls) {
+    var i;
+    var max;
+    var x = 0;
+    for (i = 0; i < 5; i++) {
+    document.getElementById(polls[i].pollutantType+"grade").innerHTML = polls[i].lqi;
+    document.getElementById(polls[i].pollutantType+"value").innerHTML = Math.round(polls[i].value) + "  	&mu;/m3";
+    if(polls[i].value > x){
+      max = polls[i].pollutantType;
+      x = polls[i].value;
+    }
+  }
+  document.getElementById(max).style.backgroundColor = "#bbb";
+  document.getElementById(max).style.borderColor = "red";
+  });
+
 }
 
 /*
@@ -184,50 +215,54 @@ function updateCurrentWeather(){
 
 */
 function updateWeatherForecast24Hours(index){
-  $.getJSON("http://192.168.0.117:8080/weather/forecast/hourly", function(json) {
+  $.getJSON("http://"+ ipAddress+":8080/weather/forecast/hourly", function(json) {
     console.log(json);
-    if(time < 9){
+    if(index < 9){
       //alert(json.list[time].dt_txt);
-      change3hour([fakePollution(),fakePollution(), Math.round(json.list[time].main.temp_max-273.15), Math.round(json.list[time].main.temp_min-273.15), iconConverter(json.list[time].weather[0].icon), json.list[time].wind.deg ]);
+
+      var pollBerlin = update24hPollutionValues(index);
+      //alert(pollBerlin[0]);
+      change3hour([pollBerlin[0],pollBerlin[1], Math.round(json.list[index].main.temp_max-273.15), Math.round(json.list[index].main.temp_min-273.15), iconConverter(json.list[index].weather[0].icon), json.list[index].wind.deg,json.list[index].wind.speed ]);
     }
   });
+}
+
+// fetches pollution grades for now and upcoming 24 hours
+function update24hPollutionValues(index){
+  var array;
+  $.getJSON("http://"+ipAddress+":8080/index/forecast/hourly", function(json) {
+      array = [json[index].background, json[index].traffic];
+  });
+  return array;
 }
 
 /*
   Get weather values for upcomming days and pushes them into UI
 
 */
-function updateWeatherForecastUpcommingDays(time){
-  $.getJSON("http://192.168.0.117:8080/weather/forecast/hourly", function(json) {
+function updateWeatherForecastUpcomingDays(index){
+  $.getJSON("http://"+ ipAddress+":8080/weather/forecast/hourly", function(json) {
     console.log(json);
-
-      var i = getRightIndex(time);
-      updateDailyForecast([fakePollution(),fakePollution(), Math.round(json.list[i].main.temp_max-273.15), Math.round(json.list[i].main.temp_min-273.15), iconConverter(json.list[i].weather[0].icon), json.list[i].wind.deg], time);
+      var pollDay = updateNextDaysPollutionValues(index);
+      //alert(pollDay[0]);
+      var i = getRightIndex(index);
+      updateDailyForecast([pollDay[0],pollDay[1], Math.round(json.list[i].main.temp_max-273.15), Math.round(json.list[i].main.temp_min-273.15), iconConverter(json.list[i].weather[0].icon), json.list[i].wind.deg,json.list[i].wind.speed], index);
 
   });
+}
+
+function updateNextDaysPollutionValues(index){
+  var array;
+  $.getJSON("http://"+ipAddress+":8080/index/forecast/daily", function(json) {
+      array = [json[index].background, json[index].traffic];
+  });
+  return array;
 }
 
 function getRightIndex(i){
   var hour = new Date().getHours();
 
-  return 4 + Math.floor((24-hour)/3) + 8*i
-
-
-  if (13 <= hour && hour <= 15) {
-    return i;
-  }
-  else if (16 <= hour && hour <= 18) {
-    return i-1;
-  }
-  else if (19 <= hour && hour <= 21) {
-    return i-2;
-  }
-  else if (22 <= hour) {
-    return i-3;
-  }
-  else{
-    return i-1;
-  }
+  return 4 + Math.floor((24-hour)/3) + 8*i;
 }
 
 
@@ -457,35 +492,15 @@ function degToWord(deg) {
   return res;
 }
 
-// Sets arrow which represents direction 
-function getWindIcon(deg, id){
-  var word = degToWord(deg);
+// Sets arrow which represents direction
+function getWindIcon(deg,strength, id){
+  var word = Math.round(strength*3.6)+ "kmh";
   var svg = word+"<svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'><g> <path transform='rotate("+ deg + ", 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/> </g></svg>";
   document.getElementById(id).innerHTML = svg;
 }
 
 
 
-// START FAKE BAR CHART CODE 
-var dataset = [1, 4, 2, 7, 5, 3];
-var labels = ["1", "2", "3", "4", "5", "6"];
-
-
-var ctxJSON = barchart1.getContext('2d');
-var configJSON = {
-  type: 'bar',
-  data: {
-    labels: labels,
-    datasets: [{
-      label: 'blub',
-      data: dataset,
-      backgroundColor: '#000000'
-    }]
-  }
-};
-
-var chartJSON = new Chart(ctxJSON, configJSON);
-// END FAKE BAR CHART CODE 
 
 
 function updatesNamesOfDaysInForecast() {
@@ -524,9 +539,9 @@ function getDayName(i) {
 };
 
 
-function makeGauge(id, value, color, width) {
+function makeGauge(id, value, color, width, pointer) {
   // #888 = BACKGROUND
-  if (color == "#888"){
+  if (color == "#888" && pointer !== false){
     var gauge = new RadialGauge({
       renderTo: id,
       width: width,
@@ -568,9 +583,10 @@ function makeGauge(id, value, color, width) {
       animationDuration: 1500,
       animationRule: "linear"
     }).draw();
+    return gauge;
   }
-  // TRAFFIC 
-  else {
+  // TRAFFIC
+  else if (pointer !== false) {
     var gauge = new RadialGauge({
       renderTo: id,
       width: width,
@@ -623,12 +639,87 @@ function makeGauge(id, value, color, width) {
       animationRule: "linear"
     }).draw();
   }
+  else {
+    var gauge = new RadialGauge({
+      renderTo: id,
+      width: width,
+      height: width,
+      value: value,
+      minValue: 0,
+      startAngle: 90,
+      ticksAngle: 180,
+      valueBox: false,
+      maxValue: 180,
+      majorTicks: ["", "", "", "", "", "", ""],
+      minorTicks: 1,
+      strokeTicks: true,
+      highlights: [{
+          "from": 60,
+          "to": 120,
+          "color": '#BBB'
+        },
+        {
+          "from": 120,
+          "to": 180,
+          "color": '#555'
+        }
+      ],
+      colorPlate: 'Transparent',
+      colorNumbers: '#888',
+      borderShadowWidth: 0,
+      borders: false,
+      needle: false,
+      animationDuration: 1500,
+      animationRule: "linear"
+    }).draw();
+  }
 
 }
 
+function updateRecommendationText(grade){
+  var text;
+  if (grade == 1){
+    text = "1 - good <br> enjoy cycling and outdoor activities in the city!";
+  }
+  else if (grade == 2){
+    text = "2 - moderate <br> enjoy cycling and outdoor activities in the city!";
+  }
+  else if (grade == 3){
+    text = "3 - unhealthy for sensitive groups <br> if possible, avoid cycling during rush hour and on high-traffic roads. if you do need to cycle on main roads: try to ensure you're cycling at a steady pace, not too fast or slow (fast, uphill or hard cycling increases pollution intake further).";
+  }
+  else if (grade == 4){
+    text = "4 - unhealthy <br> if possible, avoid cycling during rush hour and on high-traffic roads. if you do need to cycle on main roads: try to ensure you're cycling at a steady pace, not too fast or slow (fast, uphill or hard cycling increases pollution intake further).";
+  }
+  else if (grade == 5){
+    text = "5 - very unhealthy <br> if possible, avoid cycling during rush hour and on high-traffic roads. if you start to feel respiratory discomfort (eg. coughing or breathing difficulties), reduce cycling intensity eg. try to find an alternative route using our pollution map. if you do need to cycle on main roads: try to cycle at a steady pace, not too fast or slow (fast, uphill or hard cycling increases pollution intake further).";
+  }
+  else {
+    text = "6 - hazardous <br> if possible, avoid cycling during rush hour and on high-traffic roads. if you start to feel respiratory discomfort (eg. coughing or breathing difficulties), reduce cycling intensity eg. try to find an alternative route using our pollution map. if you do need to cycle on main roads: try to cycle at a steady pace, not too fast or slow (fast, uphill or hard cycling increases pollution intake further).";
+  }
+  document.getElementById("recommendationText").innerHTML = text;
+  if(grade <= 2){
+    document.getElementById("rec1").style.display = "block";
+    document.getElementById("rec2").style.display = "none";
+    document.getElementById("rec3").style.display = "none";
+  }
+  else if(grade <= 4){
+    document.getElementById("rec1").style.display = "none";
+    document.getElementById("rec2").style.display = "block";
+    document.getElementById("rec3").style.display = "none";
+  } else {
+    document.getElementById("rec1").style.display = "none";
+    document.getElementById("rec2").style.display = "none";
+    document.getElementById("rec3").style.display = "block";
+  }
+}
+
 function fillGauge(idbg, idtr, valuebg, valuetr, size) {
+  if (idbg !== undefined){
     makeGauge(idbg, (valuebg * 30) - 17, "#888", size);
+  }
+  if (idtr !== undefined){
     makeGauge(idtr, (valuetr * 30) - 12, "#000", size);
+  }
 }
 
 // Updates daily weather and polltion forecast
@@ -675,19 +766,54 @@ function updateDailyForecast(data, timeID){
   document.getElementById(icon).src = data[4];
   document.getElementById(temp).innerHTML = data[3] + "°";
   //+" <br>"+ data[2] + "°"
-  getWindIcon(data[5], wind);
+  getWindIcon(data[5],data[6], wind);
 }
 
-// Updates 24h Forecast 
+// Updates 24h Forecast
 function change3hour(data){
   fillGauge("background", "traffic", data[0], data[1], 300);
   document.getElementById("weatherIconNow").src = data[4];
   document.getElementById("temp-min").innerHTML = data[3] + "°";
   document.getElementById("temp-max").innerHTML = data[2] + "°";
-  getWindIcon(data[5], "windWrap");
+  getWindIcon(data[5],data[6], "windWrap");
+  updateRecommendationText(data[1]);
+  document.getElementById("valueBGpopup").innerHTML = data[0];
+  document.getElementById("valueTRpopup").innerHTML = data[1];
+
 }
 
-// Updates Interface which makes ML approachable 
+function updateLocationGauge(data){
+  updateRecommendationText(data[1]);
+  if (data[0] == "background"){
+    makeGauge("traffic", (data[1] * 30) - 12, "#000", 300,false);
+    makeGauge("background", (data[1] * 30) - 17, "#888", 300);
+  } else {
+    makeGauge("background", (data[1] * 30) - 17, "#888", 300, false);
+    makeGauge("traffic", (data[1] * 30) - 12, "#000", 300);
+  }
+}
+
+// Updates Interface which makes ML approachable
 function showResult(){
-  fillGauge("mlbg", "mltr", fakePollution(),fakePollution(),300);
+  var gauge;
+	gauge = makeGauge("mlbg", (fakePollution() * 30) - 17 ,"#888",300);
+
+}
+
+function detailedInfo(index){
+  if (index == 0){
+    document.getElementById("detailed").innerHTML = "PM10 <br> inhalable particulate matter <10µm) <br> main sources are combustion processes (eg. indoor heating, wildfires), mechanical processes (eg. construction, mineral dust, agriculture) and biological particles (eg. pollen, bacteria, mold). <br> inhalable particles can penetrate into the lungs. short term exposure can cause irritation of the airways, coughing, and aggravation of heart and lung diseases, expressed as difficulty reaching, heart attacks and even premature death. ";
+  }
+  else if (index == 1){
+    document.getElementById("detailed").innerHTML = "NO2 <br> nitrogen dioxide <br> main sources are fuel burning processes, such as those used in industry and transportation. exposure may cause increased bronchial reactivity in patients with COPD, and increased risk of respiratory infections, especially in young children";
+  }
+  else if (index == 2){
+    document.getElementById("detailed").innerHTML = "SO2 <br> sulfur dioxide <br> main sources are burning processes of sulfur-containing fuel in industry, transportation and power plants. exposure causes irritation of the respiratory tract, coughing and generates local inflammatory reactions. there in turn, may cause aggravation of lung diseases, even with short term exposure. ";
+  }
+  else if (index == 3){
+    document.getElementById("detailed").innerHTML = "CO <br> carbon monoxide <br> typically originates from the incomplete combustion of carbon fuels, such as that which occurs in car engines and power plants when inhaled carbon monoxide can prevent the blood from carrying oxygen. exposure may cause dizziness, nausea and headaches. exposure to extreme concentrations lead to loss of consciousness.";
+  }
+  else if (index == 4){
+    document.getElementById("detailed").innerHTML = "O3 <br> ozone <br> is created in a chemical reaction between atmospheric oxygen, nitrogen oxides, carbon monoxide and organise compounds (VOC), in the precedes of sunlight. ozone can irritate the airways and cause coughing, a burning sensation, wheezing and shortness of breath. additionally ozone is one of the major components of photochemical smog.";
+  } else {}
 }

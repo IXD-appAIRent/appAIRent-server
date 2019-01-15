@@ -7,8 +7,10 @@ html, body {
 }
 
 #article1{
-  background-image: url("middlepollution.png");
-    background-size: 100%;
+  background-size: 100%;
+  backgroundImage: url("icons/middlepollution.png");
+  width: 100%;
+  display: none;
 }
 
 #map {
@@ -22,7 +24,7 @@ html, body {
 .gContainer {
   position: relative;
   width: 300px;
-  height: 250px;
+  height: 170px;
 }
 
 
@@ -33,17 +35,13 @@ html, body {
 }
 #divBackgroundimage{
   position: absolute;
-  background-image: url("middlepollution.png");
-    background-size: 100%;
+  background-image: url("icons/highpollution.png");
+  background-size: 100%;
     width: 100%;
     height: 100%;
+    z-index: -11;
 }
 
-#article1 {
-
-  width: 100%;
-  display: none;
-}
 
 .temperature {
   font-size: 150%;
@@ -90,15 +88,12 @@ html, body {
 	box-shadow: none;
 }
 
-#choice-1:hover, #choice-2:hover, #choice-3:hover, #choice-4:hover, #choice-5:hover, #choice-6:hover, #choice-7:hover, #choice-8:hover, #choice-9:hover{
-	background-color: #888;
-}
 
 #address {
   display: none;
 }
 #location {
-	margin-bottom: 50px;
+
 }
 
 #locationTitle {
@@ -112,8 +107,9 @@ html, body {
 
 #iconWrap {
   white-space: nowrap;
-  width: 10%;
+  width: 10%
 }
+
 
 #windWrap {
   white-space: nowrap;
@@ -134,9 +130,6 @@ html, body {
   stroke-miterlimit: 10;
 }
 
-#Layer_1:hover {
-  fill: #777777;
-}
 
 .weather {
 	margin-left: 20px;
@@ -152,6 +145,42 @@ html, body {
 .weather1 {
 	/*border: solid 1px;*/
 
+}
+.transparent{
+  background-color: Transparent !important;
+}
+
+
+.navigator {
+    width: 100%;
+    padding: 0;
+    height: 14px;
+    background-color: Transparent;
+}
+.navigator a {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    text-indent: -999em;
+    background: Transparent;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    box-shadow: 0 0 1px 1px #000000;
+    margin-right: 10px;
+}
+.navigator a {
+    background: #FFFFFF;
+}
+.navigator a.activeSlide {
+    background: #000000;
+}
+
+.right{
+  width: 30%;
+}
+.left{
+  width: 30%;
 }
 
 #weatherIconNow {
@@ -205,10 +234,10 @@ html, body {
 
 
 .carousel-indicators li {
-	height: 7px !important;
-	width: 7px !important;
+	height: 8px !important;
+	width: 8px !important;
  border: solid 1px;
- border-radius: 50%;
+ border-radius: 60%;
  background-color: #fff;
 
 }
@@ -249,4 +278,29 @@ html, body {
   width: 300px;
   height: 250px;
   position: absolute;
+}
+
+#PM10, #NO2, #SO2, #CO, #O3 {
+  width: 16%;
+	height: 100px;
+  text-align: center;
+  padding: 5px 0px 2px 2px;
+  margin: 3px 3px 3px 3px;
+  border: solid 1px;
+  border-radius: 5%;
+}
+
+#detailview span {
+  height: 25px;
+width: 25px;
+background-color: #bbb;
+border-radius: 50%;
+display: inline-block;
+}
+
+#detailedDiv{
+  padding: 5px 5px 5px 5px;
+  margin: 3px 3px 3px 3px;
+  border: solid 1px;
+  border-radius: 5px;
 }
