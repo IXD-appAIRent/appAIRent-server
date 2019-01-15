@@ -143,12 +143,36 @@
 
 
 
-        <div id="moreCharts">
-          <h2>averages throughout the year/ day</h2>
-
-          <div>
-            <canvas id="barchart1"></canvas>
+        <div >
+          <div class="row" id="detailview">
+            <div class="col-xs-2" id="PM10" onclick="detailedInfo(0)">PM10<br>
+              <span id="PM10grade"></span>
+              <p id="PM10value"></p>
+            </div>
+            <div class="col-xs-2" id="NO2" onclick="detailedInfo(1)">NO2<br>
+              <span id="NO2grade"></span>
+              <p id="NO2value"></p>
+            </div>
+            <div class="col-xs-2" id="SO2"
+            onclick="detailedInfo(2)">SO2<br>
+              <span id="SO2grade"></span>
+              <p id="SO2value"></p>
+            </div>
+            <div class="col-xs-2" id="CO"
+            onclick="detailedInfo(3)">CO<br>
+              <span id="COgrade"></span>
+              <p id="COvalue"></p>
+            </div>
+            <div class="col-xs-2" id="O3"
+            onclick="detailedInfo(4)">O3<br>
+              <span id="O3grade"></span>
+              <p id="O3value"></p>
+            </div>
           </div>
+
+          <div id="detailedDiv"><span id="detailed"></span></div>
+
+
         </div>
 
       </div>
@@ -499,16 +523,16 @@
 
 
 
-  <div id="article3" style="display: none">
-      <div>
-        <h1> all weather stations in berlin </h1>
-        <h3> click on station to see current values.
-              </h3>
-      </div>
+    <div id="article3" style="display: none">
+        <div>
+          <h1> all weather stations in berlin </h1>
+          <h3> click on station to see current values.
+                </h3>
+        </div>
 
-      <div id='map'>
-      </div>
-  </div>
+        <div id='map'>
+        </div>
+    </div>
 
 
   <script src="Chart.bundle.js"></script>

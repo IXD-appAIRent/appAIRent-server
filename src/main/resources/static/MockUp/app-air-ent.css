@@ -279,3 +279,28 @@ html, body {
   height: 250px;
   position: absolute;
 }
+
+#PM10, #NO2, #SO2, #CO, #O3 {
+  width: 16%;
+	height: 100px;
+  text-align: center;
+  padding: 5px 0px 2px 2px;
+  margin: 3px 3px 3px 3px;
+  border: solid 1px;
+  border-radius: 5%;
+}
+
+#detailview span {
+  height: 25px;
+width: 25px;
+background-color: #bbb;
+border-radius: 50%;
+display: inline-block;
+}
+
+#detailedDiv{
+  padding: 5px 5px 5px 5px;
+  margin: 3px 3px 3px 3px;
+  border: solid 1px;
+  border-radius: 5px;
+}

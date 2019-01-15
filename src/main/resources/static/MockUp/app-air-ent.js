@@ -180,14 +180,34 @@ function updateCurrentWeather(){
       document.getElementById("title1").innerHTML = "Berlin";
       document.getElementById("distance").innerHTML = "<br> average values for Berlin";
       var nowdata = update24hPollutionValues(0);
-      document.getElementById("article1").style.backgroundImage = "url('icons/middlepollution.png')"; 
+      document.getElementById("article1").style.backgroundImage = "url('icons/middlepollution.png')";
       nowdata.push(Math.round(now.main.temp_max-273.15));
       nowdata.push(Math.round(now.main.temp_min-273.15));
       nowdata.push(iconConverter(now.weather[0].icon));
       nowdata.push(now.wind.deg);
       nowdata.push(now.wind.speed);
       change3hour(nowdata);
+      updateDetailView();
   });
+}
+
+function updateDetailView(){
+  $.getJSON("http://"+ ipAddress+":8080/stations/all?type=traffic,background&mean=true", function(polls) {
+    var i;
+    var max;
+    var x = 0;
+    for (i = 0; i < 5; i++) {
+    document.getElementById(polls[i].pollutantType+"grade").innerHTML = polls[i].lqi;
+    document.getElementById(polls[i].pollutantType+"value").innerHTML = Math.round(polls[i].value) + "  	&mu;/m3";
+    if(polls[i].value > x){
+      max = polls[i].pollutantType;
+      x = polls[i].value;
+    }
+  }
+  document.getElementById(max).style.backgroundColor = "#bbb";
+  document.getElementById(max).style.borderColor = "red";
+  });
+
 }
 
 /*
@@ -481,26 +501,6 @@ function getWindIcon(deg,strength, id){
 
 
 
-// START FAKE BAR CHART CODE
-var dataset = [1, 4, 2, 7, 5, 3];
-var labels = ["1", "2", "3", "4", "5", "6"];
-
-
-var ctxJSON = barchart1.getContext('2d');
-var configJSON = {
-  type: 'bar',
-  data: {
-    labels: labels,
-    datasets: [{
-      label: 'blub',
-      data: dataset,
-      backgroundColor: '#000000'
-    }]
-  }
-};
-
-var chartJSON = new Chart(ctxJSON, configJSON);
-// END FAKE BAR CHART CODE
 
 
 function updatesNamesOfDaysInForecast() {
@@ -798,4 +798,22 @@ function showResult(){
   var gauge;
 	gauge = makeGauge("mlbg", (fakePollution() * 30) - 17 ,"#888",300);
 
+}
+
+function detailedInfo(index){
+  if (index == 0){
+    document.getElementById("detailed").innerHTML = "PM10 <br> inhalable particulate matter <10µm) <br> main sources are combustion processes (eg. indoor heating, wildfires), mechanical processes (eg. construction, mineral dust, agriculture) and biological particles (eg. pollen, bacteria, mold). <br> inhalable particles can penetrate into the lungs. short term exposure can cause irritation of the airways, coughing, and aggravation of heart and lung diseases, expressed as difficulty reaching, heart attacks and even premature death. ";
+  }
+  else if (index == 1){
+    document.getElementById("detailed").innerHTML = "NO2 <br> nitrogen dioxide <br> main sources are fuel burning processes, such as those used in industry and transportation. exposure may cause increased bronchial reactivity in patients with COPD, and increased risk of respiratory infections, especially in young children";
+  }
+  else if (index == 2){
+    document.getElementById("detailed").innerHTML = "SO2 <br> sulfur dioxide <br> main sources are burning processes of sulfur-containing fuel in industry, transportation and power plants. exposure causes irritation of the respiratory tract, coughing and generates local inflammatory reactions. there in turn, may cause aggravation of lung diseases, even with short term exposure. ";
+  }
+  else if (index == 3){
+    document.getElementById("detailed").innerHTML = "CO <br> carbon monoxide <br> typically originates from the incomplete combustion of carbon fuels, such as that which occurs in car engines and power plants when inhaled carbon monoxide can prevent the blood from carrying oxygen. exposure may cause dizziness, nausea and headaches. exposure to extreme concentrations lead to loss of consciousness.";
+  }
+  else if (index == 4){
+    document.getElementById("detailed").innerHTML = "O3 <br> ozone <br> is created in a chemical reaction between atmospheric oxygen, nitrogen oxides, carbon monoxide and organise compounds (VOC), in the precedes of sunlight. ozone can irritate the airways and cause coughing, a burning sensation, wheezing and shortness of breath. additionally ozone is one of the major components of photochemical smog.";
+  } else {}
 }
