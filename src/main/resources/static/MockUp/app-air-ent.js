@@ -103,8 +103,8 @@ function getDistNearestStation(lat, lon) {
   return dist;
 }
 
-// Returns array of current polution values
-function getCurrentPolutionValue(lat, lon) {
+// Returns array of current pollution values
+function getCurrentPollutionValue(lat, lon) {
   var values = [];
   StationUrl = encodeURI("http://"+ ipAddress+":8080/stations/nearest?lat=" + lat.trim() + "&lng=" + lon.trim());
   $.getJSON(StationUrl, function(data) {
@@ -134,9 +134,9 @@ function updateLocationDependentValues() {
       var dist = getDistNearestStation(lat, lon);
       document.getElementById("distance").innerHTML = "<br/> distance to next station: " + dist + " km";
       setLocPoint(latlong);
-      var pollData = getCurrentPolutionValue(lat, lon);
+      var pollData = getCurrentPollutionValue(lat, lon);
       updateLocationGauge(pollData);
-
+      updateOnePopupValue(pollData);
       document.getElementById("address").style.display = "none";
     } else {
       alert("No such address, try again");
@@ -144,6 +144,18 @@ function updateLocationDependentValues() {
     }
   });
 }
+
+function updateOnePopupValue(data){
+  if (data[0] == "background"){
+    document.getElementById("valueBGpopup").innerHTML = data[1];
+    document.getElementById("TRpopup").innerHTML = "";
+  } else{
+    document.getElementById("valueTRpopup").innerHTML = data[1];
+    document.getElementById("BGpopup").innerHTML = "";
+  }
+}
+
+
 
 // Creates buttons for forecast
 function createForecastButtons() {
@@ -164,11 +176,14 @@ function createForecastButtons() {
 function updateCurrentWeather(){
   $.getJSON("http://"+ ipAddress+":8080/weather/current", function(now) {
       console.log(now); // this will show the info it in firebug console
+      document.getElementById("title1").innerHTML = "Berlin";
+      document.getElementById("distance").innerHTML = "<br> average values for Berlin";
       var nowdata = update24hPollutionValues(0);
       nowdata.push(Math.round(now.main.temp_max-273.15));
       nowdata.push(Math.round(now.main.temp_min-273.15));
       nowdata.push(iconConverter(now.weather[0].icon));
       nowdata.push(now.wind.deg);
+      nowdata.push(now.wind.speed);
       change3hour(nowdata);
   });
 }
@@ -185,7 +200,7 @@ function updateWeatherForecast24Hours(index){
 
       var pollBerlin = update24hPollutionValues(index);
       //alert(pollBerlin[0]);
-      change3hour([pollBerlin[0],pollBerlin[1], Math.round(json.list[index].main.temp_max-273.15), Math.round(json.list[index].main.temp_min-273.15), iconConverter(json.list[index].weather[0].icon), json.list[index].wind.deg ]);
+      change3hour([pollBerlin[0],pollBerlin[1], Math.round(json.list[index].main.temp_max-273.15), Math.round(json.list[index].main.temp_min-273.15), iconConverter(json.list[index].weather[0].icon), json.list[index].wind.deg,json.list[index].wind.speed ]);
     }
   });
 }
@@ -209,7 +224,7 @@ function updateWeatherForecastUpcomingDays(index){
       var pollDay = updateNextDaysPollutionValues(index);
       //alert(pollDay[0]);
       var i = getRightIndex(index);
-      updateDailyForecast([pollDay[0],pollDay[1], Math.round(json.list[i].main.temp_max-273.15), Math.round(json.list[i].main.temp_min-273.15), iconConverter(json.list[i].weather[0].icon), json.list[i].wind.deg], index);
+      updateDailyForecast([pollDay[0],pollDay[1], Math.round(json.list[i].main.temp_max-273.15), Math.round(json.list[i].main.temp_min-273.15), iconConverter(json.list[i].weather[0].icon), json.list[i].wind.deg,json.list[i].wind.speed], index);
 
   });
 }
@@ -456,8 +471,8 @@ function degToWord(deg) {
 }
 
 // Sets arrow which represents direction
-function getWindIcon(deg, id){
-  var word = degToWord(deg);
+function getWindIcon(deg,strength, id){
+  var word = Math.round(strength*3.6)+ "kmh";
   var svg = word+"<svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'><g> <path transform='rotate("+ deg + ", 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/> </g></svg>";
   document.getElementById(id).innerHTML = svg;
 }
@@ -566,6 +581,7 @@ function makeGauge(id, value, color, width, pointer) {
       animationDuration: 1500,
       animationRule: "linear"
     }).draw();
+    return gauge;
   }
   // TRAFFIC
   else if (pointer !== false) {
@@ -661,24 +677,38 @@ function makeGauge(id, value, color, width, pointer) {
 function updateRecommendationText(grade){
   var text;
   if (grade == 1){
-    text = "wow everything is fine today! enjoy your day!";
+    text = "1 - good <br> enjoy cycling and outdoor activities in the city!";
   }
   else if (grade == 2){
-    text = "Today is okay, try to avoid big streets though";
+    text = "2 - moderate <br> enjoy cycling and outdoor activities in the city!";
   }
   else if (grade == 3){
-    text = "if possible, make your journeys at times, when roads are less busy, so outside of traffic rush hours - check our live traffic maps";
+    text = "3 - unhealthy for sensitive groups <br> if possible, avoid cycling during rush hour and on high-traffic roads. if you do need to cycle on main roads: try to ensure you're cycling at a steady pace, not too fast or slow (fast, uphill or hard cycling increases pollution intake further).";
   }
   else if (grade == 4){
-    text = "today some pollutants are over the yearly maximum, leave your windows closed and use side roads. Sensitive people should consider... ";
+    text = "4 - unhealthy <br> if possible, avoid cycling during rush hour and on high-traffic roads. if you do need to cycle on main roads: try to ensure you're cycling at a steady pace, not too fast or slow (fast, uphill or hard cycling increases pollution intake further).";
   }
   else if (grade == 5){
-    text = "5 is a very bad grade";
+    text = "5 - very unhealthy <br> if possible, avoid cycling during rush hour and on high-traffic roads. if you start to feel respiratory discomfort (eg. coughing or breathing difficulties), reduce cycling intensity eg. try to find an alternative route using our pollution map. if you do need to cycle on main roads: try to cycle at a steady pace, not too fast or slow (fast, uphill or hard cycling increases pollution intake further).";
   }
   else {
-    text = "fucked up";
+    text = "6 - hazardous <br> if possible, avoid cycling during rush hour and on high-traffic roads. if you start to feel respiratory discomfort (eg. coughing or breathing difficulties), reduce cycling intensity eg. try to find an alternative route using our pollution map. if you do need to cycle on main roads: try to cycle at a steady pace, not too fast or slow (fast, uphill or hard cycling increases pollution intake further).";
   }
   document.getElementById("recommendationText").innerHTML = text;
+  if(grade <= 2){
+    document.getElementById("rec1").style.display = "block";
+    document.getElementById("rec2").style.display = "none";
+    document.getElementById("rec3").style.display = "none";
+  }
+  else if(grade <= 4){
+    document.getElementById("rec1").style.display = "none";
+    document.getElementById("rec2").style.display = "block";
+    document.getElementById("rec3").style.display = "none";
+  } else {
+    document.getElementById("rec1").style.display = "none";
+    document.getElementById("rec2").style.display = "none";
+    document.getElementById("rec3").style.display = "block";
+  }
 }
 
 function fillGauge(idbg, idtr, valuebg, valuetr, size) {
@@ -734,7 +764,7 @@ function updateDailyForecast(data, timeID){
   document.getElementById(icon).src = data[4];
   document.getElementById(temp).innerHTML = data[3] + "°";
   //+" <br>"+ data[2] + "°"
-  getWindIcon(data[5], wind);
+  getWindIcon(data[5],data[6], wind);
 }
 
 // Updates 24h Forecast
@@ -743,11 +773,15 @@ function change3hour(data){
   document.getElementById("weatherIconNow").src = data[4];
   document.getElementById("temp-min").innerHTML = data[3] + "°";
   document.getElementById("temp-max").innerHTML = data[2] + "°";
-  getWindIcon(data[5], "windWrap");
+  getWindIcon(data[5],data[6], "windWrap");
   updateRecommendationText(data[1]);
+  document.getElementById("valueBGpopup").innerHTML = data[0];
+  document.getElementById("valueTRpopup").innerHTML = data[1];
+
 }
 
 function updateLocationGauge(data){
+  updateRecommendationText(data[1]);
   if (data[0] == "background"){
     makeGauge("traffic", (data[1] * 30) - 12, "#000", 300,false);
     makeGauge("background", (data[1] * 30) - 17, "#888", 300);
@@ -759,5 +793,7 @@ function updateLocationGauge(data){
 
 // Updates Interface which makes ML approachable
 function showResult(){
-  fillGauge("mlbg", "mltr", fakePollution(),fakePollution(),300);
+  var gauge;
+	gauge = makeGauge("mlbg", (fakePollution() * 30) - 17 ,"#888",300);
+
 }

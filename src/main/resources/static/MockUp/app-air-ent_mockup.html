@@ -35,8 +35,8 @@
   </div>
 
   <div data-role="page" id="article1">
-    <div data-role="header" data-theme="a" data-position="fixed" data-id="footer">
-      <a href="#article3" data-icon="location" data-iconpos="notext">Map</a>
+    <div data-role="header" data-theme="a" data-position="fixed" >
+      <!--<a href="#article3" data-icon="location" data-iconpos="notext">Map</a>-->
       <h1 class="nolinkstyle">app-air-ent</h1>
     </div>
     <div data-role="content">
@@ -97,19 +97,19 @@
       </div>
 
       <div class="container">
-        <a href="#popupBasic" data-rel="popup">i</a>
+        <!--<a href="#popupBasic" data-rel="popup">i</a>-->
         <div data-role="popup" id="popupBasic">
         	<p id="BGpopup">grey: background, grade: <span id="valueBGpopup"></span></p>
           <p id="TRpopup"> black: traffic, grade: <span id="valueTRpopup"></p>
         </div>
 
+        <a href="#popupBasic" data-rel="popup">
         <div class="gContainer">
           <canvas class="gaugePos" id="background"></canvas>
           <canvas class="gaugePos" id="traffic"></canvas>
-        </div>
+        </div></a>
 
         <div id="selTime"></div>
-
         <table>
           <tr>
             <td><button class="button1" id="choice-1" onclick="updateCurrentWeather();">now</button></td>
@@ -127,8 +127,16 @@
           <h2> Recommendation </h2>
           <p id="recommendationText"> if possible, make your journeys at times, when roads are less busy, so outside of traffic rush hours - check our live traffic maps
           </p>
-
-
+            <a href="#popupRec" data-rel="popup">more info</a>
+            <div data-role="popup" id="popupRec">
+              <span id="rec1">keep an eye out for changes throughout the day </span>
+              <span id="rec2">if you start to feel respiratory discomfort (eg. coughing or breathing difficulties), reduce cycling intensity eg. try to find an alternative route using our pollution map <br><br>
+              especially in the morning (due to greater winds the pollution is usually improved in the evening) <br><br>
+              you want to maintain a fairly regular, low intake of oxygen; breathing hard from cycling too fast will only cause you to take in more pollution. But don’t ride too slow, either; try to find a balance of moving with purpose, but not overexerting yourself. --> the amount of pollution in the air doesn’t change but the amount you are inhaling does! </span>
+              <span id="rec3">try to include extra antioxidant-rich fruit and vegetables (incl. blueberries, strawberries, plums, oranges, grapes cherries, mangoes and kale amongst the highest) to counteract the impact of the air pollution on the body <br><br>
+              especially in the morning (due to greater winds the pollution is usually improved in the evening)<br><br>
+              you want to maintain a fairly regular, low intake of oxygen; breathing hard from cycling too fast will only cause you to take in more pollution. But don’t ride too slow, either; try to find a balance of moving with purpose, but not overexerting yourself. --> the amount of pollution in the air doesn’t change but the amount you are inhaling does! </span>
+            </div>
 
 
 
@@ -148,12 +156,20 @@
       </div>
 
     </div>
+    <div class="transparent" data-role="footer" data-position="fixed">
+  <span class="ui-title transparent"> <!-- to have the div centered in footer -->
+    <div class="navigator transparent">
+      <a href="#article1" class="activeSlide">1</a>
+      <a href="#article2">2</a>
+    </div>
+  </span>
+</div>
 
   </div>
 
   <div data-role="page" id="article2">
-    <div data-role="header" data-theme="a" data-position="fixed" data-id="footer">
-      <a href="#article3" data-icon="location" data-iconpos="notext">Map</a>
+    <div data-role="header" data-theme="a" >
+        <!--<a href="#article3" data-icon="location" data-iconpos="notext">Map</a>-->
       <h1><a href="#article1"><span class="nolinkstyle">app-air-ent</span></a></h1>
     </div>
     <div data-role="content" class="forecastall">
@@ -246,11 +262,8 @@
       <div id="machinelearning">
         <h1> Machine Learning </h1>
         <h3>here you can swap some parameters and see how it affects the outcome of our machine learning algorithm</h3>
-
-        <button id="windDirection" onclick="showResult()">see results</button>
         <div class="mlGauge">
           <canvas class="mlGaugePos" id="mlbg"></canvas>
-          <canvas class="mlGaugePos" id="mltr"></canvas>
         </div>
 
         <div class="row">
@@ -261,13 +274,11 @@
             <li data-target="#IconCarousel" data-slide-to="1"></li>
             <li data-target="#IconCarousel" data-slide-to="2"></li>
             <li data-target="#IconCarousel" data-slide-to="3"></li>
-            <li data-target="#IconCarousel" data-slide-to="4"></li>
-            <li data-target="#IconCarousel" data-slide-to="5"></li>
           </ol>
 
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
-            <div class="item active" onclick="showResult()">
+            <div class="item active" >
               <img src="icons/sunny.svg" alt="sunny">
             </div>
 
@@ -285,10 +296,12 @@
           </div>
 
           <!-- Left and right controls -->
-          <a class="left carousel-control" href="#IconCarousel" data-slide="prev">
+          <a class="left carousel-control" href="#IconCarousel" data-slide="prev" onclick="showResult()">
+
             <span class="sr-only">Previous</span>
           </a>
-          <a class="right carousel-control" href="#IconCarousel" data-slide="next">
+          <a class="right carousel-control" href="#IconCarousel" data-slide="next" onclick="showResult()">
+
             <span class="sr-only">Next</span>
           </a>
         </div>
@@ -300,41 +313,32 @@
             <li data-target="#TempCarousel" data-slide-to="1" class="active"></li>
             <li data-target="#TempCarousel" data-slide-to="2"></li>
             <li data-target="#TempCarousel" data-slide-to="3"></li>
-            <li data-target="#TempCarousel" data-slide-to="4"></li>
-            <li data-target="#TempCarousel" data-slide-to="5"></li>
           </ol>
 
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
             <div class="item ">
-              <img src="icons/sunny.svg" alt="sunny">
+              <img src="icons/22deg.svg" alt="sunny">
             </div>
             <div class="item active">
-              <img src="icons/sun_cloud.svg" alt="stormy">
+              <img src="icons/30deg.svg" alt="stormy">
+            </div>
+            <div class="item">
+              <img src="icons/10deg.svg" alt="cloudy">
+            </div>
+            <div class="item">
+              <img src="icons/4deg.svg" alt="cloudy">
             </div>
 
-            <div class="item">
-              <img src="icons/cloud.svg" alt="cloudy">
-            </div>
-
-            <div class="item">
-              <img src="icons/rain.svg" alt="cloudy">
-            </div>
-
-            <div class="item">
-              <img src="icons/storm.svg" alt="stormy">
-            </div>
-
-            <div class="item">
-              <img src="icons/snow_cloud.svg" alt="cloudy">
-            </div>
           </div>
 
           <!-- Left and right controls -->
-          <a class="left carousel-control" href="#TempCarousel" data-slide="prev">
+          <a class="left carousel-control" href="#TempCarousel" data-slide="prev" onclick="showResult()">
+
             <span class="sr-only">Previous</span>
           </a>
-          <a class="right carousel-control" href="#TempCarousel" data-slide="next">
+          <a class="right carousel-control" href="#TempCarousel" data-slide="next" onclick="showResult()">
+
             <span class="sr-only">Next</span>
           </a>
         </div>
@@ -346,41 +350,31 @@
             <li data-target="#DirectionCarousel" data-slide-to="1"></li>
             <li data-target="#DirectionCarousel" data-slide-to="2" class="active"></li>
             <li data-target="#DirectionCarousel" data-slide-to="3"></li>
-            <li data-target="#DirectionCarousel" data-slide-to="4"></li>
-            <li data-target="#DirectionCarousel" data-slide-to="5"></li>
           </ol>
 
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
             <div class="item ">
-              <img src="icons/sunny.svg" alt="sunny">
+              <img src="icons/N5.svg" alt="sunny">
             </div>
             <div class="item">
-              <img src="icons/sun_cloud.svg" alt="stormy">
+              <img src="icons/E20.svg" alt="stormy">
             </div>
-
             <div class="item active">
-              <img src="icons/cloud.svg" alt="cloudy">
+              <img src="icons/S15.svg" alt="cloudy">
             </div>
-
             <div class="item">
-              <img src="icons/rain.svg" alt="cloudy">
-            </div>
-
-            <div class="item">
-              <img src="icons/storm.svg" alt="stormy">
-            </div>
-
-            <div class="item">
-              <img src="icons/snow_cloud.svg" alt="cloudy">
+              <img src="icons/W10.svg" alt="cloudy">
             </div>
           </div>
 
           <!-- Left and right controls -->
-          <a class="left carousel-control" href="#DirectionCarousel" data-slide="prev">
+          <a class="left carousel-control" href="#DirectionCarousel" data-slide="prev" onclick="showResult()">
+
             <span class="sr-only">Previous</span>
           </a>
-          <a class="right carousel-control" href="#DirectionCarousel" data-slide="next">
+          <a class="right carousel-control" href="#DirectionCarousel" data-slide="next" onclick="showResult()">
+
             <span class="sr-only">Next</span>
           </a>
         </div>
@@ -394,132 +388,95 @@
             <li data-target="#WeekCarousel" data-slide-to="1"></li>
             <li data-target="#WeekCarousel" data-slide-to="2"></li>
             <li data-target="#WeekCarousel" data-slide-to="3"  class="active"></li>
-            <li data-target="#WeekCarousel" data-slide-to="4"></li>
-            <li data-target="#WeekCarousel" data-slide-to="5"></li>
           </ol>
 
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
             <div class="item ">
-              <img src="icons/sunny.svg" alt="sunny">
+              <img src="icons/morning.svg" alt="sunny">
             </div>
             <div class="item">
-              <img src="icons/sun_cloud.svg" alt="stormy">
+              <img src="icons/midday.svg" alt="stormy">
             </div>
-
             <div class="item">
-              <img src="icons/cloud.svg" alt="cloudy">
+              <img src="icons/night.svg" alt="cloudy">
             </div>
-
             <div class="item active">
-              <img src="icons/rain.svg" alt="cloudy">
-            </div>
-
-            <div class="item">
-              <img src="icons/storm.svg" alt="stormy">
-            </div>
-
-            <div class="item">
-              <img src="icons/snow_cloud.svg" alt="cloudy">
+              <img src="icons/weekend.svg" alt="cloudy">
             </div>
           </div>
 
           <!-- Left and right controls -->
-          <a class="left carousel-control" href="#WeekCarousel" data-slide="prev">
+          <a class="left carousel-control" href="#WeekCarousel" data-slide="prev" onclick="showResult()">
+
             <span class="sr-only">Previous</span>
           </a>
-          <a class="right carousel-control" href="#WeekCarousel" data-slide="next">
+          <a class="right carousel-control" href="#WeekCarousel" data-slide="next" onclick="showResult()">
+
             <span class="sr-only">Next</span>
           </a>
         </div>
 
-        <div id="TimeCarousel" class="col-xs-6 carousel slide" data-interval="false" data-ride="carousel">
+        <div id="SeasonCarousel" class="col-xs-6 carousel slide" data-interval="false" data-ride="carousel">
           <!-- Indicators -->
           <ol class="carousel-indicators">
-            <li data-target="#TimeCarousel" data-slide-to="0"></li>
-            <li data-target="#TimeCarousel" data-slide-to="1"></li>
-            <li data-target="#TimeCarousel" data-slide-to="2"></li>
-            <li data-target="#TimeCarousel" data-slide-to="3"></li>
-            <li data-target="#TimeCarousel" data-slide-to="4"  class="active"></li>
-            <li data-target="#TimeCarousel" data-slide-to="5"></li>
+            <li data-target="#SeasonCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#SeasonCarousel" data-slide-to="1"></li>
+            <li data-target="#SeasonCarousel" data-slide-to="2"></li>
+            <li data-target="#SeasonCarousel" data-slide-to="3"></li>
           </ol>
 
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
-            <div class="item ">
-              <img src="icons/sunny.svg" alt="sunny">
-            </div>
-            <div class="item">
-              <img src="icons/sun_cloud.svg" alt="stormy">
-            </div>
-
-            <div class="item">
-              <img src="icons/cloud.svg" alt="cloudy">
-            </div>
-
-            <div class="item">
-              <img src="icons/rain.svg" alt="cloudy">
-            </div>
-
             <div class="item active">
-              <img src="icons/storm.svg" alt="stormy">
+              <img src="icons/spring.svg" alt="sunny">
             </div>
-
             <div class="item">
-              <img src="icons/snow_cloud.svg" alt="cloudy">
+              <img src="icons/sunny.svg" alt="stormy">
+            </div>
+            <div class="item">
+              <img src="icons/autumn.svg" alt="cloudy">
+            </div>
+            <div class="item">
+              <img src="icons/winter.svg" alt="cloudy">
             </div>
           </div>
 
           <!-- Left and right controls -->
-          <a class="left carousel-control" href="#TimeCarousel" data-slide="prev">
+          <a class="left carousel-control" href="#SeasonCarousel" data-slide="prev" onclick="showResult()">
+
             <span class="sr-only">Previous</span>
           </a>
-          <a class="right carousel-control" href="#TimeCarousel" data-slide="next">
+          <a class="right carousel-control" href="#SeasonCarousel" data-slide="next" onclick="showResult()">
+
             <span class="sr-only">Next</span>
           </a>
         </div>
 
-        <div id="SpeedCarousel" class="col-xs-6 carousel slide" data-interval="false" data-ride="carousel">
+        <div id="TypeCarousel" class="col-xs-6 carousel slide" data-interval="false" data-ride="carousel">
           <!-- Indicators -->
           <ol class="carousel-indicators">
-            <li data-target="#SpeedCarousel" data-slide-to="0"></li>
-            <li data-target="#SpeedCarousel" data-slide-to="1"></li>
-            <li data-target="#SpeedCarousel" data-slide-to="2"></li>
-            <li data-target="#SpeedCarousel" data-slide-to="3"></li>
-            <li data-target="#SpeedCarousel" data-slide-to="4"></li>
-            <li data-target="#SpeedCarousel" data-slide-to="5"  class="active"></li>
+            <li data-target="#TypeCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#TypeCarousel" data-slide-to="1"></li>
           </ol>
 
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
-            <div class="item ">
-              <img src="icons/sunny.svg" alt="sunny">
-            </div>
-            <div class="item">
-              <img src="icons/sun_cloud.svg" alt="stormy">
-            </div>
-            <div class="item">
-              <img src="icons/cloud.svg" alt="cloudy">
-            </div>
-
-            <div class="item">
-              <img src="icons/rain.svg" alt="cloudy">
-            </div>
-
             <div class="item">
               <img src="icons/storm.svg" alt="stormy">
             </div>
-
             <div class="item active">
               <img src="icons/snow_cloud.svg" alt="cloudy">
             </div>
           </div>
 
           <!-- Left and right controls -->
-          <a class="left carousel-control" href="#SpeedCarousel" data-slide="prev">
+          <a class="left carousel-control" href="#TypeCarousel" data-slide="prev" onclick="showResult()">
+
             <span class="sr-only">Previous</span>
           </a>
-          <a class="right carousel-control" href="#SpeedCarousel" data-slide="next">
+          <a class="right carousel-control" href="#TypeCarousel" data-slide="next" onclick="showResult()">
+
             <span class="sr-only">Next</span>
           </a>
         </div>
@@ -531,11 +488,20 @@
 
       </div>
     </div>
+
+    <div class="transparent" data-role="footer" data-position="fixed">
+  <span class="ui-title transparent"> <!-- to have the div centered in footer -->
+    <div class="navigator transparent">
+      <a href="#article1" >1</a>
+      <a href="#article2" class="activeSlide">2</a>
+    </div>
+  </span>
+</div>
   </div>
 
 
 
-  <div data-role="page" id="article3">
+  <div id="article3" style="display: none">
     <div data-role="header" data-theme="a" data-position="fixed" data-id="footer">
       <h1>
         <a href="#article1"><span class="nolinkstyle">app-air-ent</span></a>

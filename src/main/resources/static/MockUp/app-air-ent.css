@@ -22,7 +22,7 @@ html, body {
 .gContainer {
   position: relative;
   width: 300px;
-  height: 250px;
+  height: 170px;
 }
 
 
@@ -95,7 +95,7 @@ html, body {
   display: none;
 }
 #location {
-	margin-bottom: 50px;
+
 }
 
 #locationTitle {
@@ -147,6 +147,42 @@ html, body {
 .weather1 {
 	/*border: solid 1px;*/
 
+}
+.transparent{
+  background-color: Transparent !important;
+}
+
+
+.navigator {
+    width: 100%;
+    padding: 0;
+    height: 14px;
+    background-color: Transparent;
+}
+.navigator a {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    text-indent: -999em;
+    background: Transparent;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    box-shadow: 0 0 1px 1px #000000;
+    margin-right: 10px;
+}
+.navigator a {
+    background: #FFFFFF;
+}
+.navigator a.activeSlide {
+    background: #000000;
+}
+
+.right{
+  width: 30%;
+}
+.left{
+  width: 30%;
 }
 
 #weatherIconNow {
@@ -200,10 +236,10 @@ html, body {
 
 
 .carousel-indicators li {
-	height: 7px !important;
-	width: 7px !important;
+	height: 8px !important;
+	width: 8px !important;
  border: solid 1px;
- border-radius: 50%;
+ border-radius: 60%;
  background-color: #fff;
 
 }
