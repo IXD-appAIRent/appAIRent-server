@@ -8,6 +8,7 @@ $.ajaxSetup({
 createForecastButtons();
 
 updateCurrentWeather();
+
 updateWeatherForecastUpcomingDays(0);
 updateWeatherForecastUpcomingDays(1);
 updateWeatherForecastUpcomingDays(2);
@@ -179,6 +180,7 @@ function updateCurrentWeather(){
       document.getElementById("title1").innerHTML = "Berlin";
       document.getElementById("distance").innerHTML = "<br> average values for Berlin";
       var nowdata = update24hPollutionValues(0);
+      document.getElementById("article1").style.backgroundImage = "url('icons/middlepollution.png')"; 
       nowdata.push(Math.round(now.main.temp_max-273.15));
       nowdata.push(Math.round(now.main.temp_min-273.15));
       nowdata.push(iconConverter(now.weather[0].icon));
