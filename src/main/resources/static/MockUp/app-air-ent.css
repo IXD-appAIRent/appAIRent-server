@@ -90,9 +90,6 @@ html, body {
 	box-shadow: none;
 }
 
-#choice-1:hover, #choice-2:hover, #choice-3:hover, #choice-4:hover, #choice-5:hover, #choice-6:hover, #choice-7:hover, #choice-8:hover, #choice-9:hover{
-	background-color: #888;
-}
 
 #address {
   display: none;
@@ -112,8 +109,9 @@ html, body {
 
 #iconWrap {
   white-space: nowrap;
-  width: 10%;
+  width: 10%
 }
+
 
 #windWrap {
   white-space: nowrap;
@@ -134,9 +132,6 @@ html, body {
   stroke-miterlimit: 10;
 }
 
-#Layer_1:hover {
-  fill: #777777;
-}
 
 .weather {
 	margin-left: 20px;
