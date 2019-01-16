@@ -1,4 +1,4 @@
-var ipAddress = "192.168.2.53";
+var ipAddress = "172.16.247.12";
 
 // enable wait for results
 $.ajaxSetup({
@@ -20,7 +20,7 @@ updatesNamesOfDaysInForecast();
 
 // Fade in of img.
 $(document).ready(function(){
-  $("#article1").fadeIn(5000);
+  $("#article1").fadeIn(6000);
 });
 
 // Navigation between main pages.
@@ -180,7 +180,8 @@ function updateCurrentWeather(){
       document.getElementById("title1").innerHTML = "Berlin";
       document.getElementById("distance").innerHTML = "<br> average values for Berlin";
       var nowdata = update24hPollutionValues(0);
-      document.getElementById("article1").style.backgroundImage = "url('icons/middlepollution.png')";
+      document.getElementById("divBackgroundimage").style.backgroundImage = "url('icons/"+nowdata[1]+".png')";
+      document.getElementById("article1").style.backgroundImage = "url('icons/"+nowdata[1]+".png')";
       nowdata.push(Math.round(now.main.temp_max-273.15));
       nowdata.push(Math.round(now.main.temp_min-273.15));
       nowdata.push(iconConverter(now.weather[0].icon));
@@ -222,7 +223,9 @@ function updateWeatherForecast24Hours(index){
 
       var pollBerlin = update24hPollutionValues(index);
       //alert(pollBerlin[0]);
-      change3hour([pollBerlin[0],pollBerlin[1], Math.round(json.list[index].main.temp_max-273.15), Math.round(json.list[index].main.temp_min-273.15), iconConverter(json.list[index].weather[0].icon), json.list[index].wind.deg,json.list[index].wind.speed ]);
+      //[pollBerlin[0],pollBerlin[1]
+      var fake = fakePollution();
+      change3hour([fake,fakePollution(), Math.round(json.list[index].main.temp_max-273.15), Math.round(json.list[index].main.temp_min-273.15), iconConverter(json.list[index].weather[0].icon), json.list[index].wind.deg,json.list[index].wind.speed ]);
     }
   });
 }
@@ -232,6 +235,7 @@ function update24hPollutionValues(index){
   var array;
   $.getJSON("http://"+ipAddress+":8080/index/forecast/hourly", function(json) {
       array = [json[index].background, json[index].traffic];
+      array = [fakePollution(),fakePollution()];
   });
   return array;
 }
@@ -306,15 +310,24 @@ function toogleAddressInterface() {
   }
 }
 
+function toogleMap() {
+  var x = document.getElementById("article3");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
 // START INITIALISATION OF MAPBOX
 mapboxgl.accessToken = 'pk.eyJ1IjoibGlsbGlwaWxsaSIsImEiOiJjanBjc3J3ZmozMG55M3dwaHFpcmFlZDNoIn0.Eh9Spcc3_PNF72jAYeGTmQ';
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/light-v9',
-  minZoom: 8.3,
+  minZoom: 8.5,
   maxZoom: 12,
   center: [13.5, 52.52697],
-  zoom: 8.3,
+  zoom: 8.5,
   interactive: false
 });
 
