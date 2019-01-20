@@ -15,7 +15,7 @@ updateWeatherForecastUpcomingDays(2);
 updateWeatherForecastUpcomingDays(3);
 
 updatesNamesOfDaysInForecast();
-
+showResult()
 
 
 // Fade in of img.
@@ -163,14 +163,14 @@ function createForecastButtons() {
   var first = new Date().getHours();
   var first = first - (first % 3);
 
-  document.getElementById("choice-2").innerHTML += (first+3) % 24;
-  document.getElementById("choice-3").innerHTML += (first+6) % 24;
-  document.getElementById("choice-4").innerHTML += (first+9) %24;
-  document.getElementById("choice-5").innerHTML += (first+12) %24;
-  document.getElementById("choice-6").innerHTML += (first+15) %24;
-  document.getElementById("choice-7").innerHTML += (first+18) %24;
-  document.getElementById("choice-8").innerHTML += (first+21) %24;
-  document.getElementById("choice-9").innerHTML += (first+24) %24;
+  document.getElementById("choice-2").innerHTML += (first+3) % 24 +":00";
+  document.getElementById("choice-3").innerHTML += (first+6) % 24 +":00";
+  document.getElementById("choice-4").innerHTML += (first+9) % 24 +":00";
+  document.getElementById("choice-5").innerHTML += (first+12) %24 +":00";
+  document.getElementById("choice-6").innerHTML += (first+15) %24 +":00";
+  document.getElementById("choice-7").innerHTML += (first+18) %24 +":00";
+  document.getElementById("choice-8").innerHTML += (first+21) %24 +":00";
+  document.getElementById("choice-9").innerHTML += (first+24) %24 +":00";
 }
 
 // Updates current weather forecast
@@ -198,15 +198,16 @@ function updateDetailView(){
     var max;
     var x = 0;
     for (i = 0; i < 5; i++) {
-    document.getElementById(polls[i].pollutantType+"grade").innerHTML = polls[i].lqi;
+    document.getElementById(polls[i].pollutantType+"grade").innerHTML = polls[i].lqi ; //+ " " + polls[i].pollutantType
     document.getElementById(polls[i].pollutantType+"value").innerHTML = Math.round(polls[i].value) + "  	&mu;/m3";
-    if(polls[i].value > x){
+    if(polls[i].lqi > x){
       max = polls[i].pollutantType;
-      x = polls[i].value;
+      x = polls[i].lqi;
+      }
     }
-  }
-  document.getElementById(max).style.backgroundColor = "#bbb";
-  document.getElementById(max).style.borderColor = "red";
+    document.getElementById(max+"value").innerHTML += "<br> worst";
+    document.getElementById(max).style.backgroundColor = "#bbb";
+    document.getElementById(max).style.borderColor = "red";
   });
 
 }
@@ -225,6 +226,8 @@ function updateWeatherForecast24Hours(index){
       //alert(pollBerlin[0]);
       //[pollBerlin[0],pollBerlin[1]
       //var fake = fakePollution();
+      //var hour = new Date(json.list[index].dt).getHours();
+      //document.getElementById("selTime").innerHTML = hour;
       change3hour([pollBerlin[0],pollBerlin[1], Math.round(json.list[index].main.temp_max-273.15), Math.round(json.list[index].main.temp_min-273.15), iconConverter(json.list[index].weather[0].icon), json.list[index].wind.deg,json.list[index].wind.speed ]);
     }
   });
@@ -743,6 +746,7 @@ function updateDailyForecast(data, timeID){
     var temp = "temp1";
     var icon = "icon1";
     var wind = "wind1";
+    var backg = "divDay1";
   }
   if (timeID == 1){
     var bg = "g20";
@@ -750,6 +754,7 @@ function updateDailyForecast(data, timeID){
     var temp = "temp2";
     var icon = "icon2";
     var wind = "wind2";
+    var backg = "divDay2";
   }
   if (timeID == 2){
     var bg = "g30";
@@ -757,6 +762,7 @@ function updateDailyForecast(data, timeID){
     var temp = "temp3";
     var icon = "icon3";
     var wind = "wind3";
+    var backg = "divDay3";
   }
   if (timeID == 3){
     var bg = "g40";
@@ -764,6 +770,7 @@ function updateDailyForecast(data, timeID){
     var temp = "temp4";
     var icon = "icon4";
     var wind = "wind4";
+    var backg = "divDay4";
   }
   if (timeID == 4){
     var bg = "g50";
@@ -777,17 +784,18 @@ function updateDailyForecast(data, timeID){
 
   fillGauge(bg,tr, data[0],data[1],110);
   document.getElementById(icon).src = data[4];
-  document.getElementById(temp).innerHTML = data[3] + "°";
+  document.getElementById(temp).innerHTML = data[3] + "°C";
   //+" <br>"+ data[2] + "°"
   getWindIcon(data[5],data[6], wind);
+  document.getElementById(backg).style.backgroundImage = "url('icons/"+data[1]+"_small.png')";
 }
 
 // Updates 24h Forecast
 function change3hour(data){
   fillGauge("background", "traffic", data[0], data[1], 300);
   document.getElementById("weatherIconNow").src = data[4];
-  document.getElementById("temp-min").innerHTML = data[3] + "°";
-  document.getElementById("temp-max").innerHTML = data[2] + "°";
+  document.getElementById("temp-min").innerHTML = data[3] + "°C";
+  document.getElementById("temp-max").innerHTML = data[2] + "°C";
   getWindIcon(data[5],data[6], "windWrap");
   updateRecommendationText(data[1]);
   document.getElementById("valueBGpopup").innerHTML = data[0];

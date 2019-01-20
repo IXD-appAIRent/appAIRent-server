@@ -10,7 +10,7 @@ html, body {
 }
 
 .header {
-  background-image: linear-gradient( black, white, orange);
+  background-color: ;
   color: #000000;
   text-shadow: none;
   height: 50px;
@@ -31,6 +31,7 @@ html, body {
   display: none;
 }
 
+
 #map {
   position: absolute;
   top: 200px;
@@ -44,7 +45,7 @@ html, body {
 .gContainer {
   position: relative;
   width: 300px;
-  height: 170px;
+  height: 180px;
 }
 
 
@@ -96,8 +97,7 @@ html, body {
 }
 
 .button1 {
-	padding: 0px;
-	margin-left: 10px;
+	padding: 2px;
   padding-top: 10px;
 	font-size: 14px;
 }
@@ -214,19 +214,24 @@ html, body {
 
 }
 
-.forecastall {
+ .forecastall {
   height: 100%;
 }
 
 .forecastday {
-  height: 100%;
   border-bottom-style: solid;
   border-width: thin;
+  background-size: 100%;
+  width: 100%;
 }
 
 .windicons {
 	white-space: nowrap;
 	margin-top: 20px;
+}
+
+.row {
+  with: 100%;
 }
 
 .ui-block-a {
@@ -303,7 +308,7 @@ html, body {
 
 #PM10, #NO2, #SO2, #CO, #O3 {
   width: 16%;
-	height: 100px;
+	height: 120px;
   text-align: center;
   padding: 5px 0px 2px 2px;
   margin: 3px 3px 3px 3px;
@@ -316,7 +321,7 @@ html, body {
 #detailview span {
   height: 25px;
 width: 25px;
-background-color: #bbb;
+background-color: #aaa;
 border-radius: 50%;
 display: inline-block;
 
@@ -330,8 +335,8 @@ display: inline-block;
 #detailedDiv{
   padding: 5px 5px 5px 5px;
   margin: 3px 3px 3px 3px;
-  border: solid 1px;
-
+  text-shadow: none;
+  color: black;
 }
 
 #recommendation {
