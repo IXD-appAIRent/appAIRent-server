@@ -97,15 +97,20 @@ html, body {
 }
 
 .button1 {
-	padding: 2px;
-  padding-top: 10px;
+	padding: 15px;
 	font-size: 14px;
 }
 
-#choice-1:focus, #choice-2:focus, #choice-3:focus, #choice-4:focus, #choice-5:focus, #choice-6:focus, #choice-7:focus, #choice-8:focus, #choice-9:focus{
+#choice-1:focus, #choice-2:focus, #choice-3:focus, #choice-4:focus, #choice-5:focus, #choice-6:focus, #choice-7:focus, #choice-8:focus{
 	background-color: #888;
 	box-shadow: none;
 }
+
+#choice-1, #choice-2, #choice-3, #choice-4, #choice-5, #choice-6, #choice-7, #choice-8{
+  border-radius: 50%;
+  border: solid 1px black;
+}
+
 
 
 #address {
@@ -314,7 +319,6 @@ html, body {
   margin: 3px 3px 3px 3px;
   border: solid 1px;
   border-radius: 5%;
-
   background-color: rgba(255,255,255,.7);
 }
 
