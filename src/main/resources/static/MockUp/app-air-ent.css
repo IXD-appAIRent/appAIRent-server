@@ -4,13 +4,24 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: 'Karla', sans-serif;
+  text-shadow: none;
+  color: black;
+
+}
+
+.header {
+  background-image: linear-gradient( black, white, orange);
+  color: #000000;
+  text-shadow: none;
+  height: 50px;
 }
 
 .borderCust {
-  border: solid 1px;
-  border-radius: 5px;
+  border-bottom: solid 1px;
   padding: 5px 5px 5px 5px;
   margin: 5px 5px 5px 5px;
+  text-shadow: none;
+  color: black;
 }
 
 #article1{
@@ -58,10 +69,9 @@ html, body {
 
 .nolinkstyle {
   text-decoration: none;
-  color: #000000;
 }
 
-#recommendation {}
+
 
 #moreCharts {
   text-align: center;
@@ -88,6 +98,7 @@ html, body {
 .button1 {
 	padding: 0px;
 	margin-left: 10px;
+  padding-top: 10px;
 	font-size: 14px;
 }
 
@@ -140,7 +151,7 @@ html, body {
 
 
 .weather {
-	
+
   width: 100%;
   margin-bottom: 8px;
   padding: 10px;
@@ -308,19 +319,25 @@ width: 25px;
 background-color: #bbb;
 border-radius: 50%;
 display: inline-block;
+
+}
+
+#detailview {
+  text-shadow: none;
+  color: black;
 }
 
 #detailedDiv{
   padding: 5px 5px 5px 5px;
   margin: 3px 3px 3px 3px;
   border: solid 1px;
-  border-radius: 5px;
+
 }
 
 #recommendation {
   padding: 5px 5px 5px 5px;
   margin: 3px 3px 3px 3px;
-  border: solid 1px;
-  border-radius: 5px;
-  background-color: rgba(216,216,216,.7);
+  text-shadow: none;
+  color: black;
+  /* background-color: rgba(216,216,216,.7); */
 }

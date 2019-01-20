@@ -1,4 +1,4 @@
-var ipAddress = "172.16.247.12";
+var ipAddress = "192.168.178.107";
 
 // enable wait for results
 $.ajaxSetup({
@@ -180,8 +180,8 @@ function updateCurrentWeather(){
       document.getElementById("title1").innerHTML = "Berlin";
       document.getElementById("distance").innerHTML = "<br> average values for Berlin";
       var nowdata = update24hPollutionValues(0);
-      document.getElementById("divBackgroundimage").style.backgroundImage = "url('icons/"+nowdata[1]+".png')";
-      document.getElementById("article1").style.backgroundImage = "url('icons/"+nowdata[1]+".png')";
+      document.getElementById("divBackgroundimage").style.backgroundImage = "url('icons/"+6+".png')"; //nowdata[1]
+      document.getElementById("article1").style.backgroundImage = "url('icons/"+6+".png')";
       nowdata.push(Math.round(now.main.temp_max-273.15));
       nowdata.push(Math.round(now.main.temp_min-273.15));
       nowdata.push(iconConverter(now.weather[0].icon));
@@ -224,8 +224,8 @@ function updateWeatherForecast24Hours(index){
       var pollBerlin = update24hPollutionValues(index);
       //alert(pollBerlin[0]);
       //[pollBerlin[0],pollBerlin[1]
-      var fake = fakePollution();
-      change3hour([fake,fakePollution(), Math.round(json.list[index].main.temp_max-273.15), Math.round(json.list[index].main.temp_min-273.15), iconConverter(json.list[index].weather[0].icon), json.list[index].wind.deg,json.list[index].wind.speed ]);
+      //var fake = fakePollution();
+      change3hour([pollBerlin[0],pollBerlin[1], Math.round(json.list[index].main.temp_max-273.15), Math.round(json.list[index].main.temp_min-273.15), iconConverter(json.list[index].weather[0].icon), json.list[index].wind.deg,json.list[index].wind.speed ]);
     }
   });
 }
@@ -235,7 +235,7 @@ function update24hPollutionValues(index){
   var array;
   $.getJSON("http://"+ipAddress+":8080/index/forecast/hourly", function(json) {
       array = [json[index].background, json[index].traffic];
-      array = [fakePollution(),fakePollution()];
+      //array = [fakePollution(),fakePollution()];
   });
   return array;
 }
