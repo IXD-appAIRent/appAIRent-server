@@ -1,4 +1,4 @@
-var ipAddress = "192.168.178.107";
+var ipAddress = "192.168.2.53";
 
 // enable wait for results
 $.ajaxSetup({
@@ -185,8 +185,8 @@ function updateCurrentWeather(){
       document.getElementById("distance").innerHTML = "<br> average values for Berlin";
       var nowdata = update24hPollutionValues(0);
       createForecastTime(0);
-      document.getElementById("divBackgroundimage").style.backgroundImage = "url('icons/"+6+".png')"; //nowdata[1]
-      document.getElementById("article1").style.backgroundImage = "url('icons/"+6+".png')";
+      document.getElementById("divBackgroundimage").style.backgroundImage = "url('icons/"+nowdata[0]+".png')"; //nowdata[1]
+      document.getElementById("article1").style.backgroundImage = "url('icons/"+nowdata[0]+".png')";
       nowdata.push(Math.round(now.main.temp_max-273.15));
       nowdata.push(Math.round(now.main.temp_min-273.15));
       nowdata.push(iconConverter(now.weather[0].icon));
@@ -794,7 +794,8 @@ function updateDailyForecast(data, timeID){
 
 // Updates 24h Forecast
 function change3hour(data){
-  fillGauge("background", "traffic", data[0], data[1], 300);
+  //fillGauge("background", "traffic", data[0], data[1], 300);
+  updatePollutionPicture(data[1]);
   document.getElementById("weatherIconNow").src = data[4];
   document.getElementById("temp-min").innerHTML = data[3] + "°C";
   document.getElementById("temp-max").innerHTML = data[2] + "°C";
@@ -803,6 +804,10 @@ function change3hour(data){
   document.getElementById("valueBGpopup").innerHTML = data[0];
   document.getElementById("valueTRpopup").innerHTML = data[1];
 
+}
+
+function updatePollutionPicture(valuetr){
+  document.getElementById("PollutionPicture").innerHTML = "<img id='pollutioIMG' alt='pollution Icon' src='icons/traf_"+valuetr+".png'/>";
 }
 
 function updateLocationGauge(data){

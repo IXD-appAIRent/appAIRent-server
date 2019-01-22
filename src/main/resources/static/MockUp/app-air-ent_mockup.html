@@ -37,7 +37,7 @@
       <a href="#" onclick="toogleMap();return false;" data-icon="location" data-iconpos="notext">Map</a>
       <h1 class="nolinkstyle">app-air-ent</h1>
     </div>
-    <div data-role="content">
+    <div data-role="content" id="content">
 
       <div class="row weather borderCust">
             <div class="col-xs-2" >
@@ -58,6 +58,7 @@
             <div class="col-xs-4" id="windWrap">
             </div>
       </div>
+
 
       <div class="borderCust container">
 
@@ -100,29 +101,17 @@
         <!--<a href="#popupBasic" data-rel="popup">i</a>-->
 
         <div data-role="popup" id="popupBasic">
-        	<p id="BGpopup">grey: background, grade: <span id="valueBGpopup"></span></p>
-          <p id="TRpopup"> black: traffic, grade: <span id="valueTRpopup"></p>
+        	<p id="BGpopup">background pollution is visualized as the background, grade: <span id="valueBGpopup"></span></p>
+          <p id="TRpopup">traffic pollution, the bigger the dots the worse it is, grade: <span id="valueTRpopup"></p>
         </div>
 
         <a href="#popupBasic" data-rel="popup">
-        <div class="gContainer container">
+        <div class="container" id="PollutionPicture">
           <canvas class="gaugePos" id="background"></canvas>
           <canvas class="gaugePos" id="traffic"></canvas>
         </div></a>
 
          <div id="selTime"></div>
-<!--
-        <div class="navigator transparent">
-          <a  id="choice-1" onclick="updateCurrentWeather();" class="activeSlide">1</a>
-          <a href="#" id="choice-2" onclick="updateWeatherForecast24Hours(1);">2</a>
-          <a href="#" id="choice-3" onclick="updateWeatherForecast24Hours(2);">3</a>
-          <a href="#" id="choice-4" onclick="updateWeatherForecast24Hours(3);">4</a>
-          <a href="#" id="choice-5" onclick="updateWeatherForecast24Hours(4);">5</a>
-          <a href="#" id="choice-6" onclick="updateWeatherForecast24Hours(5);">6</a>
-          <a href="#" id="choice-7" onclick="updateWeatherForecast24Hours(6);">7</a>
-          <a href="#" id="choice-8" onclick="updateWeatherForecast24Hours(7);">8</a>
-          <a href="#" id="choice-9" onclick="updateWeatherForecast24Hours(8);">9</a>
-        </div> -->
          <table>
           <tr>
             <td><button class="button1" id="choice-1" onclick="updateCurrentWeather();"></button></td>
@@ -136,6 +125,7 @@
           </tr>
         </table>
       </div>
+
       <div class="container">
         <div id="recommendation">
           <h2> Recommendation </h2>
