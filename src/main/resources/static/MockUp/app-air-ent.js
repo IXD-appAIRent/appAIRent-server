@@ -5,7 +5,7 @@ $.ajaxSetup({
   async: false
 });
 
-createForecastButtons();
+createForecastTime(0);
 
 updateCurrentWeather();
 
@@ -21,7 +21,7 @@ showResult();
 
 // Fade in of img.
 $(document).ready(function(){
-  $("#article1").fadeIn(5000);
+  $("#article1").fadeIn(6000);
 });
 
 // Navigation between main pages.
@@ -160,18 +160,22 @@ function updateOnePopupValue(data){
 
 
 // Creates buttons for forecast
-function createForecastButtons() {
+function createForecastTime(x) {
   var first = new Date().getHours();
   var first = first - (first % 3);
-
-  document.getElementById("choice-2").innerHTML += (first+3) % 24;
-  document.getElementById("choice-3").innerHTML += (first+6) % 24;
-  document.getElementById("choice-4").innerHTML += (first+9) %24;
-  document.getElementById("choice-5").innerHTML += (first+12) %24;
-  document.getElementById("choice-6").innerHTML += (first+15) %24;
-  document.getElementById("choice-7").innerHTML += (first+18) %24;
-  document.getElementById("choice-8").innerHTML += (first+21) %24;
-  document.getElementById("choice-9").innerHTML += (first+24) %24;
+  var t = (first +(3*x)) % 24 +":00";
+  if (x == 0){
+    t = "now";
+  }
+  document.getElementById("selTime").innerHTML = t;
+  // document.getElementById("choice-2").innerHTML += (first+3) % 24 +":00";
+  // document.getElementById("choice-3").innerHTML += (first+6) % 24 +":00";
+  // document.getElementById("choice-4").innerHTML += (first+9) % 24 +":00";
+  // document.getElementById("choice-5").innerHTML += (first+12) %24 +":00";
+  // document.getElementById("choice-6").innerHTML += (first+15) %24 +":00";
+  // document.getElementById("choice-7").innerHTML += (first+18) %24 +":00";
+  // document.getElementById("choice-8").innerHTML += (first+21) %24 +":00";
+  // document.getElementById("choice-9").innerHTML += (first+24) %24 +":00";
 }
 
 // Updates current weather forecast
@@ -181,14 +185,37 @@ function updateCurrentWeather(){
       document.getElementById("title1").innerHTML = "Berlin";
       document.getElementById("distance").innerHTML = "<br> average values for Berlin";
       var nowdata = update24hPollutionValues(0);
-      document.getElementById("article1").style.backgroundImage = "url('icons/middlepollution.png')"; 
+      createForecastTime(0);
+      document.getElementById("divBackgroundimage").style.backgroundImage = "url('icons/"+6+".png')"; //nowdata[1]
+      document.getElementById("article1").style.backgroundImage = "url('icons/"+6+".png')";
       nowdata.push(Math.round(now.main.temp_max-273.15));
       nowdata.push(Math.round(now.main.temp_min-273.15));
       nowdata.push(iconConverter(now.weather[0].icon));
       nowdata.push(now.wind.deg);
       nowdata.push(now.wind.speed);
       change3hour(nowdata);
+      updateDetailView();
   });
+}
+
+function updateDetailView(){
+  $.getJSON("http://"+ ipAddress+":8080/stations/all?type=traffic,background&mean=true", function(polls) {
+    var i;
+    var max;
+    var x = 0;
+    for (i = 0; i < 5; i++) {
+    document.getElementById(polls[i].pollutantType+"grade").innerHTML = polls[i].lqi ; //+ " " + polls[i].pollutantType
+    document.getElementById(polls[i].pollutantType+"value").innerHTML = Math.round(polls[i].value) + "  	&mu;/m3";
+    if(polls[i].lqi > x){
+      max = polls[i].pollutantType;
+      x = polls[i].lqi;
+      }
+    }
+    document.getElementById(max+"value").innerHTML += "<br> worst";
+    document.getElementById(max).style.backgroundColor = "#bbb";
+    document.getElementById(max).style.borderColor = "red";
+  });
+
 }
 
 /*
@@ -199,10 +226,11 @@ function updateWeatherForecast24Hours(index){
   $.getJSON("http://"+ ipAddress+":8080/weather/forecast/hourly", function(json) {
     console.log(json);
     if(index < 9){
-      //alert(json.list[time].dt_txt);
 
       var pollBerlin = update24hPollutionValues(index);
+      createForecastTime(index);
       //alert(pollBerlin[0]);
+      //[pollBerlin[0],pollBerlin[1]
       change3hour([pollBerlin[0],pollBerlin[1], Math.round(json.list[index].main.temp_max-273.15), Math.round(json.list[index].main.temp_min-273.15), iconConverter(json.list[index].weather[0].icon), json.list[index].wind.deg,json.list[index].wind.speed ]);
     }
   });
@@ -213,6 +241,7 @@ function update24hPollutionValues(index){
   var array;
   $.getJSON("http://"+ipAddress+":8080/index/forecast/hourly", function(json) {
       array = [json[index].background, json[index].traffic];
+      //array = [fakePollution(),fakePollution()];
   });
   return array;
 }
@@ -287,15 +316,24 @@ function toogleAddressInterface() {
   }
 }
 
+function toogleMap() {
+  var x = document.getElementById("article3");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
 // START INITIALISATION OF MAPBOX
 mapboxgl.accessToken = 'pk.eyJ1IjoibGlsbGlwaWxsaSIsImEiOiJjanBjc3J3ZmozMG55M3dwaHFpcmFlZDNoIn0.Eh9Spcc3_PNF72jAYeGTmQ';
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/light-v9',
-  minZoom: 8.3,
+  minZoom: 8.5,
   maxZoom: 12,
   center: [13.5, 52.52697],
-  zoom: 8.3,
+  zoom: 8.5,
   interactive: false
 });
 
@@ -482,26 +520,6 @@ function getWindIcon(deg,strength, id){
 
 
 
-// START FAKE BAR CHART CODE
-var dataset = [1, 4, 2, 7, 5, 3];
-var labels = ["1", "2", "3", "4", "5", "6"];
-
-
-var ctxJSON = barchart1.getContext('2d');
-var configJSON = {
-  type: 'bar',
-  data: {
-    labels: labels,
-    datasets: [{
-      label: 'blub',
-      data: dataset,
-      backgroundColor: '#000000'
-    }]
-  }
-};
-
-var chartJSON = new Chart(ctxJSON, configJSON);
-// END FAKE BAR CHART CODE
 
 
 function updatesNamesOfDaysInForecast() {
@@ -731,6 +749,7 @@ function updateDailyForecast(data, timeID){
     var temp = "temp1";
     var icon = "icon1";
     var wind = "wind1";
+    var backg = "divDay1";
   }
   if (timeID == 1){
     var bg = "g20";
@@ -738,6 +757,7 @@ function updateDailyForecast(data, timeID){
     var temp = "temp2";
     var icon = "icon2";
     var wind = "wind2";
+    var backg = "divDay2";
   }
   if (timeID == 2){
     var bg = "g30";
@@ -745,6 +765,7 @@ function updateDailyForecast(data, timeID){
     var temp = "temp3";
     var icon = "icon3";
     var wind = "wind3";
+    var backg = "divDay3";
   }
   if (timeID == 3){
     var bg = "g40";
@@ -752,6 +773,7 @@ function updateDailyForecast(data, timeID){
     var temp = "temp4";
     var icon = "icon4";
     var wind = "wind4";
+    var backg = "divDay4";
   }
   if (timeID == 4){
     var bg = "g50";
@@ -765,17 +787,18 @@ function updateDailyForecast(data, timeID){
 
   fillGauge(bg,tr, data[0],data[1],110);
   document.getElementById(icon).src = data[4];
-  document.getElementById(temp).innerHTML = data[3] + "°";
+  document.getElementById(temp).innerHTML = data[3] + "°C";
   //+" <br>"+ data[2] + "°"
   getWindIcon(data[5],data[6], wind);
+  document.getElementById(backg).style.backgroundImage = "url('icons/"+data[1]+"_small.png')";
 }
 
 // Updates 24h Forecast
 function change3hour(data){
   fillGauge("background", "traffic", data[0], data[1], 300);
   document.getElementById("weatherIconNow").src = data[4];
-  document.getElementById("temp-min").innerHTML = data[3] + "°";
-  document.getElementById("temp-max").innerHTML = data[2] + "°";
+  document.getElementById("temp-min").innerHTML = data[3] + "°C";
+  document.getElementById("temp-max").innerHTML = data[2] + "°C";
   getWindIcon(data[5],data[6], "windWrap");
   updateRecommendationText(data[1]);
   document.getElementById("valueBGpopup").innerHTML = data[0];
@@ -873,4 +896,22 @@ function showResult(){
 
 	gauge = makeGauge("mlbg", (prediction * 30) - 17 ,"#888",300);
 
+}
+
+function detailedInfo(index){
+  if (index == 0){
+    document.getElementById("detailed").innerHTML = "PM10 <br> inhalable particulate matter <10µm) <br> main sources are combustion processes (eg. indoor heating, wildfires), mechanical processes (eg. construction, mineral dust, agriculture) and biological particles (eg. pollen, bacteria, mold). <br> inhalable particles can penetrate into the lungs. short term exposure can cause irritation of the airways, coughing, and aggravation of heart and lung diseases, expressed as difficulty reaching, heart attacks and even premature death. ";
+  }
+  else if (index == 1){
+    document.getElementById("detailed").innerHTML = "NO2 <br> nitrogen dioxide <br> main sources are fuel burning processes, such as those used in industry and transportation. exposure may cause increased bronchial reactivity in patients with COPD, and increased risk of respiratory infections, especially in young children";
+  }
+  else if (index == 2){
+    document.getElementById("detailed").innerHTML = "SO2 <br> sulfur dioxide <br> main sources are burning processes of sulfur-containing fuel in industry, transportation and power plants. exposure causes irritation of the respiratory tract, coughing and generates local inflammatory reactions. there in turn, may cause aggravation of lung diseases, even with short term exposure. ";
+  }
+  else if (index == 3){
+    document.getElementById("detailed").innerHTML = "CO <br> carbon monoxide <br> typically originates from the incomplete combustion of carbon fuels, such as that which occurs in car engines and power plants when inhaled carbon monoxide can prevent the blood from carrying oxygen. exposure may cause dizziness, nausea and headaches. exposure to extreme concentrations lead to loss of consciousness.";
+  }
+  else if (index == 4){
+    document.getElementById("detailed").innerHTML = "O3 <br> ozone <br> is created in a chemical reaction between atmospheric oxygen, nitrogen oxides, carbon monoxide and organise compounds (VOC), in the precedes of sunlight. ozone can irritate the airways and cause coughing, a burning sensation, wheezing and shortness of breath. additionally ozone is one of the major components of photochemical smog.";
+  } else {}
 }

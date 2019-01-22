@@ -106,3 +106,28 @@ Results in a json, for example:
   }
 ]
 ```
+
+### LQI custom forecast
+
+To make a custom ML forecast the following URL can be used:
+
+`localhost:8080/index/forecast/custom`
+
+mandatory parameters:
+
+- pressure: Int
+- humidity: Int
+- clouds_all: Int
+- temp: Double
+- temp_min: Double
+- temp_max: Double
+- wind_speed: Double
+- wind_deg: Int
+- is_weekend: `true` or `false`
+- hour: Int, 0 to 23
+- month: Int, 1 (January) to 12 (December)
+- prediction_mode: `BACKGROUND` or `TRAFFIC`
+
+Example request:
+
+`http://localhost:8080/index/forecast/custom?pressure=1030&humidity=85&clouds_all=75&temp=280.64&temp_max=281.15&temp_min=280.15&wind_speed=10.1&wind_deg=210&hour=4&is_weekend=true&month=1&prediction_mode=BACKGROUND`

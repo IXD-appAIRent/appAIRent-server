@@ -151,3 +151,4 @@ gradle-app.setting
 
 data/ml_background.bin
 data/ml_traffic.bin
+bin
