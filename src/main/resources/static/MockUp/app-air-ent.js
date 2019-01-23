@@ -1,4 +1,4 @@
-var ipAddress = "172.16.248.96";
+var ipAddress = "192.168.2.53";
 
 // enable wait for results
 $.ajaxSetup({
@@ -512,7 +512,7 @@ function degToWord(deg) {
 // Sets arrow which represents direction
 function getWindIcon(deg,strength, id){
   var word = Math.round(strength*3.6)+ "kmh";
-  var svg = word+"<svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'><g> <path transform='rotate("+ deg + ", 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/> </g></svg>";
+  var svg = word+"<br><svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'><g> <path transform='rotate("+ deg + ", 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/> </g></svg>";
   document.getElementById(id).innerHTML = svg;
 }
 
@@ -783,7 +783,10 @@ function updateDailyForecast(data, timeID){
 
   }
 
-  fillGauge(bg,tr, data[0],data[1],110);
+  //fillGauge(bg,tr, data[0],data[1],110);
+
+  document.getElementById(bg).innerHTML = "<br>B:"+data[0]+"<br>T:"+data[1];
+  document.getElementById(tr).src = "icons/traf_"+data[1]+".png";
   document.getElementById(icon).src = data[4];
   document.getElementById(temp).innerHTML = data[3] + "°C";
   //+" <br>"+ data[2] + "°"
@@ -794,7 +797,7 @@ function updateDailyForecast(data, timeID){
 // Updates 24h Forecast
 function change3hour(data){
   //fillGauge("background", "traffic", data[0], data[1], 300);
-  updatePollutionPicture(data[1]);
+  updatePollutionPicture(data[0],data[1]);
   document.getElementById("weatherIconNow").src = data[4];
   document.getElementById("temp-min").innerHTML = data[3] + "°C";
   document.getElementById("temp-max").innerHTML = data[2] + "°C";
@@ -802,23 +805,36 @@ function change3hour(data){
   updateRecommendationText(data[1]);
   document.getElementById("valueBGpopup").innerHTML =  data[0];
   document.getElementById("valueTRpopup").innerHTML =  data[1];
-
+  document.getElementById("grades").innerHTML =  "B: "+data[0]+"<br> T: "+data[1];
 }
 
-function updatePollutionPicture(valuetr){
-  document.getElementById("PollutionPicture").innerHTML = "<img id='pollutioIMG' alt='pollution Icon' src='icons/traf_"+valuetr+".png'/>";
+function updatePollutionPicture(valuebg,valuetr){
+  document.getElementById("PollutionPicture").innerHTML = "<img id='pollutionIMG' alt='pollution Icon' src='icons/traf_"+valuetr+".png'/>";
+
+  if(valuebg <3){
+    document.getElementById("pollutionIMG").style.backgroundImage = "url('icons/1_2.png')";
+  }else if (valuebg< 5){
+    document.getElementById("pollutionIMG").style.backgroundImage = "url('icons/3_4.png')";
+  } else {
+    document.getElementById("pollutionIMG").style.backgroundImage = "url('icons/5_6.png')";
+  }
 }
 
 function updateLocationGauge(data){
   updateRecommendationText(data[1]);
-  updatePollutionPicture(data[1]);
-/*  if (data[0] == "background"){
-    makeGauge("traffic", (data[1] * 30) - 12, "#000", 300,false);
-    makeGauge("background", (data[1] * 30) - 17, "#888", 300);
+  if (data[0] == "background"){
+    document.getElementById("grades").innerHTML =  "B: "+data[1];
+    if(data[1] <3){
+      document.getElementById("pollutionIMG").src = "icons/1_2.png";
+    }else if (data[1]< 5){
+      document.getElementById("pollutionIMG").src = "icons/3_4.png";
+    } else {
+      document.getElementById("pollutionIMG").src = "icons/5_6.png";
+    }
   } else {
-    makeGauge("background", (data[1] * 30) - 17, "#888", 300, false);
-    makeGauge("traffic", (data[1] * 30) - 12, "#000", 300);
-  }*/
+    document.getElementById("grades").innerHTML =  "T: "+data[1];
+    document.getElementById("PollutionPicture").innerHTML = "<img id='pollutionIMG' alt='pollution Icon' src='icons/traf_"+data[1]+".png'/>";
+  }
 }
 
 // Updates Interface which makes ML approachable
@@ -831,6 +847,12 @@ function showResult(){
   var hour, isWeekend// timeML
   var month // seasonML
   var predictionMode // PredictionModeML
+  switch ($('#PredictionModeML > div.active').index()) {
+    case 0: predictionMode="BACKGROUND";
+      break;
+    case 1: predictionMode="TRAFFIC";
+      break;
+  }
 
   switch ($('#skyML > div.active').index()) {
     case 0: pressure=1018; humidity=30; clouds_all=0; // sunny
@@ -885,32 +907,42 @@ function showResult(){
     case 3: month=1;
       break;
   }
-  switch ($('#PredictionModeML > div.active').index()) {
-    case 0: predictionMode="BACKGROUND";
-      break;
-    case 1: predictionMode="TRAFFIC";
-      break;
+
+
+  var prediction = getPollutionPrediction(pressure, humidity, clouds_all, temp, temp_min, temp_max, wind_speed, wind_deg, hour, isWeekend, month, predictionMode);
+  var mode = predictionMode;
+
+  if(predictionMode == "TRAFFIC"){
+    document.getElementById("mlbg").src = "icons/traf_"+prediction+".png";
+  } else if (predictionMode == "BACKGROUND"){
+    if(prediction <3){
+      document.getElementById("mlbg").src = "icons/1_2.png'";
+    }else if (prediction< 5){
+      document.getElementById("mlbg").src = "icons/3_4.png";
+    } else {
+      document.getElementById("mlbg").src = "icons/5_6.png";
+    }
   }
 
-  var prediction = getPollutionPrediction(pressure, humidity, clouds_all, temp, temp_min, temp_max, wind_speed, wind_deg, hour, isWeekend, month, predictionMode)
-  gauge = makeGauge("mlbg", (prediction * 30) - 17 ,"#888",300);
+
+  document.getElementById("gradeML").innerHTML = prediction;
 
 }
 
 function getPollutionPrediction(pressure, humidity, clouds_all, temp, temp_min, temp_max, wind_speed, wind_deg, hour, isWeekend, month, predictionMode){
   var prediction = 0;
-  var url = encodeURI("http://" + ipAddress + ":8080/index/forecast/custom?" + 
+  var url = encodeURI("http://" + ipAddress + ":8080/index/forecast/custom?" +
       "pressure=" + pressure +
-      "&humidity=" + humidity + 
+      "&humidity=" + humidity +
       "&clouds_all=" + clouds_all +
       "&temp=" + temp +
       "&temp_max="+temp_max+
       "&temp_min="+temp_min+
       "&wind_speed=" + wind_speed +
-      "&wind_deg=" + wind_deg + 
-      "&hour=" + hour + 
-      "&is_weekend=" + isWeekend + 
-      "&month=" + month + 
+      "&wind_deg=" + wind_deg +
+      "&hour=" + hour +
+      "&is_weekend=" + isWeekend +
+      "&month=" + month +
       "&prediction_mode=" + predictionMode)
   $.getJSON(url, function(data) {
     prediction = data

@@ -1,4 +1,5 @@
 html, body {
+
   width: 1080px;
   height: 2240px;
   margin: 0;
@@ -11,7 +12,8 @@ html, body {
 }
 
 #content {
-  background-color: rgba(255,255, 255, 0.3);
+  background-color: rgba(230,230, 230, 0.3);
+
 }
 
 .header {
@@ -21,7 +23,7 @@ html, body {
   height: 50px;
 }
 
-.borderCust {
+.noTextShadow {
   text-shadow: none;
   color: black;
 }
@@ -31,6 +33,7 @@ padding: 5px 5px 5px 5px;
 margin: 5px 5px 5px 5px; */
 
 #article1{
+
   background-size: 100%;
   backgroundImage: url("icons/5.png");
   width: 100%;
@@ -48,18 +51,7 @@ margin: 5px 5px 5px 5px; */
   border-radius: 5px;
 }
 
-.gContainer {
-  position: relative;
-  width: 300px;
-  height: 180px;
-}
 
-
-.gaugePos {
-  width: 300px;
-  height: 250px;
-  position: absolute;
-}
 #divBackgroundimage{
   position: absolute;
   background-image: url("icons/5.png");
@@ -78,11 +70,6 @@ margin: 5px 5px 5px 5px; */
   text-decoration: none;
 }
 
-
-
-#moreCharts {
-  text-align: center;
-}
 
 .marker {
   background-image: url('icons/location_icon.svg');
@@ -179,6 +166,8 @@ margin: 5px 5px 5px 5px; */
 
 .weather {
   margin-bottom: 20px;
+    margin-left: 20px;
+
   width: 100%;
   padding: 10px 10px 0px 10px;
 }
@@ -189,10 +178,7 @@ margin: 5px 5px 5px 5px; */
   width: 100%;
 }
 
-.weather1 {
-	/*border: solid 1px;*/
 
-}
 .transparent{
   background-color: Transparent !important;
 }
@@ -227,51 +213,72 @@ margin: 5px 5px 5px 5px; */
   width: 100%;
 }
 
-#weatherIconNow {
+#grades {
+  color: black;
+  font-size: 20px;
+}
 
-
+#gradeML{
+  margin-left: 40px;
+  color: black;
+  font-size: 20px;
 }
 
 #PollutionPicture{
-  width: 100%;
+  width: 70%;
+  margin: 0px;
 }
 
-#pollutioIMG{
-  width: 80%;
-  background-color: rgba(0,0,0, 0.4) !important;
+#pollutionIMG{
+  width: 100%;
   border-radius: 50%;
   margin-left: 30px;
-  margin-bottom: 30px;
+  background-size: contain;
 }
+
+#pollTable td {
+  border: solid 1px black;
+
+}
+
 
 .weatherIcon {
-
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 15px;
 }
 
- .forecastall {
-  height: 100%;
+#forecastall {
   width: 100%;
 }
+
+
 
 .forecastday {
   border-bottom-style: solid;
   border-width: thin;
   background-size: 100%;
   width: 100%;
+  text-shadow: none;
+  color: black;
 }
 
 .windicons {
 	white-space: nowrap;
 	margin-top: 20px;
+  margin-left: -10px;
+}
+
+.windicon{
+  width: 100%;
 }
 
 .row {
-  with: 100%;
+  width: 100%;
+  font-family: inherit;
+  border-collapse: collapse;
 }
 
-.ui-block-a {
-  margin-right: 10px;
-}
 
 .temperaturefor {
   font-size: 16px;
@@ -280,19 +287,21 @@ margin: 5px 5px 5px 5px; */
 }
 
 .gauge {
-  top: 20px;
-	margin-left: 10px;
-  position: relative;
-  width: 100px;
-  height: 50px;
 }
 
-.forecastGauge {
-  width: 100px;
-  height: 100px;
-  position: absolute;
+#g11, #g21, #g31, #g41{
+  margin-top: 10px;
+  width: 80%;
+
+}
+.gauge td {
+  white-space: nowrap;
 }
 
+.gradeDays {
+  margin-top: 30px;
+  margin-left: 10px;
+}
 
 .carousel-indicators li {
 	height: 8px !important;
@@ -324,22 +333,10 @@ margin: 5px 5px 5px 5px; */
 	height: 170px;
 	padding: 3px 3px 3px 3px;
 	margin: 5px 5px 5px 5px;
-	border: solid 3px;
+	border: solid 1px;
+  border-radius: 5px;
 }
 
-.mlGauge {
-	top: 20px;
-	margin-left: 10px;
-	position: relative;
-	width: 300px;
-	height: 200px;
-}
-
-.mlGaugePos {
-  width: 300px;
-  height: 250px;
-  position: absolute;
-}
 
 #PM10, #NO2, #SO2, #CO, #O3 {
   width: 16%;
@@ -379,4 +376,14 @@ display: inline-block;
   text-shadow: none;
   color: black;
   /* background-color: rgba(216,216,216,.7); */
+}
+
+#mlbg {
+  width: 70%;
+  margin-left: 30px;
+  border-radius: 50%;
+}
+
+#MLSliders{
+  margin-top: 30px;
 }
