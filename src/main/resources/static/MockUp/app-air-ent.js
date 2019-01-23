@@ -1,4 +1,4 @@
-var ipAddress = "192.168.2.53";
+var ipAddress = "172.16.254.152";
 
 // enable wait for results
 $.ajaxSetup({
@@ -149,7 +149,7 @@ function updateLocationDependentValues() {
 function updateOnePopupValue(data){
   if (data[0] == "background"){
     document.getElementById("valueBGpopup").innerHTML = data[1];
-    document.getElementById("TRpopup").innerHTML = "";
+    document.getElementById("TRpopup").innerHTML = "This is only the data for the closest station, which is a background measurementstation";
   } else{
     document.getElementById("valueTRpopup").innerHTML = data[1];
     document.getElementById("BGpopup").innerHTML = "";
@@ -288,7 +288,7 @@ function iconConverter(iconID){
   if( iconID == "02d" || iconID == "02n") {
     icon = "icons/sun_cloud.svg";
   }
-  if( iconID == "03d" || iconID == "03n" || iconID == "04d" || iconID == "04n") {
+  if( iconID == "03d" || iconID == "03n" || iconID == "04d" || iconID == "04n" || iconID == "50d" || iconID == "50n") {
     icon = "icons/cloud.svg";
   }
   if( iconID == "09d" || iconID == "09n" || iconID == "10d" || iconID == "10n") {
@@ -812,13 +812,14 @@ function updatePollutionPicture(valuetr){
 
 function updateLocationGauge(data){
   updateRecommendationText(data[1]);
-  if (data[0] == "background"){
+  updatePollutionPicture(data[1]);
+/*  if (data[0] == "background"){
     makeGauge("traffic", (data[1] * 30) - 12, "#000", 300,false);
     makeGauge("background", (data[1] * 30) - 17, "#888", 300);
   } else {
     makeGauge("background", (data[1] * 30) - 17, "#888", 300, false);
     makeGauge("traffic", (data[1] * 30) - 12, "#000", 300);
-  }
+  }*/
 }
 
 // Updates Interface which makes ML approachable

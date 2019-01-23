@@ -163,7 +163,7 @@ margin: 5px 5px 5px 5px; */
 
 
 .weather {
-
+  margin-bottom: 20px;
   width: 100%;
   padding: 10px 10px 0px 10px;
 }
@@ -209,10 +209,7 @@ margin: 5px 5px 5px 5px; */
 }
 
 .right{
-  width: 30%;
-}
-.left{
-  width: 30%;
+  width: 100%;
 }
 
 #weatherIconNow {
@@ -237,6 +234,7 @@ margin: 5px 5px 5px 5px; */
 
  .forecastall {
   height: 100%;
+  width: 100%;
 }
 
 .forecastday {
