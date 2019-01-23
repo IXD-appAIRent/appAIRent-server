@@ -149,10 +149,10 @@ function updateLocationDependentValues() {
 function updateOnePopupValue(data){
   if (data[0] == "background"){
     document.getElementById("valueBGpopup").innerHTML = data[1];
-    document.getElementById("TRpopup").innerHTML = "This is only the data for the closest station, which is a background measurementstation";
+    document.getElementById("valueTRpopup").innerHTML = "This is only the data for the closest station, which is a background measurement-station";
   } else{
     document.getElementById("valueTRpopup").innerHTML = data[1];
-    document.getElementById("BGpopup").innerHTML = "";
+    document.getElementById("valueBGpopup").innerHTML = "This is only the data for the closest station, which is a traffic measurement-station";
   }
 }
 
@@ -801,8 +801,8 @@ function change3hour(data){
   document.getElementById("temp-max").innerHTML = data[2] + "°C";
   getWindIcon(data[5],data[6], "windWrap");
   updateRecommendationText(data[1]);
-  document.getElementById("valueBGpopup").innerHTML = data[0];
-  document.getElementById("valueTRpopup").innerHTML = data[1];
+  document.getElementById("valueBGpopup").innerHTML =  data[0];
+  document.getElementById("valueTRpopup").innerHTML =  data[1];
 
 }
 
