@@ -1,4 +1,4 @@
-var ipAddress = "192.168.0.117";
+var ipAddress = "172.16.248.96";
 
 // enable wait for results
 $.ajaxSetup({
@@ -150,10 +150,10 @@ function updateLocationDependentValues() {
 function updateOnePopupValue(data){
   if (data[0] == "background"){
     document.getElementById("valueBGpopup").innerHTML = data[1];
-    document.getElementById("TRpopup").innerHTML = "";
+    document.getElementById("valueTRpopup").innerHTML = "This is only the data for the closest station, which is a background measurement-station";
   } else{
     document.getElementById("valueTRpopup").innerHTML = data[1];
-    document.getElementById("BGpopup").innerHTML = "";
+    document.getElementById("valueBGpopup").innerHTML = "This is only the data for the closest station, which is a traffic measurement-station";
   }
 }
 
@@ -186,8 +186,8 @@ function updateCurrentWeather(){
       document.getElementById("distance").innerHTML = "<br> average values for Berlin";
       var nowdata = update24hPollutionValues(0);
       createForecastTime(0);
-      document.getElementById("divBackgroundimage").style.backgroundImage = "url('icons/"+6+".png')"; //nowdata[1]
-      document.getElementById("article1").style.backgroundImage = "url('icons/"+6+".png')";
+      document.getElementById("divBackgroundimage").style.backgroundImage = "url('icons/"+nowdata[0]+".png')"; //nowdata[1]
+      document.getElementById("article1").style.backgroundImage = "url('icons/"+nowdata[0]+".png')";
       nowdata.push(Math.round(now.main.temp_max-273.15));
       nowdata.push(Math.round(now.main.temp_min-273.15));
       nowdata.push(iconConverter(now.weather[0].icon));
@@ -289,7 +289,7 @@ function iconConverter(iconID){
   if( iconID == "02d" || iconID == "02n") {
     icon = "icons/sun_cloud.svg";
   }
-  if( iconID == "03d" || iconID == "03n" || iconID == "04d" || iconID == "04n") {
+  if( iconID == "03d" || iconID == "03n" || iconID == "04d" || iconID == "04n" || iconID == "50d" || iconID == "50n") {
     icon = "icons/cloud.svg";
   }
   if( iconID == "09d" || iconID == "09n" || iconID == "10d" || iconID == "10n") {
@@ -795,26 +795,32 @@ function updateDailyForecast(data, timeID){
 
 // Updates 24h Forecast
 function change3hour(data){
-  fillGauge("background", "traffic", data[0], data[1], 300);
+  //fillGauge("background", "traffic", data[0], data[1], 300);
+  updatePollutionPicture(data[1]);
   document.getElementById("weatherIconNow").src = data[4];
   document.getElementById("temp-min").innerHTML = data[3] + "°C";
   document.getElementById("temp-max").innerHTML = data[2] + "°C";
   getWindIcon(data[5],data[6], "windWrap");
   updateRecommendationText(data[1]);
-  document.getElementById("valueBGpopup").innerHTML = data[0];
-  document.getElementById("valueTRpopup").innerHTML = data[1];
+  document.getElementById("valueBGpopup").innerHTML =  data[0];
+  document.getElementById("valueTRpopup").innerHTML =  data[1];
 
+}
+
+function updatePollutionPicture(valuetr){
+  document.getElementById("PollutionPicture").innerHTML = "<img id='pollutioIMG' alt='pollution Icon' src='icons/traf_"+valuetr+".png'/>";
 }
 
 function updateLocationGauge(data){
   updateRecommendationText(data[1]);
-  if (data[0] == "background"){
+  updatePollutionPicture(data[1]);
+/*  if (data[0] == "background"){
     makeGauge("traffic", (data[1] * 30) - 12, "#000", 300,false);
     makeGauge("background", (data[1] * 30) - 17, "#888", 300);
   } else {
     makeGauge("background", (data[1] * 30) - 17, "#888", 300, false);
     makeGauge("traffic", (data[1] * 30) - 12, "#000", 300);
-  }
+  }*/
 }
 
 // Updates Interface which makes ML approachable

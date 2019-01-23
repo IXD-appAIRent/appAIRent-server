@@ -7,6 +7,11 @@ html, body {
   text-shadow: none;
   color: black;
 
+
+}
+
+#content {
+  background-color: rgba(255,255, 255, 0.3);
 }
 
 .header {
@@ -17,12 +22,13 @@ html, body {
 }
 
 .borderCust {
-  border-bottom: solid 1px;
-  padding: 5px 5px 5px 5px;
-  margin: 5px 5px 5px 5px;
   text-shadow: none;
   color: black;
 }
+/*
+
+padding: 5px 5px 5px 5px;
+margin: 5px 5px 5px 5px; */
 
 #article1{
   background-size: 100%;
@@ -117,7 +123,8 @@ html, body {
   display: none;
 }
 #location {
-
+  margin-bottom: 10px;
+  margin-top: -10px;
 }
 
 #locationTitle {
@@ -156,10 +163,9 @@ html, body {
 
 
 .weather {
-
+  margin-bottom: 20px;
   width: 100%;
-  margin-bottom: 8px;
-  padding: 10px;
+  padding: 10px 10px 0px 10px;
 }
 
 .weatherT {
@@ -203,10 +209,7 @@ html, body {
 }
 
 .right{
-  width: 30%;
-}
-.left{
-  width: 30%;
+  width: 100%;
 }
 
 #weatherIconNow {
@@ -214,6 +217,16 @@ html, body {
 
 }
 
+#PollutionPicture{
+  width: 100%;
+}
+
+#pollutioIMG{
+  width: 80%;
+  background-color: rgba(0,0,0, 0.4) !important;
+  border-radius: 50%;
+  margin-left: 10px;
+}
 
 .weatherIcon {
 
@@ -221,6 +234,7 @@ html, body {
 
  .forecastall {
   height: 100%;
+  width: 100%;
 }
 
 .forecastday {
