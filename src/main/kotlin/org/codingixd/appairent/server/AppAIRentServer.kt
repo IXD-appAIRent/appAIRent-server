@@ -197,6 +197,33 @@ class GreetingController {
 
         return mapper.writeValueAsString(dailyIndexForecasts)
     }
+
+    @GetMapping("/index/forecast/custom", produces = ["application/json"])
+    fun getMLPrediction(
+        @RequestParam pressure: Int, @RequestParam humidity: Int,
+        @RequestParam clouds_all: Int, @RequestParam temp: Double, @RequestParam temp_min: Double,
+        @RequestParam temp_max: Double, @RequestParam wind_speed: Double,
+        @RequestParam wind_deg: Int, @RequestParam hour: Int, @RequestParam is_weekend: Boolean,
+        @RequestParam month: Int, @RequestParam prediction_mode: String
+    ): String {
+        val mode = AirClassifier.PredictionMode.valueOf(prediction_mode)
+        val now = LocalDateTime.now()
+        var ldt = LocalDateTime.of(now.year, month, 10, hour, 0)
+        val weekday: DayOfWeek = if (is_weekend) {
+            DayOfWeek.SUNDAY
+        } else {
+            DayOfWeek.WEDNESDAY
+        }
+
+        while (ldt.dayOfWeek != weekday) {
+            ldt = ldt.plusDays(1)
+        }
+
+        val result = airClassifier.getClassification(mode, ldt, temp, temp_min, temp_max, pressure.toDouble(),
+            humidity.toDouble(), wind_speed, wind_deg.toDouble(), clouds_all.toDouble())
+
+        return mapper.writeValueAsString(result)
+    }
 }
 
 data class StationData(
@@ -215,10 +242,10 @@ fun main(args: Array<String>) {
     SpringApplication.run(Application::class.java, *args)
 }
 
+val airClassifier: AirClassifier = RandomForestAirClassifier()
+
 @Component
 class ScheduledTasks {
-
-    val airClassifier: AirClassifier = RandomForestAirClassifier()
 
     @Scheduled(fixedRate = 60000)
     fun fetchCurrentData() {
