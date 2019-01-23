@@ -826,26 +826,22 @@ function updateLocationGauge(data){
 // Updates Interface which makes ML approachable
 function showResult(){
   var gauge;
-  // skyML, tempML, windML, timeML, seasonML, PredictionModeML
-
 
   var pressure, humidity, clouds_all// skyML
   var temp, temp_min, temp_max//tempML
   var wind_speed, wind_deg// windML
-  var hour, isWeekEnd// timeML
+  var hour, isWeekend// timeML
   var month // seasonML
   var predictionMode // PredictionModeML
 
-
-  // TO DEFINE
   switch ($('#skyML > div.active').index()) {
-    case 0: pressure=0; humidity=0; clouds_all=0;
+    case 0: pressure=1018; humidity=30; clouds_all=0; // sunny
       break;
-    case 1: pressure=0; humidity=0; clouds_all=0;
+    case 1: pressure=1011; humidity=81; clouds_all=100; // cloudy
       break;
-    case 2: pressure=0; humidity=0; clouds_all=0;
+    case 2: pressure=1010; humidity=95; clouds_all=100; // rainy
       break;
-    case 3: pressure=0; humidity=0; clouds_all=0;
+    case 3: pressure=1006; humidity=75; clouds_all=100; // snowy
       break;
   }
 
@@ -872,13 +868,13 @@ function showResult(){
       break;
   }
   switch ($('#timeML > div.active').index()) {
-    case 0: hour=8; isWeekEnd=0;
+    case 0: hour=8; isWeekend="false";
       break;
-    case 1: hour=13; isWeekEnd=0;
+    case 1: hour=13; isWeekend="false";
       break;
-    case 2: hour=23; isWeekEnd=0;
+    case 2: hour=23; isWeekend="false";
       break;
-    case 3: hour=13; isWeekEnd=1;
+    case 3: hour=13; isWeekend="true";
       break;
   }
   switch ($('#seasonML > div.active').index()) {
@@ -892,16 +888,36 @@ function showResult(){
       break;
   }
   switch ($('#PredictionModeML > div.active').index()) {
-    case 0: predictionMode=0;
+    case 0: predictionMode="BACKGROUND";
       break;
-    case 1: predictionMode=1;
+    case 1: predictionMode="TRAFFIC";
       break;
   }
 
-  var prediction = fakePollution()
+  var prediction = getPollutionPrediction(pressure, humidity, clouds_all, temp, temp_min, temp_max, wind_speed, wind_deg, hour, isWeekend, month, predictionMode)
+  gauge = makeGauge("mlbg", (prediction * 30) - 17 ,"#888",300);
 
-	gauge = makeGauge("mlbg", (prediction * 30) - 17 ,"#888",300);
+}
 
+function getPollutionPrediction(pressure, humidity, clouds_all, temp, temp_min, temp_max, wind_speed, wind_deg, hour, isWeekend, month, predictionMode){
+  var prediction = 0;
+  var url = encodeURI("http://" + ipAddress + ":8080/index/forecast/custom?" + 
+      "pressure=" + pressure +
+      "&humidity=" + humidity + 
+      "&clouds_all=" + clouds_all +
+      "&temp=" + temp +
+      "&temp_max="+temp_max+
+      "&temp_min="+temp_min+
+      "&wind_speed=" + wind_speed +
+      "&wind_deg=" + wind_deg + 
+      "&hour=" + hour + 
+      "&is_weekend=" + isWeekend + 
+      "&month=" + month + 
+      "&prediction_mode=" + predictionMode)
+  $.getJSON(url, function(data) {
+    prediction = data
+  });
+  return prediction;
 }
 
 function detailedInfo(index){
