@@ -101,8 +101,8 @@
         <!--<a href="#popupBasic" data-rel="popup">i</a>-->
 
         <div data-role="popup" id="popupBasic">
-        	<p id="BGpopup">background pollution is visualized as the smog on the screen. <br> grade: <span id="valueBGpopup"></span></p>
-          <p id="TRpopup">traffic pollution is visualized by the dots, which get bigger the worse it is. <br> grade: <span id="valueTRpopup"></p>
+        	<p id="BGpopup">background pollution: <br> grade: <span id="valueBGpopup"></span></p>
+          <p id="TRpopup">traffic pollution: <br> grade: <span id="valueTRpopup"></span></p>
         </div>
 
         <a href="#popupBasic" data-rel="popup">
@@ -112,16 +112,28 @@
         </div></a>
 
          <div id="selTime"></div>
+         <table id="TimeTable">
+          <tr>
+            <td ><span id="time-1">1</span></td>
+            <td ><span id="time-2">2</span></td>
+            <td ><span id="time-3">3</span></td>
+            <td  ><span id="time-4">3</span></td>
+            <td ><span id="time-5">3</span></td>
+            <td><span id="time-6">3</span></td>
+            <td><span id="time-7">3</span></td>
+            <td><span id="time-8">3</span></td>
+          </tr>
+        </table>
          <table>
           <tr>
-            <td><button class="button1" id="choice-1" onclick="updateCurrentWeather();"></button></td>
-            <td><button class="button1" id="choice-2" onclick="updateWeatherForecast24Hours(1);"></button></td>
-            <td><button class="button1" id="choice-3" onclick="updateWeatherForecast24Hours(2);"></button></td>
-            <td><button class="button1" id="choice-4" onclick="updateWeatherForecast24Hours(3);"></button></td>
-            <td><button class="button1" id="choice-5" onclick="updateWeatherForecast24Hours(4);"></button></td>
-            <td><button class="button1" id="choice-6" onclick="updateWeatherForecast24Hours(5);"></button></td>
-            <td><button class="button1" id="choice-7" onclick="updateWeatherForecast24Hours(6);"></button></td>
-            <td><button class="button1" id="choice-8" onclick="updateWeatherForecast24Hours(7);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-1" onclick="updateCurrentWeather();"></button></td>
+            <td class="spaceBetween"><button class="button1" id="choice-2" onclick="updateWeatherForecast24Hours(1);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-3" onclick="updateWeatherForecast24Hours(2);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-4" onclick="updateWeatherForecast24Hours(3);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-5" onclick="updateWeatherForecast24Hours(4);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-6" onclick="updateWeatherForecast24Hours(5);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-7" onclick="updateWeatherForecast24Hours(6);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-8" onclick="updateWeatherForecast24Hours(7);"></button></td>
           </tr>
         </table>
       </div>
@@ -183,12 +195,10 @@
 
       </div>
       <div class="transparent" data-role="footer">
-        <span class="ui-title transparent">
-          <div class="navigator transparent">
+          <div class="ui-title navigator transparent">
             <a href="#article1" class="activeSlide" >1</a>
             <a href="#article2">2</a>
           </div>
-        </span>
       </div>
     </div>
 
@@ -470,12 +480,10 @@
       </div>
 
       <div class="transparent" data-role="footer" >
-       <span class="ui-title transparent">
-         <div class="navigator transparent">
+         <div class="navigator ui-title transparent">
            <a href="#article1">1</a>
            <a href="#article2" class="activeSlide">2</a>
          </div>
-       </span>
      </div>
     </div>
 

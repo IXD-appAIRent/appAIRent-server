@@ -5,7 +5,8 @@ $.ajaxSetup({
   async: false
 });
 
-createForecastTime(0);
+
+createButtonTime();
 
 updateCurrentWeather();
 
@@ -149,33 +150,30 @@ function updateLocationDependentValues() {
 function updateOnePopupValue(data){
   if (data[0] == "background"){
     document.getElementById("valueBGpopup").innerHTML = data[1];
-    document.getElementById("valueTRpopup").innerHTML = "This is only the data for the closest station, which is a background measurement-station";
+    document.getElementById("valueTRpopup").innerHTML = "no data, nearest station is for background.";
   } else{
     document.getElementById("valueTRpopup").innerHTML = data[1];
-    document.getElementById("valueBGpopup").innerHTML = "This is only the data for the closest station, which is a traffic measurement-station";
+    document.getElementById("valueBGpopup").innerHTML = "no data, nearest station is for traffic.";
+  }
+}
+
+function createButtonTime(){
+  var i;
+  for (i = 0; i < 8; i++){
+    var first = new Date().getHours();
+    var first = first - (first % 3);
+    var t = (first +(3*i)) % 24 +":00";
+    if (i == 0){
+      t = "now";
+    }
+    var timeid = "time-"+ (i+1);
+    document.getElementById(timeid).innerHTML = t +"  ";
   }
 }
 
 
 
-// Creates buttons for forecast
-function createForecastTime(x) {
-  var first = new Date().getHours();
-  var first = first - (first % 3);
-  var t = (first +(3*x)) % 24 +":00";
-  if (x == 0){
-    t = "now";
-  }
-  document.getElementById("selTime").innerHTML = t;
-  // document.getElementById("choice-2").innerHTML += (first+3) % 24 +":00";
-  // document.getElementById("choice-3").innerHTML += (first+6) % 24 +":00";
-  // document.getElementById("choice-4").innerHTML += (first+9) % 24 +":00";
-  // document.getElementById("choice-5").innerHTML += (first+12) %24 +":00";
-  // document.getElementById("choice-6").innerHTML += (first+15) %24 +":00";
-  // document.getElementById("choice-7").innerHTML += (first+18) %24 +":00";
-  // document.getElementById("choice-8").innerHTML += (first+21) %24 +":00";
-  // document.getElementById("choice-9").innerHTML += (first+24) %24 +":00";
-}
+
 
 // Updates current weather forecast
 function updateCurrentWeather(){
@@ -184,7 +182,7 @@ function updateCurrentWeather(){
       document.getElementById("title1").innerHTML = "Berlin";
       document.getElementById("distance").innerHTML = "<br> average values for Berlin";
       var nowdata = update24hPollutionValues(0);
-      createForecastTime(0);
+
       document.getElementById("divBackgroundimage").style.backgroundImage = "url('icons/"+nowdata[0]+".png')"; //nowdata[1]
       document.getElementById("article1").style.backgroundImage = "url('icons/"+nowdata[0]+".png')";
       nowdata.push(Math.round(now.main.temp_max-273.15));
@@ -227,7 +225,7 @@ function updateWeatherForecast24Hours(index){
     if(index < 9){
 
       var pollBerlin = update24hPollutionValues(index);
-      createForecastTime(index);
+
       //alert(pollBerlin[0]);
       //[pollBerlin[0],pollBerlin[1]
       change3hour([pollBerlin[0],pollBerlin[1], Math.round(json.list[index].main.temp_max-273.15), Math.round(json.list[index].main.temp_min-273.15), iconConverter(json.list[index].weather[0].icon), json.list[index].wind.deg,json.list[index].wind.speed ]);
