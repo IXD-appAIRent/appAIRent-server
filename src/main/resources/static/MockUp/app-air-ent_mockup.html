@@ -34,7 +34,10 @@
 
   <div data-role="page" id="article1">
     <div class="header" data-role="header" data-theme="a" data-position="fixed" >
-      <a href="#" onclick="toogleMap();return false;" data-icon="location" data-iconpos="notext"></a>
+      <a href="#" onclick="toogleMap();return false;" class="mapviewer">map</a>
+      <!--
+      <img onclick="toogleMap();return false;" id="mapviewer" src="icons/location_icon.svg"/> -->
+
       <h1 class="nolinkstyle">app-air-ent</h1>
     </div>
     <div data-role="content" id="content">
@@ -50,8 +53,7 @@
             </div>
             <div class="col-xs-6" >
               <div class="weather1">
-                <a href="#article2">
-                  <img id="weatherIconNow" src="icons/1.svg" alt="sunny"/></a>
+                  <img id="weatherIconNow" src="icons/1.svg" alt="sunny"/>
               </div>
             </div>
 
@@ -61,8 +63,7 @@
 
 
       <div class="noTextShadow container">
-
-      <div class="container" id="location">
+        <div class="container" id="location">
         <table class="weatherT">
           <tr onclick="toogleAddressInterface()">
             <th id="iconWrap">
@@ -173,10 +174,11 @@
         </div>
 
         <div class="row">
+
+          <span id="grades" class="nolinkstyle"></span>
         <a href="#popupBasic" data-rel="popup">
           <div id="PollutionPicture"></div>
         </a>
-        <span id="grades" class="nolinkstyle"></span>
       </div>
 
 
@@ -207,7 +209,7 @@
         </table>
       </div>
 
-      <div class="container">
+      <div class="container fullWidth">
         <div id="recommendation">
           <h2> Recommendation </h2>
           <p id="recommendationDiv"><span id="recommendationText"> if possible, make your journeys at times, when roads are less busy, so outside of traffic rush hours - check our live traffic maps</span> <br>
@@ -231,7 +233,9 @@
 
 
         <div >
-          <div class="row" id="detailview">
+          <div class="row fullWidth" id="detailview">
+
+            <div class="col-xs-1"></div>
             <div class="col-xs-2" id="PM10" onclick="detailedInfo(0)">PM10<br>
               <span id="PM10grade"></span>
               <p id="PM10value"></p>
@@ -255,6 +259,7 @@
               <span id="O3grade"></span>
               <p id="O3value"></p>
             </div>
+            <div class="col-xs-1"></div>
           </div>
 
           <div id="detailedDiv"><span id="detailed"></span></div>
@@ -269,6 +274,7 @@
             <a href="#article2">2</a>
           </div>
       </div>
+
     </div>
 
 
@@ -276,11 +282,12 @@
 
   <div data-role="page" id="article2">
     <div class="header" data-role="header" data-theme="a" >
-        <a href="#" onclick="toogleMap();return false;" data-icon="location" data-iconpos="notext">Map</a>
-      <h1><a href="#article1"><span class="nolinkstyle">app-air-ent</span></a></h1>
+      <a href="#" onclick="toogleMap();return false;" class="mapviewer">map</a>
+        <!--<a href="#" onclick="toogleMap();return false;" data-icon="location" data-iconpos="notext">Map</a>-->
+      <h1>app-air-ent</h1>
     </div>
     <div data-role="content" id="forecastall">
-      <div class="row forecastday" id="divDay1">
+      <div class="row forecastday fullWidth" id="divDay1">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day1"></h3>
           <div class="lead temperaturefor" id="temp1"><br></div>
@@ -301,7 +308,7 @@
 
       </div>
 
-      <div class="row forecastday" id="divDay2">
+      <div class="row forecastday fullWidth" id="divDay2">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day2"></h3>
           <div class="lead temperaturefor" id="temp2"><br></div>
@@ -322,7 +329,7 @@
 
       </div>
 
-      <div class="row forecastday" id="divDay3">
+      <div class="row forecastday fullWidth" id="divDay3">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day3"></h3>
           <div class="lead temperaturefor" id="temp3"><br></div>
@@ -344,7 +351,7 @@
 
       </div>
 
-      <div class="row forecastday" id="divDay4">
+      <div class="row forecastday fullWidth" id="divDay4">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day4"></h3>
           <div class="lead temperaturefor" id="temp4"><br></div>
@@ -365,15 +372,15 @@
         </div>
 
       </div>
-      <div id="machinelearning">
-        <h1> Machine Learning </h1>
-        <h3>here you can swap some parameters and see how it affects the outcome of our machine learning algorithm</h3>
+      <div id="machinelearning" >
+        <h1 class="fullWidth"> Machine Learning </h1>
+        <h3 class="fullWidth">here you can swap some parameters and see how it affects the outcome of our machine learning algorithm</h3>
         <div>
           <img  id="mlbg"/>
           <span id="gradeML"></span>
         </div>
 
-        <div class="row" id="MLSliders">
+        <div class="row fullWidth" id="MLSliders">
         <div id="IconCarousel" class="col-xs-6 carousel slide" data-interval="false" data-ride="carousel">
           <!-- Indicators -->
           <ol class="carousel-indicators">
@@ -472,7 +479,8 @@
         </div>
 
         </div>
-        <div class="row">
+
+        <div class="row fullWidth">
         <div id="WeekCarousel" class="col-xs-6 carousel slide" data-interval="false" data-ride="carousel">
           <!-- Indicators -->
           <ol class="carousel-indicators">
@@ -539,16 +547,16 @@
           <!-- Indicators -->
           <ol class="carousel-indicators">
             <li data-target="#TypeCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#TypeCarousel" data-slide-to="1"></li>
+            <li data-target="#TypeCarousel" data-slide-to="1" ></li>
           </ol>
 
           <!-- Wrapper for slides -->
           <div id="PredictionModeML" class="carousel-inner">
-            <div class="item">
-              <img src="icons/traffic.svg" alt="traffic">
-            </div>
             <div class="item active">
-              <img src="icons/background.svg" alt="background">
+              <img src="icons/background.svg" alt="traffic">
+            </div>
+            <div class="item">
+              <img src="icons/traffic.svg" alt="background">
             </div>
           </div>
 
@@ -562,22 +570,19 @@
         </div>
 
 
-
-
       </div>
 
-      <div class="transparent" data-role="footer" >
-         <div class="navigator ui-title transparent">
-           <a href="#article1">1</a>
-           <a href="#article2" class="activeSlide">2</a>
-         </div>
-     </div>
-    </div>
 
+          <div class="transparent" data-role="footer" >
+             <div class="navigator ui-title transparent">
+               <a href="#article1">1</a>
+               <a href="#article2" class="activeSlide">2</a>
+             </div>
+         </div>
 
   </div>
 
-
+</div>
 
   <div id="article3" style="display: none;" >
 

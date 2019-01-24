@@ -16,6 +16,7 @@ updateWeatherForecastUpcomingDays(2);
 updateWeatherForecastUpcomingDays(3);
 
 updatesNamesOfDaysInForecast();
+makeMap();
 showResult();
 
 
@@ -324,16 +325,7 @@ function toogleMap() {
 }
 
 // START INITIALISATION OF MAPBOX
-mapboxgl.accessToken = 'pk.eyJ1IjoibGlsbGlwaWxsaSIsImEiOiJjanBjc3J3ZmozMG55M3dwaHFpcmFlZDNoIn0.Eh9Spcc3_PNF72jAYeGTmQ';
-const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/light-v9',
-  minZoom: 8.5,
-  maxZoom: 12,
-  center: [13.5, 52.52697],
-  zoom: 8.5,
-  interactive: false
-});
+
 
 var measurepoints = {
   "array": [{
@@ -479,19 +471,39 @@ var measurepoints = {
   }]
 }
 
-measurepoints.array.forEach(function(e) {
-  var coord = [];
 
-  coord.push(e.station.location.lng);
-  coord.push(e.station.location.lat);
-  var el = document.createElement('div');
-  el.className = 'marker';
-
-  // make a marker for each feature and add to the map
-  var marker = new mapboxgl.Marker(el).setLngLat(coord).setPopup(new mapboxgl.Popup() // add popups
-    .setHTML(e.measurementType + " <br/> ID: " + e.station.id + "<br/> <button id='" + e.station.id + "'>see values here</button>")).addTo(map);
-});
 // END INITIALISATION OF MAPBOX
+
+function makeMap(){
+  $.getJSON("http://"+ ipAddress+":8080/stations/all", function(arr) {
+    mapboxgl.accessToken = 'pk.eyJ1IjoibGlsbGlwaWxsaSIsImEiOiJjanBjc3J3ZmozMG55M3dwaHFpcmFlZDNoIn0.Eh9Spcc3_PNF72jAYeGTmQ';
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v9',
+      minZoom: 8.5,
+      maxZoom: 12,
+      center: [13.5, 52.52697],
+      zoom: 8.5,
+      interactive: false
+    });
+
+    arr.forEach(function(e) {
+      var coord = [];
+
+      coord.push(e.station.location.lng);
+      coord.push(e.station.location.lat);
+      var el = document.createElement('div');
+      el.className = 'marker';
+
+      // make a marker for each feature and add to the map
+      var marker = new mapboxgl.Marker(el).setLngLat(coord).setPopup(new mapboxgl.Popup() // add popups
+        .setHTML("type: "+e.measurementType + " <br/> grade: " + e.lqi + "<br/> location: "+ e.station.name)).addTo(map);
+    });
+
+  });
+}
+
+
 
 // Adds currently choosen location to map
 function setLocPoint(latlong) {
@@ -499,14 +511,6 @@ function setLocPoint(latlong) {
   locdiv.className = 'locdiv';
   var locpoint = new mapboxgl.Marker(locdiv).setLngLat(latlong).addTo(map);;
 
-}
-
-// Maps degree of wind direction to Compass direction.
-function degToWord(deg) {
-  var val = Math.round(((deg / 22.5) + 0.5))% 16;
-  var arr = ["W","WNW","NW","NNW","N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW"]
-  var res = arr[val];
-  return res;
 }
 
 // Sets arrow which represents direction
@@ -556,143 +560,6 @@ function getDayName(i) {
 };
 
 
-function makeGauge(id, value, color, width, pointer) {
-  // #888 = BACKGROUND
-  if (color == "#888" && pointer !== false){
-    var gauge = new RadialGauge({
-      renderTo: id,
-      width: width,
-      height: width,
-      value: value,
-      minValue: 0,
-      startAngle: 90,
-      ticksAngle: 180,
-      valueBox: false,
-      maxValue: 180,
-      majorTicks: ["", "", "", "", "", "", ""],
-      minorTicks: 1,
-      strokeTicks: true,
-      highlights: [{
-          "from": 60,
-          "to": 120,
-          "color": '#BBB'
-        },
-        {
-          "from": 120,
-          "to": 180,
-          "color": '#555'
-        }
-      ],
-      colorPlate: 'Transparent',
-      colorNumbers: '#888',
-      borderShadowWidth: 0,
-      borders: false,
-      colorNeedle: color,
-      colorNeedleEnd: color,
-      needleShadow: false,
-      needleType: "line",
-      needleWidth: 7,
-      needleCircleSize: 5,
-      needleCircleOuter: false,
-      needleCircleInner: false,
-      needleStart: 0,
-      needleEnd: 100,
-      animationDuration: 1500,
-      animationRule: "linear"
-    }).draw();
-    return gauge;
-  }
-  // TRAFFIC
-  else if (pointer !== false) {
-    var gauge = new RadialGauge({
-      renderTo: id,
-      width: width,
-      height: width,
-      value: value,
-      minValue: 0,
-      startAngle: 90,
-      ticksAngle: 180,
-      valueBox: false,
-      maxValue: 180,
-      majorTicks: [
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
-      highlights: [{
-          "from": 60,
-          "to": 120,
-          "color": 'Transparent'
-        },
-        {
-          "from": 120,
-          "to": 180,
-          "color": 'Transparent'
-        }
-      ],
-      minorTicks: 1,
-      strokeTicks: true,
-      colorPlate: 'Transparent',
-      colorNumbers: 'Transparent',
-      colorStrokeTicks: 'Transparent',
-      colorMinorTicks: 'Transparent',
-      borderShadowWidth: 0,
-      borders: false,
-      colorNeedle: color,
-      colorNeedleEnd: color,
-      needleShadow: false,
-      needleType: "line",
-      needleWidth: 7,
-      needleCircleSize: 5,
-      needleCircleOuter: false,
-      needleCircleInner: false,
-      needleStart: 0,
-      needleEnd: 100,
-      animationDuration: 1500,
-      animationRule: "linear"
-    }).draw();
-  }
-  else {
-    var gauge = new RadialGauge({
-      renderTo: id,
-      width: width,
-      height: width,
-      value: value,
-      minValue: 0,
-      startAngle: 90,
-      ticksAngle: 180,
-      valueBox: false,
-      maxValue: 180,
-      majorTicks: ["", "", "", "", "", "", ""],
-      minorTicks: 1,
-      strokeTicks: true,
-      highlights: [{
-          "from": 60,
-          "to": 120,
-          "color": '#BBB'
-        },
-        {
-          "from": 120,
-          "to": 180,
-          "color": '#555'
-        }
-      ],
-      colorPlate: 'Transparent',
-      colorNumbers: '#888',
-      borderShadowWidth: 0,
-      borders: false,
-      needle: false,
-      animationDuration: 1500,
-      animationRule: "linear"
-    }).draw();
-  }
-
-}
-
 function updateRecommendationText(grade){
   var text;
   if (grade == 1){
@@ -730,15 +597,6 @@ function updateRecommendationText(grade){
   }
 }
 
-function fillGauge(idbg, idtr, valuebg, valuetr, size) {
-  if (idbg !== undefined){
-    makeGauge(idbg, (valuebg * 30) - 17, "#888", size);
-  }
-  if (idtr !== undefined){
-    makeGauge(idtr, (valuetr * 30) - 12, "#000", size);
-  }
-}
-
 // Updates daily weather and polltion forecast
 function updateDailyForecast(data, timeID){
   if (timeID == 0){
@@ -773,20 +631,19 @@ function updateDailyForecast(data, timeID){
     var wind = "wind4";
     var backg = "divDay4";
   }
-  if (timeID == 4){
-    var bg = "g50";
-    var tr = "g51";
-    var temp = "temp5";
-    var icon = "icon5";
-    var wind = "wind5";
-  } else {
+  else {
 
   }
 
-  //fillGauge(bg,tr, data[0],data[1],110);
-
   document.getElementById(bg).innerHTML = "<br>B:"+data[0]+"<br>T:"+data[1];
   document.getElementById(tr).src = "icons/traf_"+data[1]+".png";
+  if(data[0] < 3){
+    document.getElementById(tr).style.backgroundImage = "url('icons/1_2.png')";
+  }else if (data[0]< 5){
+    document.getElementById(tr).style.backgroundImage = "url('icons/3_4.png')";
+  } else {
+    document.getElementById(tr).style.backgroundImage = "url('icons/5_6.png')";
+  }
   document.getElementById(icon).src = data[4];
   document.getElementById(temp).innerHTML = data[3] + "°C";
   //+" <br>"+ data[2] + "°"
@@ -796,7 +653,6 @@ function updateDailyForecast(data, timeID){
 
 // Updates 24h Forecast
 function change3hour(data){
-  //fillGauge("background", "traffic", data[0], data[1], 300);
   updatePollutionPicture(data[0],data[1]);
   document.getElementById("weatherIconNow").src = data[4];
   document.getElementById("temp-min").innerHTML = data[3] + "°C";
@@ -847,12 +703,6 @@ function showResult(){
   var hour, isWeekend// timeML
   var month // seasonML
   var predictionMode // PredictionModeML
-  switch ($('#PredictionModeML > div.active').index()) {
-    case 0: predictionMode="BACKGROUND";
-      break;
-    case 1: predictionMode="TRAFFIC";
-      break;
-  }
 
   switch ($('#skyML > div.active').index()) {
     case 0: pressure=1018; humidity=30; clouds_all=0; // sunny
@@ -907,7 +757,12 @@ function showResult(){
     case 3: month=1;
       break;
   }
-
+  switch ($('#PredictionModeML > div.active').index()) {
+    case 0: predictionMode="BACKGROUND";
+      break;
+    case 1: predictionMode="TRAFFIC";
+      break;
+  }
 
   var prediction = getPollutionPrediction(pressure, humidity, clouds_all, temp, temp_min, temp_max, wind_speed, wind_deg, hour, isWeekend, month, predictionMode);
   var mode = predictionMode;
@@ -915,9 +770,9 @@ function showResult(){
   if(predictionMode == "TRAFFIC"){
     document.getElementById("mlbg").src = "icons/traf_"+prediction+".png";
   } else if (predictionMode == "BACKGROUND"){
-    if(prediction <3){
+    if (prediction < 3){
       document.getElementById("mlbg").src = "icons/1_2.png'";
-    }else if (prediction< 5){
+    }else if (prediction < 5){
       document.getElementById("mlbg").src = "icons/3_4.png";
     } else {
       document.getElementById("mlbg").src = "icons/5_6.png";
