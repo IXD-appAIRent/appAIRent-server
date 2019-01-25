@@ -11,6 +11,7 @@ html, body {
 
 }
 
+
 #content {
   background-color: rgba(230,230, 230, 0.3);
 
@@ -20,10 +21,12 @@ html, body {
   border: none;
   box-shadow: none;
   text-shadow: none;
-  background-color: Transparent;
-  font-size: 20px;
-  font-family: inherit;
+  width: 40px;
+  height: 40px;
+   background-image: url("icons/location.png");
+  background-size:cover;
 }
+
 
 
 
@@ -59,8 +62,16 @@ margin: 5px 5px 5px 5px; */
   bottom: 0;
   width: 100%;
   height: 50%;
-  border: solid 5px;
+  border: solid 2px;
   border-radius: 5px;
+}
+
+#cross {
+  position: absolute;
+  z-index: 999;
+  color: black;
+  font-size: 26px;
+  text-align: right;
 }
 
 
@@ -75,17 +86,24 @@ margin: 5px 5px 5px 5px; */
 
 
 .temperature {
-  font-size: 150%;
+  font-size: 24px;
+
 }
 
 .nolinkstyle {
   text-decoration: none;
   color: black;
+  text-shadow: none;
+}
+
+#moreInfo {
+  color: black;
+  text-shadow: none;
 }
 
 
 .marker {
-  background-image: url('icons/location_icon.svg');
+  background-image: url('icons/location.png');
   background-size: cover;
   width: 25px;
   height: 30px;
@@ -94,7 +112,8 @@ margin: 5px 5px 5px 5px; */
 }
 
 .locdiv {
-  background-image: url('open-iconic/svg/media-record.svg');
+  background-image: url('icons/location.png');
+
   background-size: cover;
   width: 25px;
   height: 30px;
@@ -118,7 +137,7 @@ margin: 5px 5px 5px 5px; */
 
 #choice-1, #choice-2, #choice-3, #choice-4, #choice-5, #choice-6, #choice-7, #choice-8{
   border-radius: 50%;
-  border: solid 3px black;
+  border: solid 2px black;
 }
 
 .spaceBetween{
@@ -138,8 +157,7 @@ margin: 5px 5px 5px 5px; */
   display: none;
 }
 #location {
-  margin-bottom: 10px;
-  margin-top: -10px;
+  margin-bottom: 25px;
 }
 
 #locationTitle {
@@ -148,12 +166,16 @@ margin: 5px 5px 5px 5px; */
 }
 
 #locationIcon {
-  width: 100%;
+    max-height:55px;
+    max-width:55px;
+    display:block;
+    margin:0 auto;
 }
 
 #iconWrap {
   white-space: nowrap;
-  width: 10%
+  width: 10%;
+
 }
 
 
@@ -177,11 +199,13 @@ margin: 5px 5px 5px 5px; */
 }
 
 
-.weather {
-  margin-left: 20px;
+#weather {
+  white-space: nowrap;
+}
+
+#weatherIconNow{
   width: 100%;
-  height: 130px;
-  padding: 10px 10px 0px 10px;
+  white-space: nowrap;
 }
 
 .weatherT {
@@ -225,10 +249,13 @@ margin: 5px 5px 5px 5px; */
   width: 100%;
 }
 
-#grades {
+#gradet, #gradeb {
   color: black;
-  font-size: 20px;
+  margin-left: 10px;
+}
 
+#gradet {
+  margin-bottom: -25px;
 }
 
 #gradeML{
@@ -239,18 +266,20 @@ margin: 5px 5px 5px 5px; */
 
 #PollutionPicture{
   width: 70%;
-  margin: 0px;
 }
 
 #pollutionIMG{
+
+  padding-top: 0px;
   width: 100%;
+  border: solid 2px black;
   border-radius: 50%;
-  margin-left: 50px;
+  margin-bottom: 10px;
   background-size: contain;
 }
 
 #pollTable td {
-  border: solid 1px black;
+  border: solid 2px black;
 
 }
 
@@ -267,7 +296,7 @@ margin: 5px 5px 5px 5px; */
 .forecastday {
 
   margin-bottom: 10px;
-  border: solid 1px grey;
+  border: solid 2px black;
   border-radius: 5px;
   background-size: 100%;
   width: 100%;
@@ -326,7 +355,7 @@ margin: 5px 5px 5px 5px; */
 .carousel-indicators li {
 	height: 8px !important;
 	width: 8px !important;
- border: solid 1px;
+ border: solid 2px;
  border-radius: 60%;
  background-color: #fff;
 
@@ -354,9 +383,9 @@ margin: 5px 5px 5px 5px; */
 	height: 170px;
 	padding: 3px 3px 3px 3px;
 	margin: 5px 5px 5px 5px;
-	border: solid 1px;
+	border: solid 2px;
   border-radius: 5px;
-  background-color: rgba(226,226,226,1);
+  background-color: rgba(235,235,235,1);
 }
 
 
@@ -366,7 +395,7 @@ margin: 5px 5px 5px 5px; */
   text-align: center;
   padding: 5px 0px 2px 2px;
   margin: 3px 3px 3px 3px;
-  border: solid 1px;
+  border: solid 2px;
   border-radius: 5%;
   background-color: rgba(255,255,255,.7);
 }
@@ -390,7 +419,7 @@ display: inline-block;
   margin: 3px 3px 3px 3px;
   text-shadow: none;
   color: black;
-  height: 240px;
+  height: 270px;
 }
 
 #recommendation {
@@ -405,6 +434,10 @@ display: inline-block;
   width: 70%;
   margin-left: 30px;
   border-radius: 50%;
+}
+
+#machinelearning {
+  margin-top: 50px;
 }
 
 #MLSliders{

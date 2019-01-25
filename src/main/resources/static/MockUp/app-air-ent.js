@@ -7,16 +7,15 @@ $.ajaxSetup({
 
 
 createButtonTime();
-
+makeMap();
 updateCurrentWeather();
-
 updateWeatherForecastUpcomingDays(0);
 updateWeatherForecastUpcomingDays(1);
 updateWeatherForecastUpcomingDays(2);
 updateWeatherForecastUpcomingDays(3);
 
 updatesNamesOfDaysInForecast();
-makeMap();
+
 showResult();
 
 
@@ -58,6 +57,41 @@ $(document).on('swiperight', '.ui-page', function(event) {
   }
   return false;
 });
+
+
+function makeMap(){
+  var map;
+  $.getJSON("http://"+ ipAddress+":8080/stations/all", function(arr) {
+    mapboxgl.accessToken = 'pk.eyJ1IjoibGlsbGlwaWxsaSIsImEiOiJjanBjc3J3ZmozMG55M3dwaHFpcmFlZDNoIn0.Eh9Spcc3_PNF72jAYeGTmQ';
+    map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v9',
+      minZoom: 8.5,
+      maxZoom: 12,
+      center: [13.5, 52.52697],
+      zoom: 8.5,
+      interactive: false
+    });
+
+    arr.forEach(function(e) {
+      var coord = [];
+
+      coord.push(e.station.location.lng);
+      coord.push(e.station.location.lat);
+      var el = document.createElement('div');
+      el.className = 'marker';
+
+      // make a marker for each feature and add to the map
+      var marker = new mapboxgl.Marker(el).setLngLat(coord).setPopup(new mapboxgl.Popup() // add popups
+        .setHTML("type: "+e.measurementType + " <br/> grade: " + e.lqi + "<br/> location: "+ e.station.name)).addTo(map);
+    });
+  });
+
+  return map;
+}
+
+
+
 
 // Loads json
 function getJSON(url, callback) {
@@ -127,7 +161,6 @@ function updateLocationDependentValues() {
     if (Array.isArray(data) && data.length !== 0) {
 
       var street = data[0].address.road + ", " + data[0].address.city;
-
       var loc = document.getElementById("title1");
       loc.innerHTML = street;
       var latlong = [];
@@ -139,7 +172,9 @@ function updateLocationDependentValues() {
       document.getElementById("distance").innerHTML = "<br/> distance to next station: " + dist + " km";
       setLocPoint(latlong);
       var pollData = getCurrentPollutionValue(lat, lon);
-      updateLocationGauge(pollData);
+
+      updateLocationPoll(pollData);
+
       updateOnePopupValue(pollData);
       document.getElementById("address").style.display = "none";
     } else {
@@ -283,22 +318,28 @@ function fakePollution(){
 function iconConverter(iconID){
   var icon;
   if( iconID == "01d" || iconID == "01n") {
-    icon = "icons/sunny.svg";
+    icon = "icons/sunny.png";
   }
   if( iconID == "02d" || iconID == "02n") {
-    icon = "icons/sun_cloud.svg";
+    icon = "icons/sun_cloud.png";
   }
-  if( iconID == "03d" || iconID == "03n" || iconID == "04d" || iconID == "04n" || iconID == "50d" || iconID == "50n") {
-    icon = "icons/cloud.svg";
+  if( iconID == "03d" || iconID == "03n" || iconID == "04d" || iconID == "04n") {
+    icon = "icons/cloud.png";
   }
-  if( iconID == "09d" || iconID == "09n" || iconID == "10d" || iconID == "10n") {
-    icon = "icons/rain.svg";
+  if( iconID == "50d" || iconID == "50n") {
+    icon = "icons/fog.png";
+  }
+  if( iconID == "09d" || iconID == "09n") {
+    icon = "icons/rain.png";
+  }
+  if (iconID == "10d" || iconID == "10n"){
+    icon = "icons/rain_sun_cloud.png"
   }
   if( iconID == "11d" || iconID == "11n") {
-    icon = "icons/storm.svg";
+    icon = "icons/storm.png";
   }
   if( iconID == "13d" || iconID == "13n") {
-    icon = "icons/snow_cloud.svg";
+    icon = "icons/snow.png";
   }
   return icon;
 }
@@ -324,192 +365,25 @@ function toogleMap() {
   }
 }
 
-// START INITIALISATION OF MAPBOX
-
-
-var measurepoints = {
-  "array": [{
-    "measurementType": "traffic",
-    "station": {
-      "id": "088",
-      "name": "Messwagen Leipziger Str.",
-      "location": {
-        "lat": 52.5102,
-        "lng": 13.388529
-      }
-    }
-  }, {
-    "measurementType": "traffic",
-    "station": {
-      "id": "117",
-      "name": "Schildhornstraße",
-      "location": {
-        "lat": 52.463611,
-        "lng": 13.31825
-      }
-    }
-  }, {
-    "measurementType": "traffic",
-    "station": {
-      "id": "124",
-      "name": "Mariendorfer Damm",
-      "location": {
-        "lat": 52.438056,
-        "lng": 13.3875
-      }
-    }
-  }, {
-    "measurementType": "traffic",
-    "station": {
-      "id": "143",
-      "name": "Silbersteinstraße",
-      "location": {
-        "lat": 52.467511,
-        "lng": 13.44165
-      }
-    }
-  }, {
-    "measurementType": "traffic",
-    "station": {
-      "id": "174",
-      "name": "Frankfurter Allee",
-      "location": {
-        "lat": 52.514072,
-        "lng": 13.469931
-      }
-    }
-  }, {
-    "measurementType": "traffic",
-    "station": {
-      "id": "115",
-      "name": "Hardenbergplatz",
-      "location": {
-        "lat": 52.5066,
-        "lng": 13.332972
-      }
-    }
-  }, {
-    "measurementType": "background",
-    "station": {
-      "id": "010",
-      "name": "Wedding",
-      "location": {
-        "lat": 52.543041,
-        "lng": 13.349326
-      }
-    }
-  }, {
-    "measurementType": "background",
-    "station": {
-      "id": "042",
-      "name": "Neukölln",
-      "location": {
-        "lat": 52.489439,
-        "lng": 13.430856
-      }
-    }
-  }, {
-    "measurementType": "background",
-    "station": {
-      "id": "171",
-      "name": "Mitte",
-      "location": {
-        "lat": 52.513606,
-        "lng": 13.418833
-      }
-    }
-  }, {
-    "measurementType": "suburb",
-    "station": {
-      "id": "032",
-      "name": "Grunewald",
-      "location": {
-        "lat": 52.473192,
-        "lng": 13.225144
-      }
-    }
-  }, {
-    "measurementType": "suburb",
-    "station": {
-      "id": "077",
-      "name": "Buch",
-      "location": {
-        "lat": 52.644167,
-        "lng": 13.483056
-      }
-    }
-  }, {
-    "measurementType": "suburb",
-    "station": {
-      "id": "085",
-      "name": "Friedrichshagen",
-      "location": {
-        "lat": 52.447697,
-        "lng": 13.64705
-      }
-    }
-  }, {
-    "measurementType": "background",
-    "station": {
-      "id": "018",
-      "name": "Schöneberg",
-      "location": {
-        "lat": 52.485814,
-        "lng": 13.348775
-      }
-    }
-  }, {
-    "measurementType": "suburb",
-    "station": {
-      "id": "145",
-      "name": "Frohnau",
-      "location": {
-        "lat": 52.653269,
-        "lng": 13.296081
-      }
-    }
-  }]
+function closeMap() {
+  var x = document.getElementById("article3");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  }
 }
 
 
-// END INITIALISATION OF MAPBOX
 
-function makeMap(){
-  $.getJSON("http://"+ ipAddress+":8080/stations/all", function(arr) {
-    mapboxgl.accessToken = 'pk.eyJ1IjoibGlsbGlwaWxsaSIsImEiOiJjanBjc3J3ZmozMG55M3dwaHFpcmFlZDNoIn0.Eh9Spcc3_PNF72jAYeGTmQ';
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/light-v9',
-      minZoom: 8.5,
-      maxZoom: 12,
-      center: [13.5, 52.52697],
-      zoom: 8.5,
-      interactive: false
-    });
 
-    arr.forEach(function(e) {
-      var coord = [];
-
-      coord.push(e.station.location.lng);
-      coord.push(e.station.location.lat);
-      var el = document.createElement('div');
-      el.className = 'marker';
-
-      // make a marker for each feature and add to the map
-      var marker = new mapboxgl.Marker(el).setLngLat(coord).setPopup(new mapboxgl.Popup() // add popups
-        .setHTML("type: "+e.measurementType + " <br/> grade: " + e.lqi + "<br/> location: "+ e.station.name)).addTo(map);
-    });
-
-  });
-}
 
 
 
 // Adds currently choosen location to map
 function setLocPoint(latlong) {
+  var map = makeMap();
   var locdiv = document.createElement('div');
   locdiv.className = 'locdiv';
-  var locpoint = new mapboxgl.Marker(locdiv).setLngLat(latlong).addTo(map);;
+  var locpoint = new mapboxgl.Marker(locdiv).setLngLat(latlong).addTo(map);
 
 }
 
@@ -661,7 +535,8 @@ function change3hour(data){
   updateRecommendationText(data[1]);
   document.getElementById("valueBGpopup").innerHTML =  data[0];
   document.getElementById("valueTRpopup").innerHTML =  data[1];
-  document.getElementById("grades").innerHTML =  "B: "+data[0]+"<br> T: "+data[1];
+  document.getElementById("gradeb").innerHTML =  "background: "+data[0];
+  document.getElementById("gradet").innerHTML = "traffic: "+data[1];
 }
 
 function updatePollutionPicture(valuebg,valuetr){
@@ -676,10 +551,11 @@ function updatePollutionPicture(valuebg,valuetr){
   }
 }
 
-function updateLocationGauge(data){
+function updateLocationPoll(data){
   updateRecommendationText(data[1]);
   if (data[0] == "background"){
-    document.getElementById("grades").innerHTML =  "B: "+data[1];
+    document.getElementById("gradeb").innerHTML =  "background: "+data[1];
+    document.getElementById("gradet").innerHTML = "";
     if(data[1] <3){
       document.getElementById("pollutionIMG").src = "icons/1_2.png";
     }else if (data[1]< 5){
@@ -688,7 +564,8 @@ function updateLocationGauge(data){
       document.getElementById("pollutionIMG").src = "icons/5_6.png";
     }
   } else {
-    document.getElementById("grades").innerHTML =  "T: "+data[1];
+    document.getElementById("gradeb").innerHTML = "";
+    document.getElementById("gradet").innerHTML =  "traffic: "+data[1];
     document.getElementById("PollutionPicture").innerHTML = "<img id='pollutionIMG' alt='pollution Icon' src='icons/traf_"+data[1]+".png'/>";
   }
 }
@@ -771,10 +648,10 @@ function showResult(){
     document.getElementById("mlbg").src = "icons/traf_"+prediction+".png";
   } else if (predictionMode == "BACKGROUND"){
     if (prediction < 3){
-      document.getElementById("mlbg").src = "icons/1_2.png'";
+      document.getElementById("mlbg").src = "icons/1_2.png";
     }else if (prediction < 5){
       document.getElementById("mlbg").src = "icons/3_4.png";
-    } else {
+    } else if (prediction >= 5) {
       document.getElementById("mlbg").src = "icons/5_6.png";
     }
   }

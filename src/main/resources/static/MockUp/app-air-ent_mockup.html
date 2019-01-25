@@ -34,15 +34,15 @@
 
   <div data-role="page" id="article1">
     <div class="header" data-role="header" data-theme="a" data-position="fixed" >
-      <a href="#" onclick="toogleMap();return false;" class="mapviewer">map</a>
-      <!--
+      <a href="#" onclick="toogleMap();return false;" class="mapviewer"></a>
+      <!--<img id="mapButton" src="icons/location.png"/>
       <img onclick="toogleMap();return false;" id="mapviewer" src="icons/location_icon.svg"/> -->
 
       <h1 class="nolinkstyle">app-air-ent</h1>
     </div>
-    <div data-role="content" id="content">
+    <div data-role="content" id="content" onclick="closeMap()">
 
-      <div class="row weather noTextShadow">
+      <div class="row fullWidth noTextShadow" id="weather">
             <div class="col-xs-2" >
               <div class="weather2">
                 <span class="temperature" id="temp-max"> </span>
@@ -51,38 +51,28 @@
                 <span class="temperature" id="temp-min"> </span>
               </div>
             </div>
-            <div class="col-xs-6" >
+            <div class="col-xs-7" >
               <div class="weather1">
-                  <img id="weatherIconNow" src="icons/1.svg" alt="sunny"/>
+                  <img id="weatherIconNow" src="icons/sunny.png" alt="sunny"/>
               </div>
             </div>
 
-            <div class="col-xs-4" id="windWrap">
+            <div class="col-xs-3" id="windWrap">
             </div>
       </div>
 
-
       <div class="noTextShadow container">
-        <div class="container" id="location">
-        <table class="weatherT">
+        <div class="fullWidth" id="location">
+          <table>
           <tr onclick="toogleAddressInterface()">
-            <th id="iconWrap">
-
-              <svg id="locationIcon"  version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="175 150 175 190" style="enable-background:new 0 0 579 500;" xml:space="preserve">
-              <g id="Layer_1">
-              			<path class="st0" d="M304.6,250.3c7.1-9.8,11-22,10.3-35c-1.8-29.9-27.8-52.6-57.9-50.8c-30.2,1.8-53.1,27.6-51.3,57.5
-              				c0.6,10.4,4.2,19.9,9.8,27.9"/>
-              			<polyline class="st0" points="306.6,247.2 259,336.2 213.1,246.3 			"/>
-
-              		<circle class="st1" cx="259.8" cy="222.6" r="26.4"/>
-              </g>
-            </svg>
+            <th>
+              <div id="iconWrap">
+              <img id="locationIcon" src="icons/location.png"/>
+            </div>
             </th>
-            <th id="locationTitle">
-              <div>
-                <span> <span class="nolinkstyle" id="title1">Berlin</span> <span id="distance"> <br/>average values for Berlin</span>
-                </span>
-              </div>
+            <th width="70%" id="locationTitle">
+                <div> <span class="nolinkstyle" id="title1">Berlin</span> <span id="distance"> <br/>average values for Berlin</span>
+                </div>
             </th>
           </tr>
           <tr>
@@ -98,12 +88,15 @@
         </table>
       </div>
 
+      <!--  -->
+
 
         <!--<a href="#popupBasic" data-rel="popup">i</a>-->
 
         <div data-role="popup" id="popupBasic">
         	<p id="BGpopup">background pollution: <br> grade: <span id="valueBGpopup"></span></p>
           <p id="TRpopup">traffic pollution: <br> grade: <span id="valueTRpopup"></span></p>
+          <span>In this table you can see the limits of all 5 measured pollutants. The grades are based on the WHO guidelines. See their <a href="http://www.euro.who.int/en/publications/abstracts/air-quality-guidelines-for-europe" target="_blank">website</a>  </span>
           <table id="pollTable">
             <tr>
               <td>NO2 </td>
@@ -173,13 +166,12 @@
 
         </div>
 
-        <div class="row">
+            <div id="gradeb" class="nolinkstyle"></div>
+            <div id="gradet" class="nolinkstyle"></div>
 
-          <span id="grades" class="nolinkstyle"></span>
-        <a href="#popupBasic" data-rel="popup">
-          <div id="PollutionPicture"></div>
-        </a>
-      </div>
+          <a href="#popupBasic" data-rel="popup">
+            <div class="fullWidth" id="PollutionPicture"></div>
+          </a>
 
 
          <div id="selTime"></div>
@@ -211,9 +203,9 @@
 
       <div class="container fullWidth">
         <div id="recommendation">
-          <h2> Recommendation </h2>
-          <p id="recommendationDiv"><span id="recommendationText"> if possible, make your journeys at times, when roads are less busy, so outside of traffic rush hours - check our live traffic maps</span> <br>
-          <a href="#popupRec" class="nolinkstyle" data-rel="popup">more info</a></p>
+          <h3> Recommendation </h3>
+          <p id="recommendationDiv"><span id="recommendationText"> if possible, make your journeys at times, when roads are less busy, so outside of traffic rush hours - check our live traffic maps</span>
+          <a href="#popupRec" id="moreInfo" data-rel="popup">more info...</a></p>
 
             <div data-role="popup" id="popupRec">
               <span id="rec1">keep an eye out for changes throughout the day </span>
@@ -234,8 +226,6 @@
 
         <div >
           <div class="row fullWidth" id="detailview">
-
-            <div class="col-xs-1"></div>
             <div class="col-xs-2" id="PM10" onclick="detailedInfo(0)">PM10<br>
               <span id="PM10grade"></span>
               <p id="PM10value"></p>
@@ -259,7 +249,6 @@
               <span id="O3grade"></span>
               <p id="O3value"></p>
             </div>
-            <div class="col-xs-1"></div>
           </div>
 
           <div id="detailedDiv"><span id="detailed"></span></div>
@@ -282,7 +271,7 @@
 
   <div data-role="page" id="article2">
     <div class="header" data-role="header" data-theme="a" >
-      <a href="#" onclick="toogleMap();return false;" class="mapviewer">map</a>
+      <a href="#" onclick="toogleMap();return false;" class="mapviewer"><img src="icons/location.png"/></a>
         <!--<a href="#" onclick="toogleMap();return false;" data-icon="location" data-iconpos="notext">Map</a>-->
       <h1>app-air-ent</h1>
     </div>
@@ -293,7 +282,7 @@
           <div class="lead temperaturefor" id="temp1"><br></div>
         </div>
         <div class="col-xs-3">
-          <div ><img alt="weather icon" class="weatherIcon" id="icon1" src="icons/1.svg" />
+          <div ><img alt="weather icon" class="weatherIcon" id="icon1" src="icons/sunny.png" />
           </div>
         </div>
         <div class="col-xs-2 windicons" id="wind1"></div>
@@ -314,7 +303,7 @@
           <div class="lead temperaturefor" id="temp2"><br></div>
         </div>
         <div class="col-xs-3">
-          <div ><img alt="weather icon" class="weatherIcon" id="icon2" src="icons/1.svg" /></div>
+          <div ><img alt="weather icon" class="weatherIcon" id="icon2" src="icons/sunny.png" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind2">
         </div>
@@ -335,7 +324,7 @@
           <div class="lead temperaturefor" id="temp3"><br></div>
         </div>
         <div class="col-xs-3">
-          <div ><img alt="weather icon" class="weatherIcon" id="icon3" src="icons/1.svg" /></div>
+          <div ><img alt="weather icon" class="weatherIcon" id="icon3" src="icons/sunny.png" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind3">
         </div>
@@ -357,7 +346,7 @@
           <div class="lead temperaturefor" id="temp4"><br></div>
         </div>
         <div class="col-xs-3">
-          <div ><img alt="weather icon" class="weatherIcon" id="icon4" src="icons/1.svg" /></div>
+          <div ><img alt="weather icon" class="weatherIcon" id="icon4" src="icons/sunny.png" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind4">
         </div>
@@ -373,8 +362,13 @@
 
       </div>
       <div id="machinelearning" >
-        <h1 class="fullWidth"> Machine Learning </h1>
-        <h3 class="fullWidth">here you can swap some parameters and see how it affects the outcome of our machine learning algorithm</h3>
+        <h2 class="fullWidth"> How it works </h2>
+        <p class="fullWidth">here you can swap some parameters and see how it affects the outcome of our machine learning algorithm <a href="#popupML" data-rel="popup" style="color: black;">find out more...</a></p>
+
+        <div data-role="popup" id="popupML">
+          here will be more info on the ML algorithm.
+        </div>
+
         <div>
           <img  id="mlbg"/>
           <span id="gradeML"></span>
@@ -393,19 +387,19 @@
           <!-- Wrapper for slides -->
           <div id="skyML" class="carousel-inner">
             <div class="item active" >
-              <img src="icons/sunny.svg" alt="sunny">
+              <img src="icons/sunny.png" alt="sunny">
             </div>
 
             <div class="item">
-              <img src="icons/cloud.svg" alt="cloudy">
+              <img src="icons/cloud.png" alt="cloudy">
             </div>
 
             <div class="item">
-              <img src="icons/rain.svg" alt="cloudy">
+              <img src="icons/rain.png" alt="cloudy">
             </div>
 
             <div class="item">
-              <img src="icons/snow_cloud.svg" alt="cloudy">
+              <img src="icons/snow.png" alt="cloudy">
             </div>
           </div>
 
@@ -427,16 +421,16 @@
           <!-- Wrapper for slides -->
           <div id="tempML" class="carousel-inner">
             <div class="item ">
-              <img src="icons/22deg.svg" alt="sunny">
+              <img src="icons/22c.png" alt="sunny">
             </div>
             <div class="item active">
-              <img src="icons/30deg.svg" alt="stormy">
+              <img src="icons/30c.png" alt="stormy">
             </div>
             <div class="item">
-              <img src="icons/10deg.svg" alt="cloudy">
+              <img src="icons/10c.png" alt="cloudy">
             </div>
             <div class="item">
-              <img src="icons/4deg.svg" alt="cloudy">
+              <img src="icons/0c.png" alt="cloudy">
             </div>
 
           </div>
@@ -493,16 +487,16 @@
           <!-- Wrapper for slides -->
           <div id="timeML" class="carousel-inner">
             <div  class="item ">
-              <img src="icons/morning.svg" alt="sunny">
+              <img src="icons/830_weekday.png" alt="sunny">
             </div>
             <div class="item">
-              <img src="icons/midday.svg" alt="stormy">
+              <img src="icons/13_weekday.png" alt="stormy">
             </div>
             <div class="item">
-              <img src="icons/night.svg" alt="cloudy">
+              <img src="icons/23_weekday.png" alt="cloudy">
             </div>
             <div class="item active">
-              <img src="icons/weekend.svg" alt="cloudy">
+              <img src="icons/13_weekend.png" alt="cloudy">
             </div>
           </div>
 
@@ -524,16 +518,16 @@
           <!-- Wrapper for slides -->
           <div id="seasonML" class="carousel-inner">
             <div class="item active">
-              <img src="icons/spring.svg" alt="sunny">
+              <img src="icons/spring.png" alt="sunny">
             </div>
             <div class="item">
-              <img src="icons/summer.svg" alt="stormy">
+              <img src="icons/summer.png" alt="stormy">
             </div>
             <div class="item">
-              <img src="icons/autumn.svg" alt="cloudy">
+              <img src="icons/autumn.png" alt="cloudy">
             </div>
             <div class="item">
-              <img src="icons/winter.svg" alt="cloudy">
+              <img src="icons/winter.png" alt="cloudy">
             </div>
           </div>
 
@@ -587,6 +581,7 @@
   <div id="article3" style="display: none;" >
 
       <div id='map'>
+          <p id="cross" onclick="toogleMap();">X</p>
       </div>
   </div>
 
