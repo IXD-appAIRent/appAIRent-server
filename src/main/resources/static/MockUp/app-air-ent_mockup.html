@@ -15,8 +15,6 @@
 
   <link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet" />
 
-  <script src="gauge.min.js"></script>
-
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -35,8 +33,7 @@
   <div data-role="page" id="article1">
     <div class="header" data-role="header" data-theme="a" data-position="fixed" >
       <a href="#" onclick="toogleMap();return false;" class="mapviewer"></a>
-      <!--<img id="mapButton" src="icons/location.png"/>
-      <img onclick="toogleMap();return false;" id="mapviewer" src="icons/location_icon.svg"/> -->
+      <!--<img id="mapButton" src="icons/location.png"/> -->
 
       <h1 class="nolinkstyle">app-air-ent</h1>
     </div>
@@ -209,11 +206,10 @@
 
             <div data-role="popup" id="popupRec">
               <span id="rec1">keep an eye out for changes throughout the day </span>
-              <span id="rec2">if you start to feel respiratory discomfort (eg. coughing or breathing difficulties), reduce cycling intensity eg. try to find an alternative route using our pollution map <br><br>
+              <span id="rec2">if you start to feel respiratory discomfort (eg. coughing or breathing difficulties), reduce cycling intensity eg. try to find an alternative route using our pollution map
               especially in the morning (due to greater winds the pollution is usually improved in the evening) <br><br>
               you want to maintain a fairly regular, low intake of oxygen; breathing hard from cycling too fast will only cause you to take in more pollution. But don’t ride too slow, either; try to find a balance of moving with purpose, but not overexerting yourself. --> the amount of pollution in the air doesn’t change but the amount you are inhaling does! </span>
-              <span id="rec3">try to include extra antioxidant-rich fruit and vegetables (incl. blueberries, strawberries, plums, oranges, grapes cherries, mangoes and kale amongst the highest) to counteract the impact of the air pollution on the body <br><br>
-              especially in the morning (due to greater winds the pollution is usually improved in the evening)<br><br>
+              <span id="rec3">try to include extra antioxidant-rich fruit and vegetables (incl. blueberries, strawberries, plums, oranges, grapes cherries, mangoes and kale amongst the highest) to counteract the impact of the air pollution on the body. especially in the morning (due to greater winds the pollution is usually improved in the evening)<br><br>
               you want to maintain a fairly regular, low intake of oxygen; breathing hard from cycling too fast will only cause you to take in more pollution. But don’t ride too slow, either; try to find a balance of moving with purpose, but not overexerting yourself. --> the amount of pollution in the air doesn’t change but the amount you are inhaling does! </span>
             </div>
 
@@ -363,18 +359,19 @@
       </div>
       <div id="machinelearning" >
         <h2 class="fullWidth"> How it works </h2>
-        <p class="fullWidth">here you can swap some parameters and see how it affects the outcome of our machine learning algorithm <a href="#popupML" data-rel="popup" style="color: black;">find out more...</a></p>
+        <p class="fullWidth">here you can swap some parameters and see how it affects the outcome of our machine learning algorithm</p>
 
         <div data-role="popup" id="popupML">
           here will be more info on the ML algorithm.
         </div>
+        <a href="#popupML" data-rel="popup" style="color: black;">
+          <div>
+            <img  id="mlbg"/>
+            <span id="gradeML"></span>
+          </div>
+        </a>
 
-        <div>
-          <img  id="mlbg"/>
-          <span id="gradeML"></span>
-        </div>
-
-        <div class="row fullWidth" id="MLSliders">
+        <div class="row fullWidth" >
         <div id="IconCarousel" class="col-xs-6 carousel slide" data-interval="false" data-ride="carousel">
           <!-- Indicators -->
           <ol class="carousel-indicators">
@@ -453,16 +450,16 @@
           <!-- Wrapper for slides -->
           <div id="windML" class="carousel-inner">
             <div class="item">
-              <img src="icons/N5.svg" alt="N5">
+              <img src="icons/N5.png" alt="N5">
             </div>
             <div class="item">
-              <img src="icons/E20.svg" alt="E20">
+              <img src="icons/E20.png" alt="E20">
             </div>
             <div class="item active">
-              <img src="icons/S15.svg" alt="S15">
+              <img src="icons/S15.png" alt="S15">
             </div>
             <div class="item">
-              <img src="icons/W10.svg" alt="W10">
+              <img src="icons/W10.png" alt="W10">
             </div>
           </div>
 
@@ -474,7 +471,7 @@
 
         </div>
 
-        <div class="row fullWidth">
+        <div class="row fullWidth" id="MLSliders">
         <div id="WeekCarousel" class="col-xs-6 carousel slide" data-interval="false" data-ride="carousel">
           <!-- Indicators -->
           <ol class="carousel-indicators">
@@ -584,10 +581,6 @@
           <p id="cross" onclick="toogleMap();">X</p>
       </div>
   </div>
-
-
-  <script src="Chart.bundle.js"></script>
-
 
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 

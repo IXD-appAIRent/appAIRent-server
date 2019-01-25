@@ -572,8 +572,6 @@ function updateLocationPoll(data){
 
 // Updates Interface which makes ML approachable
 function showResult(){
-  var gauge;
-
   var pressure, humidity, clouds_all// skyML
   var temp, temp_min, temp_max//tempML
   var wind_speed, wind_deg// windML
