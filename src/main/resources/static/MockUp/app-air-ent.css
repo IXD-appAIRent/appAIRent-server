@@ -112,7 +112,7 @@ margin: 5px 5px 5px 5px; */
 }
 
 .locdiv {
-  background-image: url('icons/location.png');
+  background-image: url('icons/location_now.png');
 
   background-size: cover;
   width: 25px;
