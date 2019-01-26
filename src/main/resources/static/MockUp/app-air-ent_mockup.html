@@ -34,12 +34,15 @@
 
   <div data-role="page" id="article1">
     <div class="header" data-role="header" data-theme="a" data-position="fixed" >
-      <a href="#" onclick="toogleMap();return false;" data-icon="location" data-iconpos="notext">Map</a>
+      <a href="#" onclick="toogleMap();return false;" class="mapviewer"></a>
+      <!--<img id="mapButton" src="icons/location.png"/>
+      <img onclick="toogleMap();return false;" id="mapviewer" src="icons/location_icon.svg"/> -->
+
       <h1 class="nolinkstyle">app-air-ent</h1>
     </div>
-    <div data-role="content" id="content">
+    <div data-role="content" id="content" onclick="closeMap()">
 
-      <div class="row weather borderCust">
+      <div class="row fullWidth noTextShadow" id="weather">
             <div class="col-xs-2" >
               <div class="weather2">
                 <span class="temperature" id="temp-max"> </span>
@@ -48,40 +51,28 @@
                 <span class="temperature" id="temp-min"> </span>
               </div>
             </div>
-            <div class="col-xs-6" >
+            <div class="col-xs-7" >
               <div class="weather1">
-                <a href="#article2">
-                  <img id="weatherIconNow" src="" alt="sunny"/></a>
+                  <img id="weatherIconNow" src="icons/sunny.png" alt="sunny"/>
               </div>
             </div>
 
-            <div class="col-xs-4" id="windWrap">
+            <div class="col-xs-3" id="windWrap">
             </div>
       </div>
 
-
-      <div class="borderCust container">
-
-      <div class="container" id="location">
-        <table class="weatherT">
+      <div class="noTextShadow container">
+        <div class="fullWidth" id="location">
+          <table>
           <tr onclick="toogleAddressInterface()">
-            <th id="iconWrap">
-
-              <svg id="locationIcon"  version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="175 150 175 190" style="enable-background:new 0 0 579 500;" xml:space="preserve">
-              <g id="Layer_1">
-              			<path class="st0" d="M304.6,250.3c7.1-9.8,11-22,10.3-35c-1.8-29.9-27.8-52.6-57.9-50.8c-30.2,1.8-53.1,27.6-51.3,57.5
-              				c0.6,10.4,4.2,19.9,9.8,27.9"/>
-              			<polyline class="st0" points="306.6,247.2 259,336.2 213.1,246.3 			"/>
-
-              		<circle class="st1" cx="259.8" cy="222.6" r="26.4"/>
-              </g>
-            </svg>
+            <th>
+              <div id="iconWrap">
+              <img id="locationIcon" src="icons/location.png"/>
+            </div>
             </th>
-            <th id="locationTitle">
-              <div>
-                <span> <span class="nolinkstyle" id="title1">Berlin</span> <span id="distance"> <br/>average values for Berlin</span>
-                </span>
-              </div>
+            <th width="70%" id="locationTitle">
+                <div> <span class="nolinkstyle" id="title1">Berlin</span> <span id="distance"> <br/>average values for Berlin</span>
+                </div>
             </th>
           </tr>
           <tr>
@@ -97,40 +88,124 @@
         </table>
       </div>
 
+      <!--  -->
+
 
         <!--<a href="#popupBasic" data-rel="popup">i</a>-->
 
         <div data-role="popup" id="popupBasic">
-        	<p id="BGpopup">background pollution is visualized as the smog on the screen. <br> grade: <span id="valueBGpopup"></span></p>
-          <p id="TRpopup">traffic pollution is visualized by the dots, which get bigger the worse it is. <br> grade: <span id="valueTRpopup"></p>
+        	<p id="BGpopup">background pollution: <br> grade: <span id="valueBGpopup"></span></p>
+          <p id="TRpopup">traffic pollution: <br> grade: <span id="valueTRpopup"></span></p>
+          <span>In this table you can see the limits of all 5 measured pollutants. The grades are based on the WHO guidelines. See their <a href="http://www.euro.who.int/en/publications/abstracts/air-quality-guidelines-for-europe" target="_blank">website</a>  </span>
+          <table id="pollTable">
+            <tr>
+              <td>NO2 </td>
+              <td>SO2 </td>
+              <td>O3 </td>
+              <td>CO </td>
+              <td>PM10 </td>
+              <td>Grade </td>
+            </tr>
+            <tr>
+              <td>1h avg 200 </td>
+              <td>1h avg 350 </td>
+              <td>1h avg 180 </td>
+              <td>8h av 10 </td>
+              <td>24h avg 50 </td>
+              <td>limit </td>
+            </tr>
+            <tr>
+              <td>0-25 </td>
+              <td>0-25 </td>
+              <td>0-33 </td>
+              <td>0-1 </td>
+              <td>0-10 </td>
+              <td>1 </td>
+            </tr>
+            <tr>
+              <td>26-50 </td>
+              <td>26-50 </td>
+              <td>34-65 </td>
+              <td>1-2 </td>
+              <td>11-20 </td>
+              <td>2 </td>
+            </tr>
+            <tr>
+              <td>51-100 </td>
+              <td>51-120 </td>
+              <td>66-120 </td>
+              <td>2-4 </td>
+              <td>21-35 </td>
+              <td>3 </td>
+            </tr>
+            <tr>
+              <td>101-200 </td>
+              <td>121-350 </td>
+              <td>121-180 </td>
+              <td>4-10 </td>
+              <td>36-50 </td>
+              <td>4 </td>
+            </tr>
+            <tr>
+              <td>201-500 </td>
+              <td>351-1000 </td>
+              <td>181-240 </td>
+              <td>10-30</td>
+              <td>51-100 </td>
+              <td>5 </td>
+            </tr>
+            <tr>
+              <td>>500 </td>
+              <td>>1000 </td>
+              <td>>240 </td>
+              <td>>30</td>
+              <td>>100 </td>
+              <td>6 </td>
+            </tr>
+          </table>
+
         </div>
 
-        <a href="#popupBasic" data-rel="popup">
-        <div class="container" id="PollutionPicture">
-          <canvas class="gaugePos" id="background"></canvas>
-          <canvas class="gaugePos" id="traffic"></canvas>
-        </div></a>
+            <div id="gradeb" class="nolinkstyle"></div>
+            <div id="gradet" class="nolinkstyle"></div>
+
+          <a href="#popupBasic" data-rel="popup">
+            <div class="fullWidth" id="PollutionPicture"></div>
+          </a>
+
 
          <div id="selTime"></div>
+         <table id="TimeTable">
+          <tr>
+            <td ><span id="time-1">1</span></td>
+            <td ><span id="time-2">2</span></td>
+            <td ><span id="time-3">3</span></td>
+            <td  ><span id="time-4">4</span></td>
+            <td ><span id="time-5">5</span></td>
+            <td><span id="time-6">6</span></td>
+            <td><span id="time-7">7</span></td>
+            <td><span id="time-8">8</span></td>
+          </tr>
+        </table>
          <table>
           <tr>
-            <td><button class="button1" id="choice-1" onclick="updateCurrentWeather();"></button></td>
-            <td><button class="button1" id="choice-2" onclick="updateWeatherForecast24Hours(1);"></button></td>
-            <td><button class="button1" id="choice-3" onclick="updateWeatherForecast24Hours(2);"></button></td>
-            <td><button class="button1" id="choice-4" onclick="updateWeatherForecast24Hours(3);"></button></td>
-            <td><button class="button1" id="choice-5" onclick="updateWeatherForecast24Hours(4);"></button></td>
-            <td><button class="button1" id="choice-6" onclick="updateWeatherForecast24Hours(5);"></button></td>
-            <td><button class="button1" id="choice-7" onclick="updateWeatherForecast24Hours(6);"></button></td>
-            <td><button class="button1" id="choice-8" onclick="updateWeatherForecast24Hours(7);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-1" onclick="updateCurrentWeather();"></button></td>
+            <td class="spaceBetween"><button class="button1" id="choice-2" onclick="updateWeatherForecast24Hours(1);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-3" onclick="updateWeatherForecast24Hours(2);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-4" onclick="updateWeatherForecast24Hours(3);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-5" onclick="updateWeatherForecast24Hours(4);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-6" onclick="updateWeatherForecast24Hours(5);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-7" onclick="updateWeatherForecast24Hours(6);"></button></td>
+            <td class="spaceBetween" ><button class="button1" id="choice-8" onclick="updateWeatherForecast24Hours(7);"></button></td>
           </tr>
         </table>
       </div>
 
-      <div class="container">
+      <div class="container fullWidth">
         <div id="recommendation">
-          <h2> Recommendation </h2>
-          <p id="recommendationDiv"><span id="recommendationText"> if possible, make your journeys at times, when roads are less busy, so outside of traffic rush hours - check our live traffic maps</span> <br>
-          <a href="#popupRec" class="nolinkstyle" data-rel="popup">more info</a></p>
+          <h3> Recommendation </h3>
+          <p id="recommendationDiv"><span id="recommendationText"> if possible, make your journeys at times, when roads are less busy, so outside of traffic rush hours - check our live traffic maps</span>
+          <a href="#popupRec" id="moreInfo" data-rel="popup">more info...</a></p>
 
             <div data-role="popup" id="popupRec">
               <span id="rec1">keep an eye out for changes throughout the day </span>
@@ -150,7 +225,7 @@
 
 
         <div >
-          <div class="row" id="detailview">
+          <div class="row fullWidth" id="detailview">
             <div class="col-xs-2" id="PM10" onclick="detailedInfo(0)">PM10<br>
               <span id="PM10grade"></span>
               <p id="PM10value"></p>
@@ -183,13 +258,12 @@
 
       </div>
       <div class="transparent" data-role="footer">
-        <span class="ui-title transparent">
-          <div class="navigator transparent">
+          <div class="ui-title navigator transparent">
             <a href="#article1" class="activeSlide" >1</a>
             <a href="#article2">2</a>
           </div>
-        </span>
       </div>
+
     </div>
 
 
@@ -197,86 +271,110 @@
 
   <div data-role="page" id="article2">
     <div class="header" data-role="header" data-theme="a" >
-        <a href="#" onclick="toogleMap();return false;" data-icon="location" data-iconpos="notext">Map</a>
-      <h1><a href="#article1"><span class="nolinkstyle">app-air-ent</span></a></h1>
+      <a href="#" onclick="toogleMap();return false;" class="mapviewer"><img src="icons/location.png"/></a>
+        <!--<a href="#" onclick="toogleMap();return false;" data-icon="location" data-iconpos="notext">Map</a>-->
+      <h1>app-air-ent</h1>
     </div>
-    <div data-role="content" class="forecastall">
-      <div class="row forecastday" id="divDay1">
+    <div data-role="content" id="forecastall">
+      <div class="row forecastday fullWidth" id="divDay1">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day1"></h3>
           <div class="lead temperaturefor" id="temp1"><br></div>
         </div>
         <div class="col-xs-3">
-          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon1" src="" /></div>
+          <div ><img alt="weather icon" class="weatherIcon" id="icon1" src="icons/sunny.png" />
+          </div>
         </div>
-        <div class="col-xs-2 windicons" id="wind1">
-        </div>
+        <div class="col-xs-2 windicons" id="wind1"></div>
         <div class="col-xs-5 gauge">
-          <canvas id="g10" class="forecastGauge"></canvas>
-          <canvas id="g11" class="forecastGauge"></canvas>
+          <table>
+            <tr>
+              <td><span class="gradeDays" id="g10" ></span> </td>
+              <td><img id="g11" src="x" /></td>
+            </tr>
+          </table>
         </div>
 
       </div>
 
-      <div class="row forecastday" id="divDay2">
+      <div class="row forecastday fullWidth" id="divDay2">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day2"></h3>
           <div class="lead temperaturefor" id="temp2"><br></div>
         </div>
         <div class="col-xs-3">
-          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon2" src="" /></div>
+          <div ><img alt="weather icon" class="weatherIcon" id="icon2" src="icons/sunny.png" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind2">
         </div>
         <div class="col-xs-5 gauge">
-          <canvas id="g20" class="forecastGauge"></canvas>
-          <canvas id="g21" class="forecastGauge"></canvas>
+           <table>
+            <tr>
+              <td><span class="gradeDays" id="g20" ></span> </td>
+              <td><img id="g21" src="x"/></td>
+            </tr>
+          </table>
         </div>
 
       </div>
 
-      <div class="row forecastday" id="divDay3">
+      <div class="row forecastday fullWidth" id="divDay3">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day3"></h3>
           <div class="lead temperaturefor" id="temp3"><br></div>
         </div>
         <div class="col-xs-3">
-          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon3" src="" /></div>
+          <div ><img alt="weather icon" class="weatherIcon" id="icon3" src="icons/sunny.png" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind3">
         </div>
+
         <div class="col-xs-5 gauge">
-          <canvas id="g30" class="forecastGauge"></canvas>
-          <canvas id="g31" class="forecastGauge"></canvas>
+          <table>
+            <tr>
+              <td><span class="gradeDays" id="g30" ></span> </td>
+              <td><img id="g31" src="x" /></td>
+            </tr>
+          </table>
         </div>
 
       </div>
 
-      <div class="row forecastday" id="divDay4">
+      <div class="row forecastday fullWidth" id="divDay4">
         <div class="col-xs-2">
           <h3 class="featurette-heading" id="day4"></h3>
           <div class="lead temperaturefor" id="temp4"><br></div>
         </div>
         <div class="col-xs-3">
-          <div class="weather"><img alt="weather icon" class="weatherIcon" id="icon4" src="" /></div>
+          <div ><img alt="weather icon" class="weatherIcon" id="icon4" src="icons/sunny.png" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind4">
         </div>
 
         <div class="col-xs-5 gauge">
-          <canvas id="g40" class="forecastGauge"></canvas>
-          <canvas id="g41" class="forecastGauge"></canvas>
+          <table>
+            <tr>
+              <td><span class="gradeDays" id="g40" ></span> </td>
+              <td><img id="g41" src="x"/></td>
+            </tr>
+          </table>
         </div>
 
       </div>
-      <div id="machinelearning">
-        <h1> Machine Learning </h1>
-        <h3>here you can swap some parameters and see how it affects the outcome of our machine learning algorithm</h3>
-        <div class="mlGauge">
-          <canvas class="mlGaugePos" id="mlbg"></canvas>
+      <div id="machinelearning" >
+        <h2 class="fullWidth"> How it works </h2>
+        <p class="fullWidth">here you can swap some parameters and see how it affects the outcome of our machine learning algorithm <a href="#popupML" data-rel="popup" style="color: black;">find out more...</a></p>
+
+        <div data-role="popup" id="popupML">
+          here will be more info on the ML algorithm.
         </div>
 
-        <div class="row">
+        <div>
+          <img  id="mlbg"/>
+          <span id="gradeML"></span>
+        </div>
+
+        <div class="row fullWidth" id="MLSliders">
         <div id="IconCarousel" class="col-xs-6 carousel slide" data-interval="false" data-ride="carousel">
           <!-- Indicators -->
           <ol class="carousel-indicators">
@@ -289,19 +387,19 @@
           <!-- Wrapper for slides -->
           <div id="skyML" class="carousel-inner">
             <div class="item active" >
-              <img src="icons/sunny.svg" alt="sunny">
+              <img src="icons/sunny.png" alt="sunny">
             </div>
 
             <div class="item">
-              <img src="icons/cloud.svg" alt="cloudy">
+              <img src="icons/cloud.png" alt="cloudy">
             </div>
 
             <div class="item">
-              <img src="icons/rain.svg" alt="cloudy">
+              <img src="icons/rain.png" alt="cloudy">
             </div>
 
             <div class="item">
-              <img src="icons/snow_cloud.svg" alt="cloudy">
+              <img src="icons/snow.png" alt="cloudy">
             </div>
           </div>
 
@@ -323,16 +421,16 @@
           <!-- Wrapper for slides -->
           <div id="tempML" class="carousel-inner">
             <div class="item ">
-              <img src="icons/22deg.svg" alt="sunny">
+              <img src="icons/22c.png" alt="sunny">
             </div>
             <div class="item active">
-              <img src="icons/30deg.svg" alt="stormy">
+              <img src="icons/30c.png" alt="stormy">
             </div>
             <div class="item">
-              <img src="icons/10deg.svg" alt="cloudy">
+              <img src="icons/10c.png" alt="cloudy">
             </div>
             <div class="item">
-              <img src="icons/4deg.svg" alt="cloudy">
+              <img src="icons/0c.png" alt="cloudy">
             </div>
 
           </div>
@@ -375,7 +473,8 @@
         </div>
 
         </div>
-        <div class="row">
+
+        <div class="row fullWidth">
         <div id="WeekCarousel" class="col-xs-6 carousel slide" data-interval="false" data-ride="carousel">
           <!-- Indicators -->
           <ol class="carousel-indicators">
@@ -388,16 +487,16 @@
           <!-- Wrapper for slides -->
           <div id="timeML" class="carousel-inner">
             <div  class="item ">
-              <img src="icons/morning.svg" alt="sunny">
+              <img src="icons/830_weekday.png" alt="sunny">
             </div>
             <div class="item">
-              <img src="icons/midday.svg" alt="stormy">
+              <img src="icons/13_weekday.png" alt="stormy">
             </div>
             <div class="item">
-              <img src="icons/night.svg" alt="cloudy">
+              <img src="icons/23_weekday.png" alt="cloudy">
             </div>
             <div class="item active">
-              <img src="icons/weekend.svg" alt="cloudy">
+              <img src="icons/13_weekend.png" alt="cloudy">
             </div>
           </div>
 
@@ -419,16 +518,16 @@
           <!-- Wrapper for slides -->
           <div id="seasonML" class="carousel-inner">
             <div class="item active">
-              <img src="icons/spring.svg" alt="sunny">
+              <img src="icons/spring.png" alt="sunny">
             </div>
             <div class="item">
-              <img src="icons/summer.svg" alt="stormy">
+              <img src="icons/summer.png" alt="stormy">
             </div>
             <div class="item">
-              <img src="icons/autumn.svg" alt="cloudy">
+              <img src="icons/autumn.png" alt="cloudy">
             </div>
             <div class="item">
-              <img src="icons/winter.svg" alt="cloudy">
+              <img src="icons/winter.png" alt="cloudy">
             </div>
           </div>
 
@@ -442,16 +541,16 @@
           <!-- Indicators -->
           <ol class="carousel-indicators">
             <li data-target="#TypeCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#TypeCarousel" data-slide-to="1"></li>
+            <li data-target="#TypeCarousel" data-slide-to="1" ></li>
           </ol>
 
           <!-- Wrapper for slides -->
           <div id="PredictionModeML" class="carousel-inner">
-            <div class="item">
-              <img src="icons/background.svg" alt="stormy">
-            </div>
             <div class="item active">
-              <img src="icons/traffic.svg" alt="cloudy">
+              <img src="icons/background.svg" alt="traffic">
+            </div>
+            <div class="item">
+              <img src="icons/traffic.svg" alt="background">
             </div>
           </div>
 
@@ -465,28 +564,24 @@
         </div>
 
 
-
-
       </div>
 
-      <div class="transparent" data-role="footer" >
-       <span class="ui-title transparent">
-         <div class="navigator transparent">
-           <a href="#article1">1</a>
-           <a href="#article2" class="activeSlide">2</a>
-         </div>
-       </span>
-     </div>
-    </div>
 
+          <div class="transparent" data-role="footer" >
+             <div class="navigator ui-title transparent">
+               <a href="#article1">1</a>
+               <a href="#article2" class="activeSlide">2</a>
+             </div>
+         </div>
 
   </div>
 
-
+</div>
 
   <div id="article3" style="display: none;" >
 
       <div id='map'>
+          <p id="cross" onclick="toogleMap();">X</p>
       </div>
   </div>
 
