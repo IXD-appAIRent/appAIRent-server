@@ -361,12 +361,16 @@
         </div>
 
       </div>
-      <div id="machinelearning" >
-        <h2 class="fullWidth"> How it works </h2>
-        <p class="fullWidth">here you can swap some parameters and see how it affects the outcome of our machine learning algorithm <a href="#popupML" data-rel="popup" style="color: black;">find out more...</a></p>
-
-        <div data-role="popup" id="popupML">
-          here will be more info on the ML algorithm.
+      <div id="machinelearning">
+        <h1>How it works</h1>
+        <h3>We are using Machine Learing to predict the air quality with an accuracy of more than 80%.</h3>
+        <a href="#popupML" class="nolinkstyle" data-rel="popup">more info</a></p>
+            <div data-role="popup" id="popupML">
+              <span id="rec1">Our model is based on a RandomForrest. As features we selected the weather (humidity, pressure, temperature, ...), the month, the hour and a truthfalue if the data belongs to a weekend. We trained our model with hourly data of 2007. With this, we can predict the correct air quality with 80.8557% accuracy for background and 82.8854% accuracy for traffic values.</span>
+            </div>
+        </div>
+        <div class="mlGauge">
+          <canvas class="mlGaugePos" id="mlbg"></canvas>
         </div>
 
         <div>
