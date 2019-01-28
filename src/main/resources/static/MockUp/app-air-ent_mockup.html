@@ -93,7 +93,7 @@
         <div data-role="popup" id="popupBasic">
         	<p id="BGpopup">background pollution: <br> grade: <span id="valueBGpopup"></span></p>
           <p id="TRpopup">traffic pollution: <br> grade: <span id="valueTRpopup"></span></p>
-          <span>In this table you can see the limits of all 5 measured pollutants. The grades are based on the WHO guidelines. See their <a href="http://www.euro.who.int/en/publications/abstracts/air-quality-guidelines-for-europe" target="_blank">website</a>  </span>
+          <span>Background stations (visualized as color) are located away from high-traffic streets, whereas traffic stations (visualized as dots) are directly next to them. Each station gets a grade, which you can see on our map. The grades are calculated by the following table. You can find the limits of all 5 measured pollutants. Those are based on the WHO guidelines. See their <a href="http://www.euro.who.int/en/publications/abstracts/air-quality-guidelines-for-europe" target="_blank">website</a>  </span>
           <table id="pollTable">
             <tr>
               <td>NO2 </td>
@@ -360,15 +360,16 @@
 
       <div id="machinelearning">
         <h2 class="fullWidth">How it works</h2>
-        <h3 class="fullWidth">We are using Machine Learing to predict the air quality with an accuracy of more than 80%.</h3>
-        <a href="#popupML" class="nolinkstyle" style="color: black;" data-rel="popup">more info</a></p>
+        <h3 class="fullWidth">We are using Machine Learing to predict the air quality with an accuracy of more than 80%. <br> Here you can set several parameters to see the corresponding air quality value we predict based on the given data.  <a href="#popupML" class="nolinkstyle" style="color: black;" data-rel="popup">more info</a></h3>
+
         <div data-role="popup" id="popupML">
-          <span id="rec1">Our model is based on a RandomForrest. As features we selected the weather (humidity, pressure, temperature, ...), the month, the hour and a truthfalue if the data belongs to a weekend. We trained our model with hourly data of 2007. With this, we can predict the correct air quality with 80.8557% accuracy for background and 82.8854% accuracy for traffic values.</span>
+          <span id="rec1">Our model is based on a RandomForrest. For features we selected the weather (humidity, pressure, temperature, ...), the month, the hour and a truth value if the data belongs to a weekend. We trained our model with hourly data of 2007. With this, we can predict the correct air quality with 80.8557% accuracy for background and 82.8854% accuracy for traffic values.</span>
         </div>
       </div>
-      <div>
-        <img  id="mlbg"/>
+      <div class="fullWidth">
+
         <span id="gradeML"></span>
+        <img  id="mlbg"/>
       </div>
 
         <div class="row fullWidth" >
@@ -578,7 +579,7 @@
   <div id="article3" style="display: none;" >
 
       <div id='map'>
-          <p id="cross" onclick="toogleMap();">X</p>
+          <p id="closing" onclick="toogleMap();">X</p>
       </div>
   </div>
 

@@ -5,7 +5,7 @@ $.ajaxSetup({
   async: false
 });
 
-
+// On Start functions
 createButtonTime();
 makeMap();
 updateCurrentWeather();
@@ -13,12 +13,8 @@ updateWeatherForecastUpcomingDays(0);
 updateWeatherForecastUpcomingDays(1);
 updateWeatherForecastUpcomingDays(2);
 updateWeatherForecastUpcomingDays(3);
-
 updatesNamesOfDaysInForecast();
-
 showResult();
-
-
 
 // Fade in of img.
 $(document).ready(function(){
@@ -26,7 +22,6 @@ $(document).ready(function(){
 });
 
 // Navigation between main pages.
-
 $(document).on('swipeleft', '.ui-page', function(event) {
   if (event.handled !== true) // This will prevent event triggering more then
   {
@@ -42,7 +37,6 @@ $(document).on('swipeleft', '.ui-page', function(event) {
   }
   return false;
 });
-
 $(document).on('swiperight', '.ui-page', function(event) {
   if (event.handled !== true) // This will prevent event triggering more then once
   {
@@ -58,7 +52,7 @@ $(document).on('swiperight', '.ui-page', function(event) {
   return false;
 });
 
-
+// updates map with pollution values
 function makeMap(){
   var map;
   $.getJSON("http://"+ ipAddress+":8080/stations/all", function(arr) {
@@ -69,8 +63,7 @@ function makeMap(){
       minZoom: 8.5,
       maxZoom: 12,
       center: [13.5, 52.52697],
-      zoom: 8.5,
-      interactive: false
+      zoom: 8.5
     });
 
     arr.forEach(function(e) {
@@ -89,9 +82,6 @@ function makeMap(){
 
   return map;
 }
-
-
-
 
 // Loads json
 function getJSON(url, callback) {
@@ -153,7 +143,6 @@ function getCurrentPollutionValue(lat, lon) {
 
 // Update location and refresh depending values
 function updateLocationDependentValues() {
-
   var input = encodeURIComponent((document.getElementById("addressInput").value));
   var urlMine = "https://nominatim.openstreetmap.org/search/de/berlin/" + input + "?format=json&addressdetails=1&limit=1&polygon_svg=1";
 
@@ -184,6 +173,7 @@ function updateLocationDependentValues() {
   });
 }
 
+//Update PopUp based on location
 function updateOnePopupValue(data){
   if (data[0] == "background"){
     document.getElementById("valueBGpopup").innerHTML = data[1];
@@ -194,6 +184,7 @@ function updateOnePopupValue(data){
   }
 }
 
+//make 3-hour steps
 function createButtonTime(){
   var i;
   for (i = 0; i < 8; i++){
@@ -208,11 +199,7 @@ function createButtonTime(){
   }
 }
 
-
-
-
-
-// Updates current weather forecast
+// Updates current weather and starts pollution forecast
 function updateCurrentWeather(){
   $.getJSON("http://"+ ipAddress+":8080/weather/current", function(now) {
       console.log(now); // this will show the info it in firebug console
@@ -232,6 +219,7 @@ function updateCurrentWeather(){
   });
 }
 
+// Updates boxes with single pollutants
 function updateDetailView(){
   $.getJSON("http://"+ ipAddress+":8080/stations/all?type=traffic,background&mean=true", function(polls) {
     var i;
@@ -254,16 +242,13 @@ function updateDetailView(){
 
 /*
   Get weather values for next 24 hours and pushes them into UI
-
+  pushes pollution values to change3hour function
 */
 function updateWeatherForecast24Hours(index){
   $.getJSON("http://"+ ipAddress+":8080/weather/forecast/hourly", function(json) {
-    console.log(json);
     if(index < 9){
-
       var pollBerlin = update24hPollutionValues(index);
-
-      //alert(pollBerlin[0]);
+      //alert(json.list[index].dt_txt);
       //[pollBerlin[0],pollBerlin[1]
       change3hour([pollBerlin[0],pollBerlin[1], Math.round(json.list[index].main.temp_max-273.15), Math.round(json.list[index].main.temp_min-273.15), iconConverter(json.list[index].weather[0].icon), json.list[index].wind.deg,json.list[index].wind.speed ]);
     }
@@ -275,26 +260,26 @@ function update24hPollutionValues(index){
   var array;
   $.getJSON("http://"+ipAddress+":8080/index/forecast/hourly", function(json) {
       array = [json[index].background, json[index].traffic];
-      //array = [fakePollution(),fakePollution()];
   });
   return array;
 }
 
 /*
   Get weather values for upcomming days and pushes them into UI
-
+  triggers pollution data updating
 */
 function updateWeatherForecastUpcomingDays(index){
   $.getJSON("http://"+ ipAddress+":8080/weather/forecast/hourly", function(json) {
     console.log(json);
       var pollDay = updateNextDaysPollutionValues(index);
-      //alert(pollDay[0]);
+
       var i = getRightIndex(index);
       updateDailyForecast([pollDay[0],pollDay[1], Math.round(json.list[i].main.temp_max-273.15), Math.round(json.list[i].main.temp_min-273.15), iconConverter(json.list[i].weather[0].icon), json.list[i].wind.deg,json.list[i].wind.speed], index);
 
   });
 }
 
+//Updates pollution data for daily forecast
 function updateNextDaysPollutionValues(index){
   var array;
   $.getJSON("http://"+ipAddress+":8080/index/forecast/daily", function(json) {
@@ -303,15 +288,11 @@ function updateNextDaysPollutionValues(index){
   return array;
 }
 
+//turns 0,1,2,3 into 12:00 that day
 function getRightIndex(i){
   var hour = new Date().getHours();
 
   return 4 + Math.floor((24-hour)/3) + 8*i;
-}
-
-
-function fakePollution(){
-  return Math.floor(Math.random() * 6)+1;
 }
 
 // Converts icon code to icon img path
@@ -344,8 +325,6 @@ function iconConverter(iconID){
   return icon;
 }
 
-
-
 // Toggles interface to set current location
 function toogleAddressInterface() {
   var x = document.getElementById("address");
@@ -356,6 +335,7 @@ function toogleAddressInterface() {
   }
 }
 
+//toggles Map when clicking icon
 function toogleMap() {
   var x = document.getElementById("article3");
   if (x.style.display === "none") {
@@ -365,6 +345,7 @@ function toogleMap() {
   }
 }
 
+//closes map when clicking anywhere
 function closeMap() {
   var x = document.getElementById("article3");
   if (x.style.display === "block") {
@@ -372,32 +353,24 @@ function closeMap() {
   }
 }
 
-
-
-
-
-
-
 // Adds currently choosen location to map
 function setLocPoint(latlong) {
   var map = makeMap();
   var locdiv = document.createElement('div');
   locdiv.className = 'locdiv';
-  var locpoint = new mapboxgl.Marker(locdiv).setLngLat(latlong).addTo(map);
+  var locpoint = new mapboxgl.Marker(locdiv).setLngLat(latlong).setPopup(new mapboxgl.Popup().setHTML("Your Location")).addTo(map);
+
 
 }
 
 // Sets arrow which represents direction
 function getWindIcon(deg,strength, id){
   var word = Math.round(strength*3.6)+ "kmh";
-  var svg = word+"<br><svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'><g> <path transform='rotate("+ deg + ", 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/> </g></svg>";
-  document.getElementById(id).innerHTML = svg;
+  var svg2 = word + "<br> <svg class='windicon' version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 268.832 268.832' style='enable-background:new 0 0 268.832 268.832;' xml:space='preserve'><g><path transform='rotate("+deg+", 134.416, 134.416)'  d='M265.171,125.577l-80-80c-4.881-4.881-12.797-4.881-17.678,0c-4.882,4.882-4.882,12.796,0,17.678l58.661,58.661H12.5 c-6.903,0-12.5,5.597-12.5,12.5c0,6.902,5.597,12.5,12.5,12.5h213.654l-58.659,58.661c-4.882,4.882-4.882,12.796,0,17.678 c2.44,2.439,5.64,3.661,8.839,3.661s6.398-1.222,8.839-3.661l79.998-80C270.053,138.373,270.053,130.459,265.171,125.577z'/></g></svg>" ;
+  document.getElementById(id).innerHTML = svg2;
 }
 
-
-
-
-
+// pushes day-name to ui
 function updatesNamesOfDaysInForecast() {
   var i;
   for (i = 1; i < 5; i++) {
@@ -407,6 +380,7 @@ function updatesNamesOfDaysInForecast() {
   }
 };
 
+//turns date into day-name
 function getDayName(i) {
   switch ((new Date().getDay() + i) % 7) {
     case 0:
@@ -433,7 +407,7 @@ function getDayName(i) {
   return day;
 };
 
-
+// updates recommendation text based on pollution grade
 function updateRecommendationText(grade){
   var text;
   if (grade == 1){
@@ -471,7 +445,7 @@ function updateRecommendationText(grade){
   }
 }
 
-// Updates daily weather and polltion forecast
+// Updates daily weather and polltion forecast UI
 function updateDailyForecast(data, timeID){
   if (timeID == 0){
     var bg = "g10";
@@ -525,7 +499,7 @@ function updateDailyForecast(data, timeID){
   document.getElementById(backg).style.backgroundImage = "url('icons/"+data[1]+"_small.png')";
 }
 
-// Updates 24h Forecast
+// Updates 24h pollution Forecast UI
 function change3hour(data){
   updatePollutionPicture(data[0],data[1]);
   document.getElementById("weatherIconNow").src = data[4];
@@ -539,6 +513,7 @@ function change3hour(data){
   document.getElementById("gradet").innerHTML = "traffic: "+data[1];
 }
 
+// finds and pushes to UI image for pollution grade
 function updatePollutionPicture(valuebg,valuetr){
   document.getElementById("PollutionPicture").innerHTML = "<img id='pollutionIMG' alt='pollution Icon' src='icons/traf_"+valuetr+".png'/>";
 
@@ -551,6 +526,7 @@ function updatePollutionPicture(valuebg,valuetr){
   }
 }
 
+// updates pollution image if location is defined
 function updateLocationPoll(data){
   updateRecommendationText(data[1]);
   if (data[0] == "background"){
@@ -659,6 +635,7 @@ function showResult(){
 
 }
 
+// pushes parameters to ML
 function getPollutionPrediction(pressure, humidity, clouds_all, temp, temp_min, temp_max, wind_speed, wind_deg, hour, isWeekend, month, predictionMode){
   var prediction = 0;
   var url = encodeURI("http://" + ipAddress + ":8080/index/forecast/custom?" +
@@ -680,6 +657,7 @@ function getPollutionPrediction(pressure, humidity, clouds_all, temp, temp_min, 
   return prediction;
 }
 
+// gives detailed info for different pollutants
 function detailedInfo(index){
   if (index == 0){
     document.getElementById("detailed").innerHTML = "PM10 <br> inhalable particulate matter <10µm) <br> main sources are combustion processes (eg. indoor heating, wildfires), mechanical processes (eg. construction, mineral dust, agriculture) and biological particles (eg. pollen, bacteria, mold). <br> inhalable particles can penetrate into the lungs. short term exposure can cause irritation of the airways, coughing, and aggravation of heart and lung diseases, expressed as difficulty reaching, heart attacks and even premature death. ";
