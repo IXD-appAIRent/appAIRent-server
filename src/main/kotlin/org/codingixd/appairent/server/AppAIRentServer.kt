@@ -5,10 +5,9 @@ import com.javadocmd.simplelatlng.LatLng
 import de.jupf.staticlog.Log
 import net.aksingh.owmjapis.model.CurrentWeather
 import net.aksingh.owmjapis.model.HourlyWeatherForecast
-import net.aksingh.owmjapis.model.param.WeatherData
 import org.codingixd.appairent.data.*
 import org.codingixd.appairent.ml.AirClassifier
-import org.codingixd.appairent.ml.RandomForestAirClassifier
+import org.codingixd.appairent.ml.CachedRandomForestAirClassifier
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.scheduling.annotation.EnableScheduling
@@ -21,7 +20,6 @@ import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import kotlin.math.round
 
 
 @RestController
@@ -242,7 +240,7 @@ fun main(args: Array<String>) {
     SpringApplication.run(Application::class.java, *args)
 }
 
-val airClassifier: AirClassifier = RandomForestAirClassifier()
+val airClassifier: AirClassifier = CachedRandomForestAirClassifier()
 
 @Component
 class ScheduledTasks {

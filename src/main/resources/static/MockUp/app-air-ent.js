@@ -1,20 +1,21 @@
-var ipAddress = "172.16.248.96";
+var ipAddress = "192.168.2.53";
 
 // enable wait for results
 $.ajaxSetup({
   async: false
 });
 
-createForecastTime(0);
 
+createButtonTime();
+makeMap();
 updateCurrentWeather();
-
 updateWeatherForecastUpcomingDays(0);
 updateWeatherForecastUpcomingDays(1);
 updateWeatherForecastUpcomingDays(2);
 updateWeatherForecastUpcomingDays(3);
 
 updatesNamesOfDaysInForecast();
+
 showResult();
 
 
@@ -56,6 +57,41 @@ $(document).on('swiperight', '.ui-page', function(event) {
   }
   return false;
 });
+
+
+function makeMap(){
+  var map;
+  $.getJSON("http://"+ ipAddress+":8080/stations/all", function(arr) {
+    mapboxgl.accessToken = 'pk.eyJ1IjoibGlsbGlwaWxsaSIsImEiOiJjanBjc3J3ZmozMG55M3dwaHFpcmFlZDNoIn0.Eh9Spcc3_PNF72jAYeGTmQ';
+    map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v9',
+      minZoom: 8.5,
+      maxZoom: 12,
+      center: [13.5, 52.52697],
+      zoom: 8.5,
+      interactive: false
+    });
+
+    arr.forEach(function(e) {
+      var coord = [];
+
+      coord.push(e.station.location.lng);
+      coord.push(e.station.location.lat);
+      var el = document.createElement('div');
+      el.className = 'marker';
+
+      // make a marker for each feature and add to the map
+      var marker = new mapboxgl.Marker(el).setLngLat(coord).setPopup(new mapboxgl.Popup() // add popups
+        .setHTML("type: "+e.measurementType + " <br/> grade: " + e.lqi + "<br/> location: "+ e.station.name)).addTo(map);
+    });
+  });
+
+  return map;
+}
+
+
+
 
 // Loads json
 function getJSON(url, callback) {
@@ -125,7 +161,6 @@ function updateLocationDependentValues() {
     if (Array.isArray(data) && data.length !== 0) {
 
       var street = data[0].address.road + ", " + data[0].address.city;
-
       var loc = document.getElementById("title1");
       loc.innerHTML = street;
       var latlong = [];
@@ -137,7 +172,9 @@ function updateLocationDependentValues() {
       document.getElementById("distance").innerHTML = "<br/> distance to next station: " + dist + " km";
       setLocPoint(latlong);
       var pollData = getCurrentPollutionValue(lat, lon);
-      updateLocationGauge(pollData);
+
+      updateLocationPoll(pollData);
+
       updateOnePopupValue(pollData);
       document.getElementById("address").style.display = "none";
     } else {
@@ -150,33 +187,30 @@ function updateLocationDependentValues() {
 function updateOnePopupValue(data){
   if (data[0] == "background"){
     document.getElementById("valueBGpopup").innerHTML = data[1];
-    document.getElementById("valueTRpopup").innerHTML = "This is only the data for the closest station, which is a background measurement-station";
+    document.getElementById("valueTRpopup").innerHTML = "no data, nearest station is for background.";
   } else{
     document.getElementById("valueTRpopup").innerHTML = data[1];
-    document.getElementById("valueBGpopup").innerHTML = "This is only the data for the closest station, which is a traffic measurement-station";
+    document.getElementById("valueBGpopup").innerHTML = "no data, nearest station is for traffic.";
+  }
+}
+
+function createButtonTime(){
+  var i;
+  for (i = 0; i < 8; i++){
+    var first = new Date().getHours();
+    var first = first - (first % 3);
+    var t = (first +(3*i)) % 24 +":00";
+    if (i == 0){
+      t = "now";
+    }
+    var timeid = "time-"+ (i+1);
+    document.getElementById(timeid).innerHTML = t +"  ";
   }
 }
 
 
 
-// Creates buttons for forecast
-function createForecastTime(x) {
-  var first = new Date().getHours();
-  var first = first - (first % 3);
-  var t = (first +(3*x)) % 24 +":00";
-  if (x == 0){
-    t = "now";
-  }
-  document.getElementById("selTime").innerHTML = t;
-  // document.getElementById("choice-2").innerHTML += (first+3) % 24 +":00";
-  // document.getElementById("choice-3").innerHTML += (first+6) % 24 +":00";
-  // document.getElementById("choice-4").innerHTML += (first+9) % 24 +":00";
-  // document.getElementById("choice-5").innerHTML += (first+12) %24 +":00";
-  // document.getElementById("choice-6").innerHTML += (first+15) %24 +":00";
-  // document.getElementById("choice-7").innerHTML += (first+18) %24 +":00";
-  // document.getElementById("choice-8").innerHTML += (first+21) %24 +":00";
-  // document.getElementById("choice-9").innerHTML += (first+24) %24 +":00";
-}
+
 
 // Updates current weather forecast
 function updateCurrentWeather(){
@@ -185,7 +219,7 @@ function updateCurrentWeather(){
       document.getElementById("title1").innerHTML = "Berlin";
       document.getElementById("distance").innerHTML = "<br> average values for Berlin";
       var nowdata = update24hPollutionValues(0);
-      createForecastTime(0);
+
       document.getElementById("divBackgroundimage").style.backgroundImage = "url('icons/"+nowdata[0]+".png')"; //nowdata[1]
       document.getElementById("article1").style.backgroundImage = "url('icons/"+nowdata[0]+".png')";
       nowdata.push(Math.round(now.main.temp_max-273.15));
@@ -228,7 +262,7 @@ function updateWeatherForecast24Hours(index){
     if(index < 9){
 
       var pollBerlin = update24hPollutionValues(index);
-      createForecastTime(index);
+
       //alert(pollBerlin[0]);
       //[pollBerlin[0],pollBerlin[1]
       change3hour([pollBerlin[0],pollBerlin[1], Math.round(json.list[index].main.temp_max-273.15), Math.round(json.list[index].main.temp_min-273.15), iconConverter(json.list[index].weather[0].icon), json.list[index].wind.deg,json.list[index].wind.speed ]);
@@ -284,22 +318,28 @@ function fakePollution(){
 function iconConverter(iconID){
   var icon;
   if( iconID == "01d" || iconID == "01n") {
-    icon = "icons/sunny.svg";
+    icon = "icons/sunny.png";
   }
   if( iconID == "02d" || iconID == "02n") {
-    icon = "icons/sun_cloud.svg";
+    icon = "icons/sun_cloud.png";
   }
-  if( iconID == "03d" || iconID == "03n" || iconID == "04d" || iconID == "04n" || iconID == "50d" || iconID == "50n") {
-    icon = "icons/cloud.svg";
+  if( iconID == "03d" || iconID == "03n" || iconID == "04d" || iconID == "04n") {
+    icon = "icons/cloud.png";
   }
-  if( iconID == "09d" || iconID == "09n" || iconID == "10d" || iconID == "10n") {
-    icon = "icons/rain.svg";
+  if( iconID == "50d" || iconID == "50n") {
+    icon = "icons/fog.png";
+  }
+  if( iconID == "09d" || iconID == "09n") {
+    icon = "icons/rain.png";
+  }
+  if (iconID == "10d" || iconID == "10n"){
+    icon = "icons/rain_sun_cloud.png"
   }
   if( iconID == "11d" || iconID == "11n") {
-    icon = "icons/storm.svg";
+    icon = "icons/storm.png";
   }
   if( iconID == "13d" || iconID == "13n") {
-    icon = "icons/snow_cloud.svg";
+    icon = "icons/snow.png";
   }
   return icon;
 }
@@ -325,196 +365,32 @@ function toogleMap() {
   }
 }
 
-// START INITIALISATION OF MAPBOX
-mapboxgl.accessToken = 'pk.eyJ1IjoibGlsbGlwaWxsaSIsImEiOiJjanBjc3J3ZmozMG55M3dwaHFpcmFlZDNoIn0.Eh9Spcc3_PNF72jAYeGTmQ';
-const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/light-v9',
-  minZoom: 8.5,
-  maxZoom: 12,
-  center: [13.5, 52.52697],
-  zoom: 8.5,
-  interactive: false
-});
-
-var measurepoints = {
-  "array": [{
-    "measurementType": "traffic",
-    "station": {
-      "id": "088",
-      "name": "Messwagen Leipziger Str.",
-      "location": {
-        "lat": 52.5102,
-        "lng": 13.388529
-      }
-    }
-  }, {
-    "measurementType": "traffic",
-    "station": {
-      "id": "117",
-      "name": "Schildhornstraße",
-      "location": {
-        "lat": 52.463611,
-        "lng": 13.31825
-      }
-    }
-  }, {
-    "measurementType": "traffic",
-    "station": {
-      "id": "124",
-      "name": "Mariendorfer Damm",
-      "location": {
-        "lat": 52.438056,
-        "lng": 13.3875
-      }
-    }
-  }, {
-    "measurementType": "traffic",
-    "station": {
-      "id": "143",
-      "name": "Silbersteinstraße",
-      "location": {
-        "lat": 52.467511,
-        "lng": 13.44165
-      }
-    }
-  }, {
-    "measurementType": "traffic",
-    "station": {
-      "id": "174",
-      "name": "Frankfurter Allee",
-      "location": {
-        "lat": 52.514072,
-        "lng": 13.469931
-      }
-    }
-  }, {
-    "measurementType": "traffic",
-    "station": {
-      "id": "115",
-      "name": "Hardenbergplatz",
-      "location": {
-        "lat": 52.5066,
-        "lng": 13.332972
-      }
-    }
-  }, {
-    "measurementType": "background",
-    "station": {
-      "id": "010",
-      "name": "Wedding",
-      "location": {
-        "lat": 52.543041,
-        "lng": 13.349326
-      }
-    }
-  }, {
-    "measurementType": "background",
-    "station": {
-      "id": "042",
-      "name": "Neukölln",
-      "location": {
-        "lat": 52.489439,
-        "lng": 13.430856
-      }
-    }
-  }, {
-    "measurementType": "background",
-    "station": {
-      "id": "171",
-      "name": "Mitte",
-      "location": {
-        "lat": 52.513606,
-        "lng": 13.418833
-      }
-    }
-  }, {
-    "measurementType": "suburb",
-    "station": {
-      "id": "032",
-      "name": "Grunewald",
-      "location": {
-        "lat": 52.473192,
-        "lng": 13.225144
-      }
-    }
-  }, {
-    "measurementType": "suburb",
-    "station": {
-      "id": "077",
-      "name": "Buch",
-      "location": {
-        "lat": 52.644167,
-        "lng": 13.483056
-      }
-    }
-  }, {
-    "measurementType": "suburb",
-    "station": {
-      "id": "085",
-      "name": "Friedrichshagen",
-      "location": {
-        "lat": 52.447697,
-        "lng": 13.64705
-      }
-    }
-  }, {
-    "measurementType": "background",
-    "station": {
-      "id": "018",
-      "name": "Schöneberg",
-      "location": {
-        "lat": 52.485814,
-        "lng": 13.348775
-      }
-    }
-  }, {
-    "measurementType": "suburb",
-    "station": {
-      "id": "145",
-      "name": "Frohnau",
-      "location": {
-        "lat": 52.653269,
-        "lng": 13.296081
-      }
-    }
-  }]
+function closeMap() {
+  var x = document.getElementById("article3");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  }
 }
 
-measurepoints.array.forEach(function(e) {
-  var coord = [];
 
-  coord.push(e.station.location.lng);
-  coord.push(e.station.location.lat);
-  var el = document.createElement('div');
-  el.className = 'marker';
 
-  // make a marker for each feature and add to the map
-  var marker = new mapboxgl.Marker(el).setLngLat(coord).setPopup(new mapboxgl.Popup() // add popups
-    .setHTML(e.measurementType + " <br/> ID: " + e.station.id + "<br/> <button id='" + e.station.id + "'>see values here</button>")).addTo(map);
-});
-// END INITIALISATION OF MAPBOX
+
+
+
 
 // Adds currently choosen location to map
 function setLocPoint(latlong) {
+  var map = makeMap();
   var locdiv = document.createElement('div');
   locdiv.className = 'locdiv';
-  var locpoint = new mapboxgl.Marker(locdiv).setLngLat(latlong).addTo(map);;
+  var locpoint = new mapboxgl.Marker(locdiv).setLngLat(latlong).addTo(map);
 
-}
-
-// Maps degree of wind direction to Compass direction.
-function degToWord(deg) {
-  var val = Math.round(((deg / 22.5) + 0.5))% 16;
-  var arr = ["W","WNW","NW","NNW","N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW"]
-  var res = arr[val];
-  return res;
 }
 
 // Sets arrow which represents direction
 function getWindIcon(deg,strength, id){
   var word = Math.round(strength*3.6)+ "kmh";
-  var svg = word+"<svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'><g> <path transform='rotate("+ deg + ", 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/> </g></svg>";
+  var svg = word+"<br><svg class='windicon' viewBox='265 75 152 155' xmlns='http://www.w3.org/2000/svg'><g> <path transform='rotate("+ deg + ", 343, 152)' d='m324.267395,194.902954c-4.415039,-2.386047 -3.835938,-3.830994 6.898499,-17.206268c5.418457,-6.753876 9.854462,-12.476654 9.854462,-12.71701c0,-0.239044 -14.967651,-0.434601 -33.259186,-0.434601l-33.261169,0l0,-12.64856l0,-12.64888l33.522522,0c25.850525,0 33.236084,-0.380249 32.264038,-1.663589c-0.691956,-0.915314 -5.420502,-6.989792 -10.506592,-13.498825c-9.586853,-12.26857 -9.584778,-15.56044 0.014587,-16.580322c4.776733,-0.506546 79.146729,38.489502 81.705444,42.842102c-24.773956,15.539841 -54.385254,31.809464 -81.661499,46.153c-1.438232,0 -3.944672,-0.718384 -5.571106,-1.597046z' stroke-width='8.5' stroke='#000' fill='#000000'/> </g></svg>";
   document.getElementById(id).innerHTML = svg;
 }
 
@@ -558,143 +434,6 @@ function getDayName(i) {
 };
 
 
-function makeGauge(id, value, color, width, pointer) {
-  // #888 = BACKGROUND
-  if (color == "#888" && pointer !== false){
-    var gauge = new RadialGauge({
-      renderTo: id,
-      width: width,
-      height: width,
-      value: value,
-      minValue: 0,
-      startAngle: 90,
-      ticksAngle: 180,
-      valueBox: false,
-      maxValue: 180,
-      majorTicks: ["", "", "", "", "", "", ""],
-      minorTicks: 1,
-      strokeTicks: true,
-      highlights: [{
-          "from": 60,
-          "to": 120,
-          "color": '#BBB'
-        },
-        {
-          "from": 120,
-          "to": 180,
-          "color": '#555'
-        }
-      ],
-      colorPlate: 'Transparent',
-      colorNumbers: '#888',
-      borderShadowWidth: 0,
-      borders: false,
-      colorNeedle: color,
-      colorNeedleEnd: color,
-      needleShadow: false,
-      needleType: "line",
-      needleWidth: 7,
-      needleCircleSize: 5,
-      needleCircleOuter: false,
-      needleCircleInner: false,
-      needleStart: 0,
-      needleEnd: 100,
-      animationDuration: 1500,
-      animationRule: "linear"
-    }).draw();
-    return gauge;
-  }
-  // TRAFFIC
-  else if (pointer !== false) {
-    var gauge = new RadialGauge({
-      renderTo: id,
-      width: width,
-      height: width,
-      value: value,
-      minValue: 0,
-      startAngle: 90,
-      ticksAngle: 180,
-      valueBox: false,
-      maxValue: 180,
-      majorTicks: [
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
-      highlights: [{
-          "from": 60,
-          "to": 120,
-          "color": 'Transparent'
-        },
-        {
-          "from": 120,
-          "to": 180,
-          "color": 'Transparent'
-        }
-      ],
-      minorTicks: 1,
-      strokeTicks: true,
-      colorPlate: 'Transparent',
-      colorNumbers: 'Transparent',
-      colorStrokeTicks: 'Transparent',
-      colorMinorTicks: 'Transparent',
-      borderShadowWidth: 0,
-      borders: false,
-      colorNeedle: color,
-      colorNeedleEnd: color,
-      needleShadow: false,
-      needleType: "line",
-      needleWidth: 7,
-      needleCircleSize: 5,
-      needleCircleOuter: false,
-      needleCircleInner: false,
-      needleStart: 0,
-      needleEnd: 100,
-      animationDuration: 1500,
-      animationRule: "linear"
-    }).draw();
-  }
-  else {
-    var gauge = new RadialGauge({
-      renderTo: id,
-      width: width,
-      height: width,
-      value: value,
-      minValue: 0,
-      startAngle: 90,
-      ticksAngle: 180,
-      valueBox: false,
-      maxValue: 180,
-      majorTicks: ["", "", "", "", "", "", ""],
-      minorTicks: 1,
-      strokeTicks: true,
-      highlights: [{
-          "from": 60,
-          "to": 120,
-          "color": '#BBB'
-        },
-        {
-          "from": 120,
-          "to": 180,
-          "color": '#555'
-        }
-      ],
-      colorPlate: 'Transparent',
-      colorNumbers: '#888',
-      borderShadowWidth: 0,
-      borders: false,
-      needle: false,
-      animationDuration: 1500,
-      animationRule: "linear"
-    }).draw();
-  }
-
-}
-
 function updateRecommendationText(grade){
   var text;
   if (grade == 1){
@@ -732,15 +471,6 @@ function updateRecommendationText(grade){
   }
 }
 
-function fillGauge(idbg, idtr, valuebg, valuetr, size) {
-  if (idbg !== undefined){
-    makeGauge(idbg, (valuebg * 30) - 17, "#888", size);
-  }
-  if (idtr !== undefined){
-    makeGauge(idtr, (valuetr * 30) - 12, "#000", size);
-  }
-}
-
 // Updates daily weather and polltion forecast
 function updateDailyForecast(data, timeID){
   if (timeID == 0){
@@ -775,17 +505,19 @@ function updateDailyForecast(data, timeID){
     var wind = "wind4";
     var backg = "divDay4";
   }
-  if (timeID == 4){
-    var bg = "g50";
-    var tr = "g51";
-    var temp = "temp5";
-    var icon = "icon5";
-    var wind = "wind5";
-  } else {
+  else {
 
   }
 
-  fillGauge(bg,tr, data[0],data[1],110);
+  document.getElementById(bg).innerHTML = "<br>B:"+data[0]+"<br>T:"+data[1];
+  document.getElementById(tr).src = "icons/traf_"+data[1]+".png";
+  if(data[0] < 3){
+    document.getElementById(tr).style.backgroundImage = "url('icons/1_2.png')";
+  }else if (data[0]< 5){
+    document.getElementById(tr).style.backgroundImage = "url('icons/3_4.png')";
+  } else {
+    document.getElementById(tr).style.backgroundImage = "url('icons/5_6.png')";
+  }
   document.getElementById(icon).src = data[4];
   document.getElementById(temp).innerHTML = data[3] + "°C";
   //+" <br>"+ data[2] + "°"
@@ -795,8 +527,7 @@ function updateDailyForecast(data, timeID){
 
 // Updates 24h Forecast
 function change3hour(data){
-  //fillGauge("background", "traffic", data[0], data[1], 300);
-  updatePollutionPicture(data[1]);
+  updatePollutionPicture(data[0],data[1]);
   document.getElementById("weatherIconNow").src = data[4];
   document.getElementById("temp-min").innerHTML = data[3] + "°C";
   document.getElementById("temp-max").innerHTML = data[2] + "°C";
@@ -804,29 +535,43 @@ function change3hour(data){
   updateRecommendationText(data[1]);
   document.getElementById("valueBGpopup").innerHTML =  data[0];
   document.getElementById("valueTRpopup").innerHTML =  data[1];
-
+  document.getElementById("gradeb").innerHTML =  "background: "+data[0];
+  document.getElementById("gradet").innerHTML = "traffic: "+data[1];
 }
 
-function updatePollutionPicture(valuetr){
-  document.getElementById("PollutionPicture").innerHTML = "<img id='pollutioIMG' alt='pollution Icon' src='icons/traf_"+valuetr+".png'/>";
-}
+function updatePollutionPicture(valuebg,valuetr){
+  document.getElementById("PollutionPicture").innerHTML = "<img id='pollutionIMG' alt='pollution Icon' src='icons/traf_"+valuetr+".png'/>";
 
-function updateLocationGauge(data){
-  updateRecommendationText(data[1]);
-  updatePollutionPicture(data[1]);
-/*  if (data[0] == "background"){
-    makeGauge("traffic", (data[1] * 30) - 12, "#000", 300,false);
-    makeGauge("background", (data[1] * 30) - 17, "#888", 300);
+  if(valuebg <3){
+    document.getElementById("pollutionIMG").style.backgroundImage = "url('icons/1_2.png')";
+  }else if (valuebg< 5){
+    document.getElementById("pollutionIMG").style.backgroundImage = "url('icons/3_4.png')";
   } else {
-    makeGauge("background", (data[1] * 30) - 17, "#888", 300, false);
-    makeGauge("traffic", (data[1] * 30) - 12, "#000", 300);
-  }*/
+    document.getElementById("pollutionIMG").style.backgroundImage = "url('icons/5_6.png')";
+  }
+}
+
+function updateLocationPoll(data){
+  updateRecommendationText(data[1]);
+  if (data[0] == "background"){
+    document.getElementById("gradeb").innerHTML =  "background: "+data[1];
+    document.getElementById("gradet").innerHTML = "";
+    if(data[1] <3){
+      document.getElementById("pollutionIMG").src = "icons/1_2.png";
+    }else if (data[1]< 5){
+      document.getElementById("pollutionIMG").src = "icons/3_4.png";
+    } else {
+      document.getElementById("pollutionIMG").src = "icons/5_6.png";
+    }
+  } else {
+    document.getElementById("gradeb").innerHTML = "";
+    document.getElementById("gradet").innerHTML =  "traffic: "+data[1];
+    document.getElementById("PollutionPicture").innerHTML = "<img id='pollutionIMG' alt='pollution Icon' src='icons/traf_"+data[1]+".png'/>";
+  }
 }
 
 // Updates Interface which makes ML approachable
 function showResult(){
-  var gauge;
-
   var pressure, humidity, clouds_all// skyML
   var temp, temp_min, temp_max//tempML
   var wind_speed, wind_deg// windML
@@ -894,25 +639,40 @@ function showResult(){
       break;
   }
 
-  var prediction = getPollutionPrediction(pressure, humidity, clouds_all, temp, temp_min, temp_max, wind_speed, wind_deg, hour, isWeekend, month, predictionMode)
-  gauge = makeGauge("mlbg", (prediction * 30) - 17 ,"#888",300);
+  var prediction = getPollutionPrediction(pressure, humidity, clouds_all, temp, temp_min, temp_max, wind_speed, wind_deg, hour, isWeekend, month, predictionMode);
+  var mode = predictionMode;
+
+  if(predictionMode == "TRAFFIC"){
+    document.getElementById("mlbg").src = "icons/traf_"+prediction+".png";
+  } else if (predictionMode == "BACKGROUND"){
+    if (prediction < 3){
+      document.getElementById("mlbg").src = "icons/1_2.png";
+    }else if (prediction < 5){
+      document.getElementById("mlbg").src = "icons/3_4.png";
+    } else if (prediction >= 5) {
+      document.getElementById("mlbg").src = "icons/5_6.png";
+    }
+  }
+
+
+  document.getElementById("gradeML").innerHTML = prediction;
 
 }
 
 function getPollutionPrediction(pressure, humidity, clouds_all, temp, temp_min, temp_max, wind_speed, wind_deg, hour, isWeekend, month, predictionMode){
   var prediction = 0;
-  var url = encodeURI("http://" + ipAddress + ":8080/index/forecast/custom?" + 
+  var url = encodeURI("http://" + ipAddress + ":8080/index/forecast/custom?" +
       "pressure=" + pressure +
-      "&humidity=" + humidity + 
+      "&humidity=" + humidity +
       "&clouds_all=" + clouds_all +
       "&temp=" + temp +
       "&temp_max="+temp_max+
       "&temp_min="+temp_min+
       "&wind_speed=" + wind_speed +
-      "&wind_deg=" + wind_deg + 
-      "&hour=" + hour + 
-      "&is_weekend=" + isWeekend + 
-      "&month=" + month + 
+      "&wind_deg=" + wind_deg +
+      "&hour=" + hour +
+      "&is_weekend=" + isWeekend +
+      "&month=" + month +
       "&prediction_mode=" + predictionMode)
   $.getJSON(url, function(data) {
     prediction = data

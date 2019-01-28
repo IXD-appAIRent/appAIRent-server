@@ -1,4 +1,5 @@
 html, body {
+
   width: 1080px;
   height: 2240px;
   margin: 0;
@@ -10,18 +11,34 @@ html, body {
 
 }
 
+
 #content {
-  background-color: rgba(255,255, 255, 0.3);
+  background-color: rgba(230,230, 230, 0.1);
+
 }
 
+.mapviewer {
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  width: 40px;
+  height: 40px;
+   background-image: url("icons/location.png");
+  background-size:cover;
+}
+
+
+
+
 .header {
-  background-color: ;
+  background-color: rgba(255,255, 255, 0.7) ;
   color: #000000;
   text-shadow: none;
   height: 50px;
+  font-size: 20px;
 }
 
-.borderCust {
+.noTextShadow {
   text-shadow: none;
   color: black;
 }
@@ -31,6 +48,7 @@ padding: 5px 5px 5px 5px;
 margin: 5px 5px 5px 5px; */
 
 #article1{
+
   background-size: 100%;
   backgroundImage: url("icons/5.png");
   width: 100%;
@@ -44,22 +62,19 @@ margin: 5px 5px 5px 5px; */
   bottom: 0;
   width: 100%;
   height: 50%;
-  border: solid 5px;
+  border: solid 2px;
   border-radius: 5px;
 }
 
-.gContainer {
-  position: relative;
-  width: 300px;
-  height: 180px;
-}
-
-
-.gaugePos {
-  width: 300px;
-  height: 250px;
+#cross {
   position: absolute;
+  z-index: 999;
+  color: black;
+  font-size: 26px;
+  text-align: right;
 }
+
+
 #divBackgroundimage{
   position: absolute;
   background-image: url("icons/5.png");
@@ -71,21 +86,24 @@ margin: 5px 5px 5px 5px; */
 
 
 .temperature {
-  font-size: 150%;
+  font-size: 24px;
+
 }
 
 .nolinkstyle {
   text-decoration: none;
+  color: black;
+  text-shadow: none;
 }
 
-
-
-#moreCharts {
-  text-align: center;
+#moreInfo {
+  color: black;
+  text-shadow: none;
 }
+
 
 .marker {
-  background-image: url('icons/location_icon.svg');
+  background-image: url('icons/location.png');
   background-size: cover;
   width: 25px;
   height: 30px;
@@ -94,7 +112,8 @@ margin: 5px 5px 5px 5px; */
 }
 
 .locdiv {
-  background-image: url('open-iconic/svg/media-record.svg');
+  background-image: url('icons/location_now.png');
+
   background-size: cover;
   width: 25px;
   height: 30px;
@@ -102,6 +121,10 @@ margin: 5px 5px 5px 5px; */
   cursor: pointer;
 }
 
+#selTime {
+  text-align: center;
+
+}
 .button1 {
 	padding: 15px;
 	font-size: 14px;
@@ -114,7 +137,18 @@ margin: 5px 5px 5px 5px; */
 
 #choice-1, #choice-2, #choice-3, #choice-4, #choice-5, #choice-6, #choice-7, #choice-8{
   border-radius: 50%;
-  border: solid 1px black;
+  border: solid 2px black;
+}
+
+.spaceBetween{
+  padding-left: 3px;
+}
+#TimeTable td {
+  padding-left: 5px;
+}
+
+#time-1 , #time-2 ,#time-3 ,#time-4 ,#time-5 ,#time-6 ,#time-7 ,#time-8{
+  margin: 3px 3px 3px 3px;
 }
 
 
@@ -123,8 +157,7 @@ margin: 5px 5px 5px 5px; */
   display: none;
 }
 #location {
-  margin-bottom: 10px;
-  margin-top: -10px;
+  margin-bottom: 25px;
 }
 
 #locationTitle {
@@ -133,12 +166,16 @@ margin: 5px 5px 5px 5px; */
 }
 
 #locationIcon {
-  width: 100%;
+    max-height:55px;
+    max-width:55px;
+    display:block;
+    margin:0 auto;
 }
 
 #iconWrap {
   white-space: nowrap;
-  width: 10%
+  width: 10%;
+
 }
 
 
@@ -162,10 +199,13 @@ margin: 5px 5px 5px 5px; */
 }
 
 
-.weather {
-  margin-bottom: 20px;
+#weather {
+  white-space: nowrap;
+}
+
+#weatherIconNow{
   width: 100%;
-  padding: 10px 10px 0px 10px;
+  white-space: nowrap;
 }
 
 .weatherT {
@@ -174,10 +214,7 @@ margin: 5px 5px 5px 5px; */
   width: 100%;
 }
 
-.weather1 {
-	/*border: solid 1px;*/
 
-}
 .transparent{
   background-color: Transparent !important;
 }
@@ -186,7 +223,7 @@ margin: 5px 5px 5px 5px; */
 .navigator {
     width: 100%;
     padding: 0;
-    height: 14px;
+    height: 30px;
     background-color: Transparent;
 }
 .navigator a {
@@ -212,50 +249,85 @@ margin: 5px 5px 5px 5px; */
   width: 100%;
 }
 
-#weatherIconNow {
-
-
-}
-
-#PollutionPicture{
-  width: 100%;
-}
-
-#pollutioIMG{
-  width: 80%;
-  background-color: rgba(0,0,0, 0.4) !important;
-  border-radius: 50%;
+#gradet, #gradeb {
+  color: black;
   margin-left: 10px;
 }
 
-.weatherIcon {
-
+#gradet {
+  margin-bottom: -25px;
 }
 
- .forecastall {
-  height: 100%;
+#gradeML{
+  margin-left: 40px;
+  color: black;
+  font-size: 26px;
+}
+
+#PollutionPicture{
+  width: 70%;
+}
+
+#pollutionIMG{
+
+  padding-top: 0px;
   width: 100%;
+  border: solid 2px black;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  background-size: contain;
 }
+
+#pollTable td {
+  border: solid 2px black;
+
+}
+
+
+.weatherIcon {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 15px;
+}
+
+
+
 
 .forecastday {
-  border-bottom-style: solid;
-  border-width: thin;
+
+  margin-bottom: 10px;
+  border: solid 2px black;
+  border-radius: 5px;
   background-size: 100%;
   width: 100%;
+  text-shadow: none;
+  color: black;
+}
+
+
+.fullWidth {
+   width: 100%;
+   margin-left: auto;
+   margin-right: auto;
+   max-width: initial;
 }
 
 .windicons {
 	white-space: nowrap;
 	margin-top: 20px;
+  margin-left: -10px;
+}
+
+.windicon{
+  width: 100%;
 }
 
 .row {
-  with: 100%;
+  width: 100%;
+  font-family: inherit;
+  border-collapse: collapse;
 }
 
-.ui-block-a {
-  margin-right: 10px;
-}
 
 .temperaturefor {
   font-size: 16px;
@@ -263,25 +335,25 @@ margin: 5px 5px 5px 5px; */
   margin-top: -5px;
 }
 
-.gauge {
-  top: 20px;
-	margin-left: 10px;
-  position: relative;
-  width: 100px;
-  height: 50px;
+
+#g11, #g21, #g31, #g41{
+  margin: 10px;
+  width: 80%;
+  background-size: contain;
+}
+.gauge td {
+  white-space: nowrap;
 }
 
-.forecastGauge {
-  width: 100px;
-  height: 100px;
-  position: absolute;
+.gradeDays {
+  margin-top: 40px;
+  margin-left: 20px;
 }
-
 
 .carousel-indicators li {
 	height: 8px !important;
 	width: 8px !important;
- border: solid 1px;
+ border: solid 2px;
  border-radius: 60%;
  background-color: #fff;
 
@@ -295,6 +367,7 @@ margin: 5px 5px 5px 5px; */
 }
 
 .carousel-control {
+
     background-image:none !important;
     filter:none !important;
 }
@@ -305,25 +378,14 @@ margin: 5px 5px 5px 5px; */
 
 .carousel {
   width: 30%;
-	height: 170px;
+	height: 140px;
 	padding: 3px 3px 3px 3px;
 	margin: 5px 5px 5px 5px;
-	border: solid 3px;
+	border: solid 2px;
+  border-radius: 5px;
+  background-color: rgba(235,235,235,1);
 }
 
-.mlGauge {
-	top: 20px;
-	margin-left: 10px;
-	position: relative;
-	width: 300px;
-	height: 200px;
-}
-
-.mlGaugePos {
-  width: 300px;
-  height: 250px;
-  position: absolute;
-}
 
 #PM10, #NO2, #SO2, #CO, #O3 {
   width: 16%;
@@ -331,7 +393,7 @@ margin: 5px 5px 5px 5px; */
   text-align: center;
   padding: 5px 0px 2px 2px;
   margin: 3px 3px 3px 3px;
-  border: solid 1px;
+  border: solid 2px;
   border-radius: 5%;
   background-color: rgba(255,255,255,.7);
 }
@@ -355,6 +417,7 @@ display: inline-block;
   margin: 3px 3px 3px 3px;
   text-shadow: none;
   color: black;
+  height: 270px;
 }
 
 #recommendation {
@@ -363,4 +426,24 @@ display: inline-block;
   text-shadow: none;
   color: black;
   /* background-color: rgba(216,216,216,.7); */
+}
+
+#mlbg {
+  border: solid 2px black;
+  width: 70%;
+  margin-left: 30px;
+  border-radius: 50%;
+}
+
+#machinelearning {
+  margin-top: 50px;
+}
+
+#MLSliders{
+  width: 100%;
+  margin-bottom: 100px;
+}
+
+#article3 {
+  background-color: #fff;
 }
