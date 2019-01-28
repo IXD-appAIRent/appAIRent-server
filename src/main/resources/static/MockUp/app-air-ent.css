@@ -13,7 +13,7 @@ html, body {
 
 
 #content {
-  background-color: rgba(230,230, 230, 0.3);
+  background-color: rgba(230,230, 230, 0.1);
 
 }
 
@@ -112,7 +112,7 @@ margin: 5px 5px 5px 5px; */
 }
 
 .locdiv {
-  background-image: url('icons/location.png');
+  background-image: url('icons/location_now.png');
 
   background-size: cover;
   width: 25px;
@@ -335,8 +335,6 @@ margin: 5px 5px 5px 5px; */
   margin-top: -5px;
 }
 
-.gauge {
-}
 
 #g11, #g21, #g31, #g41{
   margin: 10px;
@@ -380,7 +378,7 @@ margin: 5px 5px 5px 5px; */
 
 .carousel {
   width: 30%;
-	height: 170px;
+	height: 140px;
 	padding: 3px 3px 3px 3px;
 	margin: 5px 5px 5px 5px;
 	border: solid 2px;
@@ -431,6 +429,7 @@ display: inline-block;
 }
 
 #mlbg {
+  border: solid 2px black;
   width: 70%;
   margin-left: 30px;
   border-radius: 50%;
@@ -441,8 +440,8 @@ display: inline-block;
 }
 
 #MLSliders{
-  margin-top: 30px;
   width: 100%;
+  margin-bottom: 100px;
 }
 
 #article3 {
