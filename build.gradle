@@ -54,3 +54,7 @@ jar {
     baseName = 'appairent-server'
     version = '0.1.0'
 }
+
+tasks.withType(JavaExec) {
+    jvmArgs = ['-Xms512m', '-Xmx512m']
+}
