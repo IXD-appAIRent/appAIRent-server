@@ -148,6 +148,9 @@ html, body {
   text-align: left;
   width: 99%;
 }
+#title1{
+  text-decoration:underline;
+}
 
 #locationIcon {
     max-height:55px;
@@ -217,7 +220,7 @@ html, body {
 }
 
 #gradet {
-  margin-bottom: -25px;
+  margin-bottom: -18px;
 }
 
 #gradeML{

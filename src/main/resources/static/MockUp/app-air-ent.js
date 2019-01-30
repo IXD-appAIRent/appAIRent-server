@@ -531,7 +531,7 @@ function updateLocationPoll(data){
   updateRecommendationText(data[1]);
   if (data[0] == "background"){
     document.getElementById("gradeb").innerHTML =  "background: "+data[1];
-    document.getElementById("gradet").innerHTML = "";
+    document.getElementById("gradet").innerHTML = " " ;
     if(data[1] <3){
       document.getElementById("pollutionIMG").src = "icons/1_2.png";
     }else if (data[1]< 5){
