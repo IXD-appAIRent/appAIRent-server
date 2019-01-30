@@ -50,7 +50,7 @@
             </div>
             <div class="col-xs-7" >
               <div class="weather1">
-                  <img id="weatherIconNow" src="icons/sunny.png" alt="sunny"/>
+                  <img id="weatherIconNow" src="X" alt="sunny"/>
               </div>
             </div>
 
@@ -64,7 +64,7 @@
           <tr onclick="toogleAddressInterface()">
             <th>
               <div id="iconWrap">
-              <img id="locationIcon" src="icons/location.png"/>
+              <img id="locationIcon" alt="location icon" src="icons/location.png"/>
             </div>
             </th>
             <th width="70%" id="locationTitle">
@@ -93,7 +93,7 @@
         <div data-role="popup" id="popupBasic">
         	<p id="BGpopup">background pollution: <br> grade: <span id="valueBGpopup"></span></p>
           <p id="TRpopup">traffic pollution: <br> grade: <span id="valueTRpopup"></span></p>
-          <span>In this table you can see the limits of all 5 measured pollutants. The grades are based on the WHO guidelines. See their <a href="http://www.euro.who.int/en/publications/abstracts/air-quality-guidelines-for-europe" target="_blank">website</a>  </span>
+          <span>Background stations (visualized as color) are located away from high-traffic streets, whereas traffic stations (visualized as dots) are directly next to them. Each station gets a grade, which you can see on our map. The grades are calculated by the following table. You can find the limits of all 5 measured pollutants. Those are based on the WHO guidelines. See their <a href="http://www.euro.who.int/en/publications/abstracts/air-quality-guidelines-for-europe" target="_blank">website</a>  </span>
           <table id="pollTable">
             <tr>
               <td>NO2 </td>
@@ -267,7 +267,7 @@
 
   <div data-role="page" id="article2">
     <div class="header" data-role="header" data-theme="a" >
-      <a href="#" onclick="toogleMap();return false;" class="mapviewer"><img src="icons/location.png"/></a>
+      <a href="#" onclick="toogleMap();return false;" class="mapviewer"><img src="icons/location.png" alt="location icon"/></a>
         <!--<a href="#" onclick="toogleMap();return false;" data-icon="location" data-iconpos="notext">Map</a>-->
       <h1>app-air-ent</h1>
     </div>
@@ -278,7 +278,7 @@
           <div class="lead temperaturefor" id="temp1"><br></div>
         </div>
         <div class="col-xs-3">
-          <div ><img alt="weather icon" class="weatherIcon" id="icon1" src="icons/sunny.png" />
+          <div ><img alt="weather icon" class="weatherIcon" id="icon1" src="X" />
           </div>
         </div>
         <div class="col-xs-2 windicons" id="wind1"></div>
@@ -286,7 +286,7 @@
           <table>
             <tr>
               <td><span class="gradeDays" id="g10" ></span> </td>
-              <td><img id="g11" src="x" /></td>
+              <td><img id="g11" src="x" alt="pollution" /></td>
             </tr>
           </table>
         </div>
@@ -299,7 +299,7 @@
           <div class="lead temperaturefor" id="temp2"><br></div>
         </div>
         <div class="col-xs-3">
-          <div ><img alt="weather icon" class="weatherIcon" id="icon2" src="icons/sunny.png" /></div>
+          <div ><img alt="weather icon" class="weatherIcon" id="icon2" src="X" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind2">
         </div>
@@ -307,7 +307,7 @@
            <table>
             <tr>
               <td><span class="gradeDays" id="g20" ></span> </td>
-              <td><img id="g21" src="x"/></td>
+              <td><img id="g21" src="x" alt="pollution"/></td>
             </tr>
           </table>
         </div>
@@ -320,7 +320,7 @@
           <div class="lead temperaturefor" id="temp3"><br></div>
         </div>
         <div class="col-xs-3">
-          <div ><img alt="weather icon" class="weatherIcon" id="icon3" src="icons/sunny.png" /></div>
+          <div ><img alt="weather icon" class="weatherIcon" id="icon3" src="X" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind3">
         </div>
@@ -329,7 +329,7 @@
           <table>
             <tr>
               <td><span class="gradeDays" id="g30" ></span> </td>
-              <td><img id="g31" src="x" /></td>
+              <td><img id="g31" src="x" alt="pollution" /></td>
             </tr>
           </table>
         </div>
@@ -342,7 +342,7 @@
           <div class="lead temperaturefor" id="temp4"><br></div>
         </div>
         <div class="col-xs-3">
-          <div ><img alt="weather icon" class="weatherIcon" id="icon4" src="icons/sunny.png" /></div>
+          <div ><img alt="weather icon" class="weatherIcon" id="icon4" src="X" /></div>
         </div>
         <div class="col-xs-2 windicons" id="wind4">
         </div>
@@ -351,7 +351,7 @@
           <table>
             <tr>
               <td><span class="gradeDays" id="g40" ></span> </td>
-              <td><img id="g41" src="x"/></td>
+              <td><img id="g41" src="x" alt="pollution"/></td>
             </tr>
           </table>
         </div>
@@ -360,15 +360,16 @@
 
       <div id="machinelearning">
         <h2 class="fullWidth">How it works</h2>
-        <h3 class="fullWidth">We are using Machine Learing to predict the air quality with an accuracy of more than 80%.</h3>
-        <a href="#popupML" class="nolinkstyle" style="color: black;" data-rel="popup">more info</a></p>
+        <h3 class="fullWidth">We are using Machine Learing to predict the air quality with an accuracy of more than 80%. <br> Here you can set several parameters to see the corresponding air quality value we predict based on the given data.  <a href="#popupML" class="nolinkstyle" style="color: black;" data-rel="popup">more info</a></h3>
+
         <div data-role="popup" id="popupML">
-          <span id="rec1">Our model is based on a RandomForrest. As features we selected the weather (humidity, pressure, temperature, ...), the month, the hour and a truthfalue if the data belongs to a weekend. We trained our model with hourly data of 2007. With this, we can predict the correct air quality with 80.8557% accuracy for background and 82.8854% accuracy for traffic values.</span>
+          <span id="rec1">Our model is based on a RandomForrest. For features we selected the weather (humidity, pressure, temperature, ...), the month, the hour and a truth value if the data belongs to a weekend. We trained our model with hourly data of 2007. With this, we can predict the correct air quality with 80.8557% accuracy for background and 82.8854% accuracy for traffic values.</span>
         </div>
       </div>
-      <div>
-        <img  id="mlbg"/>
+      <div class="fullWidth">
+
         <span id="gradeML"></span>
+        <img  id="mlbg"/>
       </div>
 
         <div class="row fullWidth" >
@@ -392,7 +393,7 @@
             </div>
 
             <div class="item">
-              <img src="icons/rain.png" alt="cloudy">
+              <img src="icons/rain.png" alt="rain">
             </div>
 
             <div class="item">
@@ -544,10 +545,10 @@
           <!-- Wrapper for slides -->
           <div id="PredictionModeML" class="carousel-inner">
             <div class="item active">
-              <img src="icons/background.svg" alt="traffic">
+              <img src="icons/back.png" alt="traffic">
             </div>
             <div class="item">
-              <img src="icons/traffic.svg" alt="background">
+              <img src="icons/traffic.png" alt="background">
             </div>
           </div>
 
@@ -578,7 +579,7 @@
   <div id="article3" style="display: none;" >
 
       <div id='map'>
-          <p id="cross" onclick="toogleMap();">X</p>
+          <p id="closing" onclick="toogleMap();">X</p>
       </div>
   </div>
 

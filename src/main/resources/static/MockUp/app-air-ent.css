@@ -7,8 +7,6 @@ html, body {
   font-family: 'Karla', sans-serif;
   text-shadow: none;
   color: black;
-
-
 }
 
 
@@ -23,12 +21,9 @@ html, body {
   text-shadow: none;
   width: 40px;
   height: 40px;
-   background-image: url("icons/location.png");
+  background-image: url("icons/location.png");
   background-size:cover;
 }
-
-
-
 
 .header {
   background-color: rgba(255,255, 255, 0.7) ;
@@ -42,38 +37,31 @@ html, body {
   text-shadow: none;
   color: black;
 }
-/*
-
-padding: 5px 5px 5px 5px;
-margin: 5px 5px 5px 5px; */
 
 #article1{
-
   background-size: 100%;
   backgroundImage: url("icons/5.png");
   width: 100%;
   display: none;
 }
 
-
 #map {
   position: absolute;
   top: 200px;
   bottom: 0;
   width: 100%;
-  height: 50%;
+  height: 49%;
   border: solid 2px;
   border-radius: 5px;
 }
 
-#cross {
+#closing {
   position: absolute;
   z-index: 999;
   color: black;
   font-size: 26px;
   text-align: right;
 }
-
 
 #divBackgroundimage{
   position: absolute;
@@ -83,7 +71,6 @@ margin: 5px 5px 5px 5px; */
     height: 100%;
     z-index: -11;
 }
-
 
 .temperature {
   font-size: 24px;
@@ -113,7 +100,6 @@ margin: 5px 5px 5px 5px; */
 
 .locdiv {
   background-image: url('icons/location_now.png');
-
   background-size: cover;
   width: 25px;
   height: 30px;
@@ -151,8 +137,6 @@ margin: 5px 5px 5px 5px; */
   margin: 3px 3px 3px 3px;
 }
 
-
-
 #address {
   display: none;
 }
@@ -184,21 +168,6 @@ margin: 5px 5px 5px 5px; */
 	width: 20%;
 }
 
-
-.st0 {
-  fill: #FFFFFF;
-  stroke: #000000;
-  stroke-width: 8;
-  stroke-miterlimit: 10;
-}
-
-.st1 {
-  stroke: #000000;
-  stroke-width: 8;
-  stroke-miterlimit: 10;
-}
-
-
 #weather {
   white-space: nowrap;
 }
@@ -208,17 +177,9 @@ margin: 5px 5px 5px 5px; */
   white-space: nowrap;
 }
 
-.weatherT {
-  font-family: inherit;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-
 .transparent{
   background-color: Transparent !important;
 }
-
 
 .navigator {
     width: 100%;
@@ -226,6 +187,7 @@ margin: 5px 5px 5px 5px; */
     height: 30px;
     background-color: Transparent;
 }
+
 .navigator a {
     display: inline-block;
     width: 10px;
@@ -269,7 +231,6 @@ margin: 5px 5px 5px 5px; */
 }
 
 #pollutionIMG{
-
   padding-top: 0px;
   width: 100%;
   border: solid 2px black;
@@ -283,10 +244,9 @@ margin: 5px 5px 5px 5px; */
 
 }
 
-
 .weatherIcon {
   border-collapse: collapse;
-  width: 100%;
+  width: 110%;
   margin-top: 15px;
 }
 
@@ -296,9 +256,11 @@ margin: 5px 5px 5px 5px; */
 .forecastday {
 
   margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   border: solid 2px black;
   border-radius: 5px;
-  background-size: 100%;
+  background-size: 110%;
   width: 100%;
   text-shadow: none;
   color: black;
@@ -316,6 +278,7 @@ margin: 5px 5px 5px 5px; */
 	white-space: nowrap;
 	margin-top: 20px;
   margin-left: -10px;
+  font-size: 14px;
 }
 
 .windicon{
@@ -330,15 +293,19 @@ margin: 5px 5px 5px 5px; */
 
 
 .temperaturefor {
-  font-size: 16px;
+  font-size: 20px;
   text-align: left;
   margin-top: -5px;
+}
+
+.featurette-heading {
+  font-size: 26px;
 }
 
 
 #g11, #g21, #g31, #g41{
   margin: 10px;
-  width: 80%;
+  width: 100%;
   background-size: contain;
 }
 .gauge td {
@@ -346,8 +313,9 @@ margin: 5px 5px 5px 5px; */
 }
 
 .gradeDays {
-  margin-top: 40px;
-  margin-left: 20px;
+  margin-top: 30px;
+  margin-left: 30px;
+  font-size: 20px;
 }
 
 .carousel-indicators li {
@@ -388,7 +356,7 @@ margin: 5px 5px 5px 5px; */
 
 
 #PM10, #NO2, #SO2, #CO, #O3 {
-  width: 16%;
+  width: 18%;
 	height: 120px;
   text-align: center;
   padding: 5px 0px 2px 2px;
@@ -431,8 +399,8 @@ display: inline-block;
 #mlbg {
   border: solid 2px black;
   width: 70%;
-  margin-left: 30px;
   border-radius: 50%;
+  margin-bottom: 30px;
 }
 
 #machinelearning {
@@ -447,3 +415,4 @@ display: inline-block;
 #article3 {
   background-color: #fff;
 }
+closing
