@@ -547,7 +547,7 @@ function updateLocationPoll(data){
 }
 
 // Updates Interface which makes ML approachable
-function showResult(){
+function showResult(choosen_attribute){
   var pressure, humidity, clouds_all// skyML
   var temp, temp_min, temp_max//tempML
   var wind_speed, wind_deg// windML
@@ -555,7 +555,7 @@ function showResult(){
   var month // seasonML
   var predictionMode // PredictionModeML
 
-  switch ($('#skyML > div.active').index()) {
+  switch (($('#skyML > div.active').index() + (choosen_attribute == 'skyML' ? 1 : 0 ) ) % 4) {
     case 0: pressure=1018; humidity=30; clouds_all=0; // sunny
       break;
     case 1: pressure=1011; humidity=81; clouds_all=100; // cloudy
@@ -566,7 +566,7 @@ function showResult(){
       break;
   }
 
-  switch ($('#tempML > div.active').index()) {
+  switch (($('#tempML > div.active').index()+ (choosen_attribute == 'tempML' ? 1 : 0 ))%4) {
     case 0: temp=22+273.15;
       break;
     case 1: temp=30+273.15;
@@ -578,7 +578,7 @@ function showResult(){
   }
   temp_min=temp; temp_max=temp;
 
-  switch ($('#windML > div.active').index()) {
+  switch (($('#windML > div.active').index() + (choosen_attribute == 'windML' ? 1 : 0 ))%4) {
     case 0: wind_speed=1.4; wind_deg=0;
       break;
     case 1: wind_speed=5.5; wind_deg=90;
@@ -588,7 +588,7 @@ function showResult(){
     case 3: wind_speed=2.8; wind_deg=270;
       break;
   }
-  switch ($('#timeML > div.active').index()) {
+  switch (($('#timeML > div.active').index() + (choosen_attribute == 'timeML' ? 1 : 0 ))%4) {
     case 0: hour=8; isWeekend="false";
       break;
     case 1: hour=13; isWeekend="false";
@@ -598,7 +598,7 @@ function showResult(){
     case 3: hour=13; isWeekend="true";
       break;
   }
-  switch ($('#seasonML > div.active').index()) {
+  switch (( $('#seasonML > div.active').index() + (choosen_attribute == 'seasonML' ? 1 : 0 ))%4) {
     case 0: month=4;
       break;
     case 1: month=7;
@@ -608,7 +608,7 @@ function showResult(){
     case 3: month=1;
       break;
   }
-  switch ($('#PredictionModeML > div.active').index()) {
+  switch (($('#PredictionModeML > div.active').index() + (choosen_attribute == 'PredictionModeML' ? 1 : 0 ))%2) {
     case 0: predictionMode="BACKGROUND";
       break;
     case 1: predictionMode="TRAFFIC";
