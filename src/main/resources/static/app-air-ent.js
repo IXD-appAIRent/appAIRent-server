@@ -1,4 +1,4 @@
-var ipAddress = "192.168.2.53";
+var ipAddress = "172.16.248.34";
 
 // enable wait for results
 $.ajaxSetup({
